@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "TabManager.h"
 #include "Tracker.h"
 #include "SimpleVector.h"
@@ -79,7 +81,7 @@ TabHeaderControl* TabManager::getTabHeaderControl()
 ModuleEditor* TabManager::createModuleEditor()
 {
 	ModuleEditor* moduleEditor = new ModuleEditor();
-	moduleEditor->createNewSong(tracker.playerController->getPlayMode() == PlayerController::PlayMode_FastTracker2 ? 8 : 4);	
+	moduleEditor->createNewSong(BLITRACKER_NBCHANNELS);	
 	moduleEditor->setCurrentPatternIndex(moduleEditor->getOrderPosition(0));
 	return moduleEditor;
 }
@@ -88,11 +90,7 @@ PlayerController* TabManager::createPlayerController()
 {
 	// use "fake" scopes on the PDA
 	// fake scopes are always showing linear interpolated output
-#ifdef __LOWRES__
-	PlayerController* playerController = tracker.playerMaster->createPlayerController(true);
-#else
 	PlayerController* playerController = tracker.playerMaster->createPlayerController(false);
-#endif
 	
 	if (playerController == NULL)
 		return NULL;
@@ -120,9 +118,6 @@ void TabManager::applyPlayerDefaults(PlayerController* playerController)
 	bool v = tracker.settingsDatabase->restore("PLAYMODE_ADVANCED_ALLOW8xx")->getBoolValue();
 	playerController->enablePlayModeOption(PlayerController::PlayModeOptionPanning8xx, v);
 
-	v = tracker.settingsDatabase->restore("PLAYMODE_ADVANCED_ALLOWE8x")->getBoolValue();
-	playerController->enablePlayModeOption(PlayerController::PlayModeOptionPanningE8x, v);
-
 	v = tracker.settingsDatabase->restore("PLAYMODE_ADVANCED_PTPITCHLIMIT")->getBoolValue();
 	playerController->enablePlayModeOption(PlayerController::PlayModeOptionForcePTPitchLimit, v);
 
@@ -142,7 +137,6 @@ void TabManager::applyPlayerDefaults(PlayerController* playerController)
 
 void TabManager::openNewTab(PlayerController* playerController/* = NULL*/, ModuleEditor* moduleEditor/* = NULL*/)
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 	
 	if (playerController == NULL)
@@ -171,31 +165,18 @@ void TabManager::openNewTab(PlayerController* playerController/* = NULL*/, Modul
 	PPString tabTitle = tabTitleProvider.getTabTitle();
 	tabHeader->addTab(TabHeaderControl::TabHeader(tabTitle, documents->size()-1));
 	selectModuleEditor(doc);
-#else
-	if (moduleEditor == NULL || playerController == NULL)
-		return;
-		
-	playerController->attachModuleEditor(moduleEditor);					
-	moduleEditor->attachPlayerCriticalSection(playerController->getCriticalSection());
-	playerController->setSpeed(moduleEditor->getSongBPM(), moduleEditor->getSongTickSpeed());	
-
-	documents->add(new Document(moduleEditor, playerController));	
-#endif	
 }
 
 void TabManager::switchToTab(pp_uint32 index)
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 	ASSERT(tabHeader);
 	index = tabHeader->getTab(index)->ID;
 	selectModuleEditor(documents->get(index));
-#endif
 }
 
 void TabManager::closeTab(pp_int32 index/* = -1*/)
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 
 	// when there is only a single tab open
@@ -264,12 +245,10 @@ void TabManager::closeTab(pp_int32 index/* = -1*/)
 		tracker.playerMaster->destroyPlayerController(doc->playerController);
 		delete doc;
 	}
-#endif
 }
 
 void TabManager::selectModuleEditor(Document* document)
 {
-#ifndef __LOWRES__
 	PPContainer* container = static_cast<PPContainer*>(tracker.screen->getControlByID(CONTAINER_OPENREMOVETABS));
 	ASSERT(container);
 	TabHeaderControl* tabHeader = getTabHeaderControl();
@@ -299,43 +278,28 @@ void TabManager::selectModuleEditor(Document* document)
 		tracker.updateAfterTabSwitch();		
 	}
 	currentDocument = document;
-		
-#endif
 }
 
 ModuleEditor* TabManager::getModuleEditorFromTabIndex(pp_int32 index)
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 	return documents->get(tabHeader->getTab(index)->ID)->moduleEditor;
-#else
-	return tracker.moduleEditor;
-#endif
 }
 
 PlayerController* TabManager::getPlayerControllerFromTabIndex(pp_int32 index)
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 	return documents->get(tabHeader->getTab(index)->ID)->playerController;
-#else
-	return tracker.playerController;
-#endif
 }
 
 pp_uint32 TabManager::getSelectedTabIndex()
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 	return tabHeader->getSelectedTabIndex();
-#else
-	return 0;
-#endif
 }
 
 void TabManager::cycleTab(pp_int32 offset)
 {
-#ifndef __LOWRES__
 	TabHeaderControl* tabHeader = getTabHeaderControl();
 	ASSERT(tabHeader);
 	pp_int32 index = tabHeader->getSelectedTabIndex();
@@ -351,7 +315,6 @@ void TabManager::cycleTab(pp_int32 offset)
 		tracker.screen->paintControl(tabHeader);
 		switchToTab(index);
 	}
-#endif
 }
 
 pp_int32 TabManager::getNumTabs() const

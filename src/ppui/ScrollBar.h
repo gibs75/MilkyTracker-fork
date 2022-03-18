@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 /////////////////////////////////////////////////////////////////
 //
 //	PPScrollbar control class
@@ -28,11 +30,7 @@
 #ifndef SCROLLBAR__H
 #define SCROLLBAR__H
 
-//#ifndef __LOWRES__
-	#define SCROLLBUTTONSIZE 10
-//#else
-//	#define SCROLLBUTTONSIZE 8
-//#endif
+#define SCROLLBUTTONSIZE 10
 
 #include "BasicTypes.h"
 #include "Control.h"

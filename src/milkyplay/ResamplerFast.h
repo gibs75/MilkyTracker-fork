@@ -75,7 +75,7 @@ public:
 
 		if ((voll == 0) && (volr == 0)) return;
 		
-		mp_sint32 sd1,sd2;
+		mp_sint32 sd1;
 		
 		NOCHECKMIXER_TEMPLATE(NOCHECKMIXER_8BIT_NORMAL, NOCHECKMIXER_16BIT_NORMAL);
 	}
@@ -130,7 +130,7 @@ public:
 
 		if ((voll == 0 && rampFromVolStepL == 0) && (volr == 0 && rampFromVolStepR == 0)) return;
 		
-		mp_sint32 sd1,sd2;
+		mp_sint32 sd1;
 		
 		if (rampFromVolStepL || rampFromVolStepR)
 		{
@@ -327,7 +327,7 @@ public:
 		mp_sint32 smpposfrac = chn->smpposfrac;
 		const mp_sint32 smpadd = (chn->flags&ChannelMixer::MP_SAMPLE_BACKWARD) ? -chn->smpadd : chn->smpadd;
 		
-		mp_sint32 sd1,sd2;
+		//mp_sint32 sd1,sd2;
 
 		const mp_sint32 flags = chn->flags;
 		const mp_sint32 loopstart = chn->loopstart;
@@ -493,5 +493,71 @@ public:
 		//chn->finalvolr = volr;	
 	}
 };
+
+/*
+* Resampler without interpolation or ramping
+*/
+class ResamplerBLS : public ChannelMixer::ResamplerBase
+{
+	static float getSTeBalanceAmp(mp_ubyte _lmcvalue)
+	{
+		const float dbchn  = -2.0f * (float)(20 - (_lmcvalue & 0x3F));   
+		return powf(10.0f, dbchn / 10.0f);
+	}
+
+	static void getVolumeLR (ChannelMixer::TMixerChannel* chn, mp_sint32& voll, mp_sint32& volr)
+	{
+		if (chn->mute)
+		{
+			voll = volr = 0;
+		}
+		else
+		{
+			float fvolL = getSTeBalanceAmp(chn->STebalanceLeft)  * 44.0f;
+			float fvolR = getSTeBalanceAmp(chn->STebalanceRight) * 44.0f;
+
+			voll = mp_sint32(fvolL);
+			volr = mp_sint32(fvolR);
+		}
+	}
+
+public:
+	virtual bool isRamping() { return false; }
+	virtual bool supportsFullChecking() { return true; }
+	virtual bool supportsNoChecking() { return true; }
+
+	virtual void addBlockFull(mp_sint32* buffer, ChannelMixer::TMixerChannel* chn, mp_uint32 count)
+	{
+		mp_sint32 voll = 0;
+		mp_sint32 volr = 0;
+
+		getVolumeLR(chn, voll, volr);
+
+		FULLMIXER_TEMPLATE(FULLMIXER_8BIT_BLS, FULLMIXER_16BIT_NORMAL, 16, 0);
+	}
+
+	virtual void addBlockNoCheck(mp_sint32* buffer, ChannelMixer::TMixerChannel* chn, mp_uint32 count)
+	{
+		mp_sint32 voll = 0;
+		mp_sint32 volr = 0;
+
+		getVolumeLR(chn, voll, volr);
+
+		mp_sint32 smppos = chn->smppos;
+		const mp_sint32 smpadd = (chn->flags&ChannelMixer::MP_SAMPLE_BACKWARD) ? -chn->smpadd : chn->smpadd;
+		const mp_sint32 basepos = smppos;
+		mp_sint32 posfixed = chn->smpposfrac;
+
+		mp_sint32 fp = smpadd*count;
+		MP_INCREASESMPPOS(chn->smppos,chn->smpposfrac,fp,16);
+
+		if ((voll == 0) && (volr == 0)) return;
+
+		mp_sint32 sd1;
+
+		NOCHECKMIXER_TEMPLATE(NOCHECKMIXER_8BIT_BLS, NOCHECKMIXER_16BIT_NORMAL);
+	}
+};
+
 
 #endif

@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Tracker.h"
 #include "ControlIDs.h"
 #include "Screen.h"
@@ -451,20 +453,6 @@ void Tracker::processShortcutsFastTracker(PPEvent* event)
 						}
 					}
 				}
-				else if (::getKeyModifier() == (KeyModifierSHIFT|KeyModifierCTRL))
-				{
-					switch (keyCode)
-					{
-						// Select sample using Shift+Alt+Up/Down
-						case VK_UP:
-						case VK_DOWN:
-						case VK_NEXT:
-						case VK_PRIOR:
-							listBoxSamples->dispatchEvent(event);
-							event->cancel();
-							break;
-					}
-				}
 				else if (::getKeyModifier() == KeyModifierCTRL)
 				{
 					switch (keyCode)
@@ -580,7 +568,6 @@ void Tracker::switchEditMode(EditModes mode)
 	// Assign keyboard bindings
 	getPatternEditorControl()->setShowFocus(b);
 	listBoxInstruments->setShowFocus(b);
-	listBoxSamples->setShowFocus(b);
 	listBoxOrderList->setShowFocus(b);
 	sectionDiskMenu->setFileBrowserShowFocus(b);
 	sectionDiskMenu->setCycleFilenames(b);

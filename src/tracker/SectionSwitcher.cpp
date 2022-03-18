@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionSwitcher.h"
 #include "Tracker.h"
 #include "Screen.h"
@@ -42,9 +44,6 @@
 SectionSwitcher::SectionSwitcher(Tracker& tracker) :
 	tracker(tracker),
 	bottomSection(ActiveBottomSectionNone),
-#ifdef __LOWRES__
-	lowerSectionPage(ActiveLowerSectionPageMain),
-#endif
 	currentUpperSection(NULL)
 {
 }
@@ -104,102 +103,3 @@ void SectionSwitcher::showUpperSection(SectionAbstract* section, bool hideSIP/* 
 	tracker.screen->update();
 	currentUpperSection = section;
 }
-
-#ifdef __LOWRES__
-void SectionSwitcher::showSubMenu(ActiveLowerSectionPages section, bool repaint/* = true*/)
-{
-	// Hide everything first
-	tracker.showSongSettings(false);
-	tracker.showMainOptions(false);
-	tracker.screen->getControlByID(CONTAINER_INSTRUMENTLIST)->show(false);	
-	tracker.screen->getControlByID(CONTAINER_LOWRES_TINYMENU)->show(false);
-	tracker.screen->getControlByID(CONTAINER_LOWRES_JAMMENU)->show(false);
-	
-	tracker.scopesControl->show(false);
-	tracker.screen->getControlByID(CONTAINER_SCOPECONTROL)->show(false);
-	
-	// Last active page was the "Jam"-section so the pattern editor has probably been resized
-	// Check if it was resized and if so, restore original size
-	if (lastLowerSectionPage == ActiveLowerSectionPageJam && 
-		section != ActiveLowerSectionPageJam &&
-		patternEditorSize != tracker.getPatternEditorControl()->getSize())
-	{
-		tracker.getPatternEditorControl()->setSize(patternEditorSize);
-	}	
-	
-	switch (section)
-	{
-		case ActiveLowerSectionPageMain:
-			tracker.showMainOptions(true);
-			tracker.hideInputControl(false);
-			break;
-		case ActiveLowerSectionPageSong:
-			tracker.showSongSettings(true);
-			tracker.hideInputControl(false);
-			break;
-		case ActiveLowerSectionPageInstruments:
-			tracker.screen->getControlByID(CONTAINER_INSTRUMENTLIST)->show(true);	
-			tracker.screen->getControlByID(CONTAINER_LOWRES_TINYMENU)->show(true);
-			tracker.hideInputControl(false);
-			break;
-		case ActiveLowerSectionPageScopes:
-			tracker.scopesControl->show(true);
-			tracker.screen->getControlByID(CONTAINER_SCOPECONTROL)->show(true);
-			tracker.updateScopesControlButtons();
-			tracker.hideInputControl(false);
-			break;
-		case ActiveLowerSectionPageJam:
-		{
-			PPControl* control = tracker.screen->getControlByID(CONTAINER_LOWRES_JAMMENU);
-			ASSERT(control);
-			patternEditorSize = tracker.getPatternEditorControl()->getSize();
-			PPSize size(tracker.screen->getWidth(), control->getLocation().y);
-			if (tracker.getPatternEditorControl()->getSize() != size)
-				tracker.getPatternEditorControl()->setSize(size);
-			tracker.hideInputControl();
-			tracker.screen->getControlByID(CONTAINER_LOWRES_JAMMENU)->show(true);
-			break;
-		}
-	}
-	
-	if (repaint)
-		tracker.screen->paint();
-}
-
-
-void SectionSwitcher::switchToSubMenu(ActiveLowerSectionPages lsPageNew)
-{
-	// same page, nothing to do
-	if (lsPageNew == lowerSectionPage)
-		return;
-	
-	// remember what was currently active
-	lastLowerSectionPage = lowerSectionPage;
-	// apply new page
-	lowerSectionPage = lsPageNew;
-				
-	updateSubMenusButtons(false);
-	// make it visible
-	showSubMenu(lowerSectionPage);
-}
-
-void SectionSwitcher::hideBottomSection() 
-{ 
-	if (bottomSection != ActiveBottomSectionNone)
-		showBottomSection(ActiveBottomSectionNone, false);
-}
-
-void SectionSwitcher::updateSubMenusButtons(bool repaint/* = true*/)
-{
-	PPContainer* container = static_cast<PPContainer*>(tracker.screen->getControlByID(CONTAINER_LOWRES_MENUSWITCH));
-
-	for (pp_int32 i = 0; i < tracker.NUMSUBMENUS(); i++)
-		static_cast<PPButton*>(container->getControlByID(BUTTON_0+i))->setPressed(false);
-	
-	static_cast<PPButton*>(container->getControlByID(BUTTON_0+lowerSectionPage))->setPressed(true);
-
-	if (repaint)
-		tracker.screen->paintControl(container);
-}
-
-#endif

@@ -327,7 +327,7 @@ ParticleFun::ParticleFun(int width, int height, int FOV) :
     unsigned int x,y;
  
 	i = 0;
-	const char* chr = "MilkyTracker";
+	const char* chr = "BlitSTracker";
 
 	int sLen = (int)strlen(chr);
 

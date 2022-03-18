@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "ListBox.h"
 #include "GraphicsAbstract.h"
 #include "Event.h"
@@ -721,9 +723,9 @@ placeCursor:
 
 			assureCursorVisible();
 
-			switch (keyCode)
+//			switch (keyCode)
 			{
-				default:
+//				default:
 					if ((maxEditSize > -1) && 
 						((signed)items->get(selectionIndex)->length() >= maxEditSize))
 						break;

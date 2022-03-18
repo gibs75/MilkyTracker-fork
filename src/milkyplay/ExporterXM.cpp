@@ -567,6 +567,12 @@ static void convertEffect(mp_ubyte effIn, mp_ubyte opIn, mp_ubyte& effOut, mp_ub
 				break;
 		}
 	}
+	// Blitracker use unused for custom data
+	else if (effIn == 0x1E)
+	{
+		effOut = effIn;
+		opOut = opIn;
+	}
 	else if (effIn)
 	{
 #ifdef VERBOSE
@@ -1341,6 +1347,64 @@ static void sort(mp_sword* array,mp_sint32 l, mp_sint32 r)
 	if (i<r) sort(array,i,r);
 }
 
+static void IfCopySndSynthYMFile(const SYSCHAR* _filename)
+{
+	char path  [512];
+	char subdir[512];
+	char filename  [512];
+	char ext   [512];
+	
+
+	_splitpath (_filename, path, subdir, filename, ext);
+
+	strcat (path, subdir   );
+	strcat (path, filename );
+	strcat (path, ".ini"   );
+
+	if (XMFile::exists(path) == false)
+	{
+		void* temp = nullptr;
+		size_t size = 0;
+
+		{ // Load default
+			FILE* file = fopen(ResamplerYM::GetInstance()->GetSndSynDefaultFilename(), "rb");
+			if (file == nullptr)
+			{
+				throw ErrorInfo("Cannot open SYNTHYM.INI file for read");
+			}
+
+			fseek(file, 0, SEEK_END);
+			size = ftell(file);
+			fseek(file, 0, SEEK_SET);
+
+			temp = new char[size];
+
+			if (fread(temp, size, 1, file) != 1)
+			{
+				throw ErrorInfo("Error while reading SYNTHYM.INI for copy");
+			}
+
+			fclose(file);
+		}
+
+		{ // Save .ini
+			FILE* file = fopen(path, "wb");
+			if (file == nullptr)
+			{
+				throw ErrorInfo("Cannot open module synth snd .INI file for write");
+			}
+
+			if (fwrite(temp, size, 1, file) != 1)
+			{
+				throw ErrorInfo("Error while writing module synth snd .INI file");
+			}
+			fclose(file);
+		}
+	}
+
+	ResamplerYM::GetInstance()->SetSndSynFilename(path);
+}
+
 mp_sint32 XModule::saveExtendedModule(const SYSCHAR* fileName)
 {
 	mp_sint32 i,j,k,l;
@@ -1361,6 +1425,7 @@ mp_sint32 XModule::saveExtendedModule(const SYSCHAR* fileName)
 	if (!insNum)
 		insNum++;
 	
+	{
 	// ------ start ---------------------------------
 	XMFile f(fileName, true);
 	
@@ -1816,7 +1881,10 @@ mp_sint32 XModule::saveExtendedModule(const SYSCHAR* fileName)
 			}
 	
 	}
-	
+
+	} // close file
+
+	IfCopySndSynthYMFile(fileName);
 
 	return MP_OK;
 }
@@ -1841,10 +1909,10 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 	static const mp_sint32 periods[12] = {1712,1616,1524,1440,1356,1280,1208,1140,1076,1016,960,907};
 
 	static const mp_sint32 originalPeriods[] = {1712,1616,1524,1440,1356,1280,1208,1140,1076,1016,960,906,
-												856,808,762,720,678,640,604,570,538,508,480,453,
-											    428,404,381,360,339,320,302,285,269,254,240,226,
-												214,202,190,180,170,160,151,143,135,127,120,113,
-												107,101,95,90,85,80,75,71,67,63,60,56};
+		856,808,762,720,678,640,604,570,538,508,480,453,
+		428,404,381,360,339,320,302,285,269,254,240,226,
+		214,202,190,180,170,160,151,143,135,127,120,113,
+		107,101,95,90,85,80,75,71,67,63,60,56};
 
 	TWorkBuffers workBuffers;
 
@@ -1854,10 +1922,10 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 		return MP_DEVICE_ERROR;
 
 	f.write(header.name,1,20);
-	
+
 	mp_sint32 i,j,k;
-	
-// - instruments -------------------------------------------
+
+	// - instruments -------------------------------------------
 	for (i = 0; i < 31; i++) 
 	{
 		f.write(instr[i].name, 1, 22);
@@ -1872,10 +1940,10 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 					s = instr[i].snum[j];
 					break;
 				}
-				
+
 			if (s == -1)
 				goto unused;
-				
+
 			mp_sint32 fti = (mp_sint32)smp[s].finetune + 128;
 			if (!(fti & 0xF) && !smp[s].relnote)
 			{
@@ -1884,9 +1952,9 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 			else
 			{
 				mp_sint32 c4spd = getc4spd(smp[s].relnote, smp[s].finetune);
-				
+
 				mp_sint32 dc4 = abs(sfinetunes[0]-c4spd);
-				
+
 				k = 0;
 				for (j = 1; j < 16; j++)
 					if (abs(sfinetunes[j]-c4spd) < dc4)
@@ -1895,16 +1963,16 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 						k = j;
 					}
 			}
-				
+
 			f.writeWord(swap(prep(smp[s].samplen)));
 
 			f.writeByte(k);
 			f.writeByte((mp_ubyte)(((mp_sint32)smp[s].vol*64)/255));
-							
+
 			if (smp[s].type & 3)
 			{
 				mp_sint32 loopend = /*smp[s].loopstart + */smp[s].looplen;
-				
+
 				if (smp[s].type & 32)
 				{
 					f.writeWord(0);
@@ -1922,7 +1990,7 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 					else
 						f.writeWord(swap(prep(smp[s].loopstart)));
 				}
-				
+
 				f.writeWord(swap(prep(loopend)));
 			}
 			else
@@ -1930,29 +1998,29 @@ mp_sint32 XModule::saveProtrackerModule(const SYSCHAR* fileName)
 				f.writeWord(swap(0));
 				f.writeWord(swap(1));
 			}
-			
+
 		}
 		else
 		{
-unused:
+		unused:
 			f.writeWord(swap(0));
 			f.writeByte(0);
 			f.writeByte(0);
 			f.writeWord(swap(0));
 			f.writeWord(swap(1));
 		}
-				
+
 	}
-	
-// - orderlist -------------------------------------------
+
+	// - orderlist -------------------------------------------
 	f.writeByte((mp_ubyte)header.ordnum);
-	
+
 	f.writeByte(127);
-	
+
 	mp_ubyte ord[128];
-	
+
 	memset(ord, 0, sizeof(ord));
-	
+
 	j = 0;
 	for (i = 0; i < 128; i++)
 	{
@@ -1961,15 +2029,15 @@ unused:
 		else if (header.ord[i] == 255)
 			break;
 	}
-			
+
 	f.write(ord, 1, 128);
-	
+
 	mp_uword numChannels = header.channum&1 ? header.channum+1 : header.channum;	
 
 	if (numChannels < 1 || numChannels > 99)
 		return MP_UNSUPPORTED;
-	
-// - patterns -------------------------------------------
+
+	// - patterns -------------------------------------------
 	mp_sint32 numPatterns = 0;
 	for (i = 0; i < 128; i++)
 	{
@@ -1996,16 +2064,16 @@ unused:
 		modMagic[1] += static_cast<char>(numChannels % 10u);
 	}
 	f.write(modMagic, 1, 4);
-	
+
 	for (i = 0; i < numPatterns+1; i++)
 	{
 		mp_sint32 numRows = phead[i].rows;
-		
+
 		if (numRows == 0)
 			numRows = 1;
 
 		mp_sint32 patChNum = (phead[i].channum+(phead[i].channum&1));
-		
+
 		if (patChNum < numChannels)
 			patChNum = numChannels;
 
@@ -2014,28 +2082,28 @@ unused:
 
 		mp_ubyte* srcPattern = new mp_ubyte[len];
 		mp_ubyte* dstPattern = new mp_ubyte[lenDst];
-	
+
 		memset(srcPattern, 0, len);
 		memset(dstPattern, 0, lenDst);
 
 		convertPattern(this, &phead[i], srcPattern, numChannels, workBuffers, false);		
-	
+
 		for (mp_sint32 r = 0; r < 64; r++)
 			for (mp_sint32 c = 0; c < numChannels; c++)
-			{
+			{			
 			
 				if (r < numRows)
-				{
+				{				
 				
 					mp_sint32 srcIndex = (r*numChannels*5)+(c*5);
 					mp_sint32 dstIndex = (r*numChannels*4)+(c*4);
-					
+
 					mp_sint32 period = 0;
-					
+
 					mp_ubyte note = srcPattern[srcIndex];
-					
+
 					//note = r+24+1;
-					
+
 					if (note)
 					{
 						note--;
@@ -2044,12 +2112,12 @@ unused:
 						else
 							period = (periods[note%12]*16>>((note/12)))>>2;
 					}
-				
+
 					mp_ubyte ins = srcPattern[srcIndex+1];
-				
+
 					if (ins > 31)
 						ins = 0;
-				
+
 					mp_ubyte eff = 0;
 					mp_ubyte op = 0;
 
@@ -2069,23 +2137,23 @@ unused:
 					{
 						eff = op = 0;
 					}
-				
+
 					/*if (srcPattern[srcIndex+2] >= 0x10 && srcPattern[srcIndex+2] <= 0x50 &&
-						eff == 0 && op == 0)
+					eff == 0 && op == 0)
 					{
-						eff = 0x0C;
-						op = srcPattern[srcIndex+2] - 0x10;
+					eff = 0x0C;
+					op = srcPattern[srcIndex+2] - 0x10;
 					}*/
-				
+
 					dstPattern[dstIndex] = (ins & 0xF0) + ((period>>8)&0x0F);
 					dstPattern[dstIndex+1] = (mp_ubyte)(period&0xFF);
 					dstPattern[dstIndex+2] = ((ins & 0x0F) << 4) + (eff);
 					dstPattern[dstIndex+3] = op;
-					
+
 				}
-			
+
 			}
-			
+
 		f.write(dstPattern, 4, numChannels*64);
 
 		delete[] srcPattern;
@@ -2116,7 +2184,7 @@ unused:
 				f.writeByte(smp[i].getSampleValue(j));
 		}
 	}
-	
+
 	return MP_OK;
 }
 

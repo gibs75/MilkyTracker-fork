@@ -1299,8 +1299,8 @@ const mp_sint32 XModule::sfinetunes[16] = {8363,8413,8463,8529,8581,8651,8723,87
 
 const mp_sbyte XModule::modfinetunes[16] = {0,16,32,48,64,80,96,112,-128,-112,-96,-80,-64,-48,-32,-16};
 
-const mp_ubyte XModule::numValidXMEffects = 24;
-const mp_ubyte XModule::validXMEffects[XModule::numValidXMEffects] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,20,21,25,27,29,33};
+const mp_ubyte XModule::numValidXMEffects = 25;
+const mp_ubyte XModule::validXMEffects[XModule::numValidXMEffects] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,20,21,25,27,29,33,0x1e};
 
 //////////////////////////////////////////////////////////////////////////
 // various tools for loading and converting modules	     				//

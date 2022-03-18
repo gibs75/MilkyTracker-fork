@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "PatternEditorControl.h"
 #include "GraphicsAbstract.h"
 #include "Screen.h"
@@ -101,13 +103,8 @@ PatternEditorControl::PatternEditorControl(pp_int32 id, PPScreen* parentScreen, 
 
 	initKeyBindings();
 	
-#ifdef __LOWRES__
-	setFont(PPFont::getFont(PPFont::FONT_TINY));
-	switchEditMode(EditModeMilkyTracker);
-#else
 	setFont(PPFont::getFont(PPFont::FONT_SYSTEM));
 	switchEditMode(EditModeFastTracker);
-#endif
 		
 	setRecordMode(false);
 	
@@ -513,10 +510,17 @@ void PatternEditorControl::paint(PPGraphicsAbstract* g)
 				}
 			}
 
-			sprintf(name, "%i", j+1);
+			if (j < 4)
+			{
+				sprintf(name, "pcm%i", j+1);
+			}
+			else
+			{
+				sprintf(name, "ym%i", j+1-4);
+			}
 
 			if (muteChannels[j])
-				strcat(name, " <Mute>");
+				strcat(name, "-Mute");
 
 			g->drawString(name, px + (slotSize>>1)-(((pp_int32)strlen(name)*font->getCharWidth())>>1), py+1);
 		}

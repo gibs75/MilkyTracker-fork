@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef __RESAMPLERHELPER_H__
 #define __RESAMPLERHELPER_H__
 
@@ -47,7 +49,7 @@ public:
 	
 	ChannelMixer::ResamplerBase* createResamplerFromIndex(pp_uint32 index);
 	
-	ChannelMixer::ResamplerTypes getResamplerType(pp_uint32 index, bool ramping);
+	MixerSettings::ResamplerTypes getResamplerType(pp_uint32 index, bool ramping);
 };
 
 #endif

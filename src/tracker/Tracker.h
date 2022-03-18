@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef TRACKER__H
 #define TRACKER__H
 
@@ -93,7 +95,6 @@ class Tracker : public EventListenerInterface
 {
 private:
 	// I've replaced some constants
-#ifndef __LOWRES__
 	pp_int32 SCOPESHEIGHT();
 	pp_int32 CURRENTSCOPESHEIGHT();
 	pp_int32 UPPERSECTIONDEFAULTHEIGHTWOINS()	{ return 54+64; }
@@ -102,15 +103,6 @@ private:
 	pp_int32 SAMPLESECTIONDEFAULTHEIGHT();
 	pp_int32 TABHEADERHEIGHT()					{ return 16; }
 	pp_int32 MAXEDITORHEIGHT();
-#else
-	pp_int32 SCOPESHEIGHT()						{ return 64; }
-	pp_int32 SCOPESWIDTH()						{ return 320-26; }
-	pp_int32 UPPERSECTIONDEFAULTHEIGHT()		{ return (64+16); }
-	pp_int32 INSTRUMENTSECTIONDEFAULTHEIGHT()	{ return 188; }
-	pp_int32 SAMPLESECTIONDEFAULTHEIGHT()		{ return 184; }
-	pp_int32 NUMSUBMENUS()						{ return 5; }
-	pp_int32 MAXEDITORHEIGHT();
-#endif
 	
 	bool* muteChannels;
 	
@@ -133,7 +125,6 @@ private:
 	SectionTranspose* sectionTranspose;
 	SectionAdvancedEdit* sectionAdvancedEdit;
 	SectionDiskMenu* sectionDiskMenu;
-	SectionHDRecorder* sectionHDRecorder;
 	SectionSettings* sectionSettings;
 	SectionInstruments* sectionInstruments;
 	SectionSamples* sectionSamples;
@@ -184,7 +175,9 @@ private:
 	// - global controls -------------------------------------------------------
 	PPListBox* listBoxOrderList;
 	PPListBox* listBoxInstruments;
-	PPListBox* listBoxSamples;
+	PPListBox* listBoxYMsounds;
+
+	void refreshYMSoundsIntrumentsMapping(void);
 
 	// - build UI parts --------------------------------------------------------
 	void initSectionOrderlist(pp_int32 x, pp_int32 y);
@@ -237,9 +230,6 @@ private:
 
 	void updateSongTitle(bool repaint = true);
 
-#ifdef __LOWRES__
-	void updateJamMenuOrder(bool repaint = true);
-#endif
 	void updateOrderlist(bool repaint = true);
 	void updateSongLength(bool repaint = true);
 	void updateSongRepeat(bool repaint = true);
@@ -252,7 +242,6 @@ private:
 	void updatePatternLength(bool repaint = true);
 	void updatePattern(bool repaint = true);
 
-	void updateSamplesListBox(bool repaint = true);
 	void updateInstrumentsListBox(bool repaint = true);
 
 	void updateSongInfo(bool repaint = true);
@@ -275,14 +264,6 @@ private:
 	// Show/hide main section (song settings + main menu)
 	void showSongSettings(bool show);
 	void showMainOptions(bool show);
-	
-#ifdef __LOWRES__
-	void selectScopesControl(pp_int32 ctrlType);
-	void updateScopesControlButtons();
-	void toggleJamMenuPianoSize();
-	void flipInstrumentListBoxes();
-#endif
-
 	void showMainMenu(bool show, bool showInstrumentSelector);
 	
 	void showScopes(bool visible, pp_uint32 style);
@@ -337,6 +318,7 @@ private:
 	void selectInstrument(pp_int32 instrument);
 	void fillInstrumentListBox(PPListBox* listBox, ModuleEditor* moduleEditor = NULL);
 	void fillSampleListBox(PPListBox* listBox, pp_int32 insIndex, ModuleEditor* moduleEditor = NULL);
+	void fillYMSoundsListBox(PPListBox* listBox);
 	void fillModuleListBox(PPListBox* listBox);
 	
 	void setChanged();
@@ -420,15 +402,17 @@ private:
 	
 	bool prepareSavingWithDialog(FileTypes eType);
 	bool saveTypeWithDialog(FileTypes eType, EventListenerInterface* fileSystemChangedListener = NULL);
-	bool saveCurrentModuleAsSelectedType();
+    void RefreshSndSynFilename();
+    bool saveCurrentModuleAsSelectedType();
 	void saveType(FileTypes eType);
 	void save();
 	void saveAs();
 	void handleSaveProceed();
 	void handleSaveCancel();
 	
+	void runBLSBatch(const char* filename, const char* batchname);
+
 	void buildMODSaveErrorWarning(pp_int32 error);
-	void estimateSongLength(bool signalWait = false);
 
 public:
 	Tracker();
@@ -533,7 +517,6 @@ private:
 	void eventKeyDownBinding_InvokeSectionTranspose();
 	void eventKeyDownBinding_InvokeSectionAdvancedEdit();
 	void eventKeyDownBinding_InvokeSectionDiskMenu();
-	void eventKeyDownBinding_InvokeSectionHDRecorder();
 	void eventKeyDownBinding_InvokeSectionQuickOptions();
 	void eventKeyDownBinding_InvokeSectionOptimize();
 	void eventKeyDownBinding_InvokeSectionAbout();

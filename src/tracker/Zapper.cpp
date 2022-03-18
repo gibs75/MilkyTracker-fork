@@ -28,13 +28,13 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Zapper.h"
 #include "Tracker.h"
 #include "PlayerController.h"
 #include "ModuleEditor.h"
-#include "ModuleServices.h"
 #include "PatternEditor.h"
-#include "SectionHDRecorder.h"
 
 void Zapper::zapAll()
 {
@@ -45,9 +45,7 @@ void Zapper::zapAll()
 	tracker.moduleEditor->createEmptySong(true, 
 										  true, 
 										  tracker.playerController->getPlayMode() == PlayerController::PlayMode_FastTracker2 ? 8 : 4);
-	tracker.moduleEditor->getModuleServices()->resetEstimatedSongLength();
 	tracker.moduleEditor->reloadCurrentPattern();
-	tracker.sectionHDRecorder->adjustOrders();
 	// stop song with resetting main volume
 	tracker.ensureSongStopped(true, false);
 	tracker.updateSongInfo(false);
@@ -61,9 +59,7 @@ void Zapper::zapSong()
 	tracker.moduleEditor->createEmptySong(true, 
 								  false,
 								  tracker.playerController->getPlayMode() == PlayerController::PlayMode_FastTracker2 ? 8 : 4);
-	tracker.moduleEditor->getModuleServices()->resetEstimatedSongLength();
 	tracker.moduleEditor->reloadCurrentPattern();
-	tracker.sectionHDRecorder->adjustOrders();
 	// stop song with resetting main volume
 	tracker.ensureSongStopped(true, false);			
 	tracker.updateSongInfo(false);

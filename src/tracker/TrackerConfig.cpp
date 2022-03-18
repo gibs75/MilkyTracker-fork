@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "TrackerConfig.h"
 #include "version.h"
 
@@ -60,11 +62,7 @@ PPColor TrackerConfig::colorRowHighLight_2(16, 16, 16);
 PPColor TrackerConfig::colorSampleEditorWaveform(255, 255, 128);
 
 // how many open tabs are allowed
-#ifndef __LOWRES__
 pp_int32 TrackerConfig::numTabs = 32;
-#else
-pp_int32 TrackerConfig::numTabs = 1;
-#endif
 
 // How many channels possible in XM module? We take the standard here => 32 channels
 pp_int32 TrackerConfig::numPlayerChannels = 32;
@@ -94,7 +92,7 @@ const PPString TrackerConfig::defaultColorPalette("2B" // Numkeys
 												  "8080FF" // ColorCursor
 												  "602040" // ColorCursorLine
 												  "A01830" // ColorCursorLineHighlighted
-												  "406080" // ColorTheme
+												  "409040" // ColorTheme
 												  "FFFFFF" // ColorForegroundText
 												  "C0C0C0" // ColorButtons
 												  "000000" // ColorButtonText
@@ -150,5 +148,5 @@ const char* TrackerConfig::predefinedColorPalettes[TrackerConfig::numPredefinedC
 
 const PPSystemString TrackerConfig::untitledSong("Untitled");
 
-const pp_int32 TrackerConfig::numMixFrequencies = 4;
-const pp_int32 TrackerConfig::mixFrequencies[] = {11025, 22050, 44100, 48000};
+const pp_int32 TrackerConfig::numMixFrequencies = 1;
+const pp_int32 TrackerConfig::mixFrequencies[] = {25000};

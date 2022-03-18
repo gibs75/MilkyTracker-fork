@@ -20,12 +20,13 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include <new>
 #include "ModuleEditor.h"
 #include "PatternEditor.h"
 #include "SampleEditor.h"
 #include "EnvelopeEditor.h"
-#include "ModuleServices.h"
 #include "PlayerCriticalSection.h"
 #include "TrackerConfig.h"
 #include "PPSystem.h"
@@ -125,7 +126,7 @@ ModuleEditor::ModuleEditor() :
 
 	module = new XModule();
 	
-	createNewSong();
+	createNewSong(BLITRACKER_NBCHANNELS);
 
 	changesListener = new ChangesListener(*this);
 
@@ -144,14 +145,11 @@ ModuleEditor::ModuleEditor() :
 	envelopeEditor->addNotificationListener(changesListener);
 	envelopeEditor->attachEnvelope(NULL, module);
 	
-	moduleServices = new ModuleServices(*module);
-
 	currentCursorPosition.row = currentCursorPosition.channel = currentCursorPosition.inner = 0;	
 }
 
 ModuleEditor::~ModuleEditor()
 {
-	delete moduleServices;
 	delete sampleEditor;
 	delete patternEditor;
 	delete envelopeEditor;
@@ -599,7 +597,7 @@ void ModuleEditor::createEmptySong(bool clearPatterns/* = true*/, bool clearInst
 	}
 }
 
-bool ModuleEditor::createNewSong(mp_uword numChannels/*= 8*/)
+bool ModuleEditor::createNewSong(mp_uword numChannels)
 {
 	module->createEmptySong(true, true, numChannels);
 
@@ -667,6 +665,29 @@ bool ModuleEditor::openSong(const SYSCHAR* fileName, const SYSCHAR* preferredFil
 
 	mp_sint32 nRes = module->loadModule(fileName);
 	
+	if (module != nullptr)
+	{
+		module->header.speed = 125;
+	}
+
+	if (nRes == MP_OK)
+	{
+		char drive[256];
+		char dir[256];
+		char filename[256];
+
+		_splitpath(fileName, drive, dir, filename, NULL);
+		strcat(drive, dir);
+		strcat(drive, filename);
+		strcat(drive, ".INI");
+
+		if (XMFile::exists(drive))
+		{
+			ResamplerYM::GetInstance()->SetSndSynFilename(drive);
+			ResamplerYM::GetInstance()->Reload();
+		}
+	}
+
 	// unknown format
 	if (nRes == MP_UNKNOWN_FORMAT)
 	{
@@ -756,11 +777,13 @@ bool ModuleEditor::openSong(const SYSCHAR* fileName, const SYSCHAR* preferredFil
 	}
 	else
 	{
-		createNewSong();
+		createNewSong(BLITRACKER_NBCHANNELS);
 	}
 
 	cleanUnusedPatterns();
 	
+	setNumChannels(7);
+
 	return res;
 }
 

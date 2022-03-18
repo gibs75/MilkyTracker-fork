@@ -100,7 +100,7 @@ public:
 
 	virtual		const char* getDriverID() { return "WaveOut"; }
 
-	virtual		mp_sint32	getPreferredSampleRate() const { return 44100; }
+	virtual		mp_sint32	getPreferredSampleRate() const { return 25000; }
 	virtual		mp_sint32	getPreferredBufferSize() const { return 8192; }
 };
 

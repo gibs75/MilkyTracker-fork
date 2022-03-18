@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Tracker.h"
 #include "TabManager.h"
 #include "MilkyPlay.h"
@@ -45,7 +47,6 @@
 #include "EnvelopeEditorControl.h"
 #include "SampleEditorControl.h"
 #include "SectionDiskMenu.h"
-#include "SectionHDRecorder.h"
 #include "SectionOptimize.h"
 #include "ScopesControl.h"
 #include "GlobalColorConfig.h"
@@ -147,7 +148,6 @@ bool Tracker::shutDown()
 		settingsDatabase->store("PLAYMODE", sectionQuickOptions->keepSettings() ? playModeStrings[playMode] : playModeStrings[4]);
 
 		settingsDatabase->store("PLAYMODE_ADVANCED_ALLOW8xx", playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionPanning8xx));
-		settingsDatabase->store("PLAYMODE_ADVANCED_ALLOWE8x", playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionPanningE8x));
 		// Only affects protracker playmodes
 		settingsDatabase->store("PLAYMODE_ADVANCED_PTPITCHLIMIT", playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionForcePTPitchLimit));
 
@@ -169,14 +169,6 @@ bool Tracker::shutDown()
 		settingsDatabase->store("INTERNALDISKBROWSERSETTINGS", sectionDiskMenu->getConfigUInt32());	
 		settingsDatabase->store("INTERNALDISKBROWSERLASTPATH", sectionDiskMenu->getCurrentPathASCII());
 
-		// HD recorder
-		settingsDatabase->store("HDRECORDER_MIXFREQ", sectionHDRecorder->getSettingsFrequency());
-		settingsDatabase->store("HDRECORDER_MIXERVOLUME", sectionHDRecorder->getSettingsMixerVolume());
-		settingsDatabase->store("HDRECORDER_MIXERSHIFT", sectionHDRecorder->getSettingsMixerShift());
-		settingsDatabase->store("HDRECORDER_RAMPING", sectionHDRecorder->getSettingsRamping() ? 1 : 0);
-		settingsDatabase->store("HDRECORDER_INTERPOLATION", sectionHDRecorder->getSettingsResampler());
-		settingsDatabase->store("HDRECORDER_ALLOWMUTING", sectionHDRecorder->getSettingsAllowMuting() ? 1 : 0);
-
 		// sample editor
 		settingsDatabase->store("SAMPLEEDITORDECIMALOFFSETS", sectionSamples->getOffsetFormat());
 		// Sample editor contol will store last used values here
@@ -190,9 +182,6 @@ bool Tracker::shutDown()
 			sprintf(buffer, "OPTIMIZER_%i",i);
 			settingsDatabase->store(buffer, sectionOptimize->getOptimizeCheckBoxFlags(i));
 		}
-
-		// Scale of envelope editor
-		settingsDatabase->store("ENVELOPEEDITORSCALE", sectionInstruments->getEnvelopeEditorControl()->getScale());
 
 		// Orderlist was expanded?
 		settingsDatabase->store("EXTENDEDORDERLIST", extendedOrderlist ? 1 : 0);
@@ -211,19 +200,6 @@ bool Tracker::shutDown()
 			palette.colors[i] = GlobalColorConfig::getInstance()->getColor((GlobalColorConfig::GlobalColors)i);	
 
 		settingsDatabase->store("ACTIVECOLORS", ColorPaletteContainer::encodePalette(palette));
-
-		// store predefined envelopes
-		for (i = 0; i < sectionInstruments->getNumPredefinedEnvelopes(); i++)
-		{
-			sprintf(buffer, "PREDEFENVELOPEVOLUME_%i",i);
-			settingsDatabase->store(buffer, sectionInstruments->getEncodedEnvelope(SectionInstruments::EnvelopeTypeVolume, i));
-		}
-
-		for (i = 0; i < sectionInstruments->getNumPredefinedEnvelopes(); i++)
-		{
-			sprintf(buffer, "PREDEFENVELOPEPANNING_%i",i);		
-			settingsDatabase->store(buffer, sectionInstruments->getEncodedEnvelope(SectionInstruments::EnvelopeTypePanning, i));
-		}
 
 		// store effect macros from pattern editor control
 		for (i = 0; i < NUMEFFECTMACROS; i++)

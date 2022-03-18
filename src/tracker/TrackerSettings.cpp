@@ -28,6 +28,8 @@
  *
  */
 
+ // 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Tracker.h"
 #include "ModuleEditor.h"
 #include "TrackerSettingsDatabase.h"
@@ -47,7 +49,6 @@
 #include "SectionSettings.h"
 #include "SectionSamples.h"
 #include "SectionDiskMenu.h"
-#include "SectionHDRecorder.h"
 #include "SectionQuickOptions.h"
 #include "SectionOptimize.h"
 #include "TrackerConfig.h"
@@ -76,7 +77,7 @@ void Tracker::buildDefaultSettings()
 	settingsDatabase->store("MIXERVOLUME", 256);
 	settingsDatabase->store("MIXERSHIFT", 1);
 	settingsDatabase->store("RAMPING", 1);
-	settingsDatabase->store("INTERPOLATION", 1);
+	settingsDatabase->store("INTERPOLATION", MixerSettings::MIXER_BLS / 2);
 	settingsDatabase->store("MIXERFREQ", PlayerMaster::getPreferredSampleRate());
 #ifdef __FORCEPOWEROFTWOBUFFERSIZE__
 	settingsDatabase->store("FORCEPOWEROFTWOBUFFERSIZE", 1);
@@ -90,7 +91,6 @@ void Tracker::buildDefaultSettings()
 	settingsDatabase->store("PLAYMODEKEEPSETTINGS", 0);
 	settingsDatabase->store("PLAYMODE","FASTTRACKER2");
 	settingsDatabase->store("PLAYMODE_ADVANCED_ALLOW8xx",1);
-	settingsDatabase->store("PLAYMODE_ADVANCED_ALLOWE8x",0);
 	// Only affects protracker playmodes
 	settingsDatabase->store("PLAYMODE_ADVANCED_PTPITCHLIMIT",1);
 	settingsDatabase->store("PLAYMODE_ADVANCED_PTPANNING", TrackerConfig::defaultProTrackerPanning);
@@ -119,11 +119,7 @@ void Tracker::buildDefaultSettings()
 		settingsDatabase->store(keyName, valueName);
 	}
 
-#ifdef __LOWRES__
-	settingsDatabase->store("PATTERNFONT", PPFont::FONT_TINY);
-#else
 	settingsDatabase->store("PATTERNFONT", PPFont::FONT_SYSTEM);
-#endif
 
 	// Scopes?
 	settingsDatabase->store("SCOPES", 1);
@@ -151,11 +147,7 @@ void Tracker::buildDefaultSettings()
 	// Live switch
 	settingsDatabase->store("LIVESWITCH", 0);
 	// Our default edit mode
-#ifdef __LOWRES__
-	settingsDatabase->store("EDITMODE", EditModeMilkyTracker);
-#else
 	settingsDatabase->store("EDITMODE", EditModeFastTracker);
-#endif
 	// Our default scrolling mode
 	settingsDatabase->store("SCROLLMODE", ScrollModeStayInCenter);
 	// Mute fading value (from 0 to 100 percent)
@@ -181,11 +173,7 @@ void Tracker::buildDefaultSettings()
 	settingsDatabase->store("INTERNALDISKBROWSERSETTINGS", SectionDiskMenu::getDefaultConfigUInt32());
 	settingsDatabase->store("INTERNALDISKBROWSERLASTPATH", "");
 	// Estimate playtime after a song has been loaded?
-#ifdef __LOWRES__
-	settingsDatabase->store("AUTOESTPLAYTIME", 0);
-#else
 	settingsDatabase->store("AUTOESTPLAYTIME", 1);
-#endif
 	// show splash screen?
 	settingsDatabase->store("SHOWSPLASH", 1);
 	// orderlist is extended
@@ -236,7 +224,7 @@ void Tracker::buildDefaultSettings()
 	}
 
 	// ---------- HD recorder last settings ----------
-	settingsDatabase->store("HDRECORDER_MIXFREQ", 44100);
+	settingsDatabase->store("HDRECORDER_MIXFREQ", TrackerConfig::mixFrequencies[0]);
 	settingsDatabase->store("HDRECORDER_MIXERVOLUME", 256);
 	settingsDatabase->store("HDRECORDER_MIXERSHIFT", 1);
 	settingsDatabase->store("HDRECORDER_RAMPING", 1);
@@ -332,10 +320,6 @@ void Tracker::applySettingByKey(PPDictionaryKey* theKey, TMixerSettings& setting
 	{
 		playerController->enablePlayModeOption(PlayerController::PlayModeOptionPanning8xx, v2 != 0);
 	}
-	else if (theKey->getKey().compareTo("PLAYMODE_ADVANCED_ALLOWE8x") == 0)
-	{
-		playerController->enablePlayModeOption(PlayerController::PlayModeOptionPanningE8x, v2 != 0);
-	}
 	else if (theKey->getKey().compareTo("PLAYMODE_ADVANCED_PTPITCHLIMIT") == 0)
 	{
 		playerController->enablePlayModeOption(PlayerController::PlayModeOptionForcePTPitchLimit, v2 != 0);
@@ -375,11 +359,6 @@ void Tracker::applySettingByKey(PPDictionaryKey* theKey, TMixerSettings& setting
 				message.show();
 			}
 		}
-	}
-	else if (theKey->getKey().compareTo("ENVELOPEEDITORSCALE") == 0)
-	{
-		if (sectionInstruments && sectionInstruments->getEnvelopeEditor())
-			sectionInstruments->getEnvelopeEditorControl()->setScale(v2);
 	}
 	else if (theKey->getKey().compareTo("PATTERNFONT") == 0)
 	{
@@ -513,11 +492,6 @@ void Tracker::applySettingByKey(PPDictionaryKey* theKey, TMixerSettings& setting
 			sectionDiskMenu->setCurrentPath(path, false);
 		}
 	}
-	else if (theKey->getKey().compareTo("AUTOESTPLAYTIME") == 0)
-	{
-		if (v2)
-			estimateSongLength();
-	}
 	else if (theKey->getKey().compareTo("EXTENDEDORDERLIST") == 0)
 	{
 		expandOrderlist(v2 != 0);
@@ -530,31 +504,6 @@ void Tracker::applySettingByKey(PPDictionaryKey* theKey, TMixerSettings& setting
 	{
 		TitlePageManager titlePageManager(*screen);
 		titlePageManager.showTitlePage((TitlePageManager::Pages)v2, false);
-	}
-	// ---------------- HD Recorder settings -------------------
-	else if (theKey->getKey().compareTo("HDRECORDER_MIXFREQ") == 0)
-	{
-		sectionHDRecorder->setSettingsFrequency(v2);
-	}
-	else if (theKey->getKey().compareTo("HDRECORDER_MIXERVOLUME") == 0)
-	{
-		sectionHDRecorder->setSettingsMixerVolume(v2);
-	}
-	else if (theKey->getKey().compareTo("HDRECORDER_MIXERSHIFT") == 0)
-	{
-		sectionHDRecorder->setSettingsMixerShift(v2);
-	}
-	else if (theKey->getKey().compareTo("HDRECORDER_RAMPING") == 0)
-	{
-		sectionHDRecorder->setSettingsRamping(v2 != 0);
-	}
-	else if (theKey->getKey().compareTo("HDRECORDER_INTERPOLATION") == 0)
-	{
-		sectionHDRecorder->setSettingsResampler(v2);
-	}
-	else if (theKey->getKey().compareTo("HDRECORDER_ALLOWMUTING") == 0)
-	{
-		sectionHDRecorder->setSettingsAllowMuting(v2 != 0);
 	}
 	// ---------------- Recording & stuff ------------------
 	else if (theKey->getKey().compareTo("MULTICHN_RECORD") == 0)
@@ -576,11 +525,6 @@ void Tracker::applySettingByKey(PPDictionaryKey* theKey, TMixerSettings& setting
 	else if (theKey->getKey().compareTo("MULTICHN_RECORDNOTEDELAY") == 0)
 	{
 		recorderLogic->setRecordNoteDelay(v2 != 0);
-	}
-	else if (theKey->getKey().compareTo("INVERTMWHEELZOOM") == 0)
-	{
-		sectionSamples->getSampleEditorControl()->setInvertMWheelZoom(v2 != 0);
-		sectionInstruments->getEnvelopeEditorControl()->setInvertMWheelZoom(v2 != 0);
 	}
 	// ----------------------- Tabs -------------------------
 	else if (theKey->getKey().compareTo("TABS_STOPBACKGROUNDBEHAVIOUR") == 0)
@@ -639,26 +583,6 @@ void Tracker::applySettingByKey(PPDictionaryKey* theKey, TMixerSettings& setting
 		}
 	}
 	// ------------------ envelopes  --------------------
-	else if (theKey->getKey().startsWith("PREDEFENVELOPEVOLUME_"))
-	{
-		if (sectionInstruments)
-		{
-			PPString str = (const char*)theKey->getKey()+21;
-			pp_int32 i = str.getIntValue();
-			str = theKey->getStringValue();
-			sectionInstruments->setEncodedEnvelope(SectionInstruments::EnvelopeTypeVolume, i, str);
-		}
-	}
-	else if (theKey->getKey().startsWith("PREDEFENVELOPEPANNING_"))
-	{
-		if (sectionInstruments)
-		{
-			PPString str = (const char*)theKey->getKey()+22;
-			pp_int32 i = str.getIntValue();
-			str = theKey->getStringValue();
-			sectionInstruments->setEncodedEnvelope(SectionInstruments::EnvelopeTypePanning, i, str);
-		}
-	}
 	// ------------------ effect macros  --------------------
 	else if (theKey->getKey().startsWith("EFFECTMACRO_"))
 	{

@@ -99,8 +99,8 @@ mp_sint32 AudioDriver_MMSYSTEM::initDevice(mp_sint32 bufferSizeInWords, mp_uint3
 
 	mp_uint32 supportedFormats[] = { WAVE_FORMAT_48S16, 48000,
 									 WAVE_FORMAT_4S16,  44100,
-									 WAVE_FORMAT_2S16,  22050,
-									 WAVE_FORMAT_1S16,  11025 };
+									 WAVE_FORMAT_2S16,  25000,
+									 WAVE_FORMAT_2S16,  22025 };
 
 	bool modeFound = false;
 	DWORD dwFormat = 0;

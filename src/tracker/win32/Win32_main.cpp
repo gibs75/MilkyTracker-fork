@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include <Windows.h>
 #include <Windowsx.h>
 #include <tchar.h>
@@ -40,6 +42,8 @@
 #include "PPSystem.h"
 #include "PPMutex.h"
 #include "XMFile.h"
+#include "ChannelMixer.h"
+#include "PPMessageBox.h"
 
 #include "MIDIInDevice.h"
 #include "MidiReceiver_win32.h"
@@ -53,7 +57,7 @@ using midi::CMIDIReceiver;
 #define IDM_FULLSCREEN		0x10
 #define IDM_PREFERENCES		0x11
 
-#define WINDOWTITLE			_T("Loading MilkyTracker...")
+#define WINDOWTITLE			_T("Loading BlitSTracker...")
 
 #define	FS_FREQUENCY		0x3C
 #define	FS_BPS				0x20
@@ -422,9 +426,9 @@ static LONG WINAPI CrashHandler(EXCEPTION_POINTERS*)
 	if (num != 100) 
 		myTracker->saveModule(buffer);
 
-	MessageBox(NULL, _T("MilkyTracker has crashed, sorry for the inconvenience.\n\n")\
+	MessageBox(NULL, _T("BlitSTracker has crashed, sorry for the inconvenience.\n\n")\
 		_T("An attempt was made to save the current module in the application folder.\n")\
-		_T("Please report this error back to the MilkyTracker development team.\n"), NULL, MB_OK);
+		_T("Please report do not report this error back to the MilkyTracker development team.\n"), NULL, MB_OK);
 	
 	return EXCEPTION_CONTINUE_SEARCH;
 }
@@ -1097,10 +1101,6 @@ static BOOL AppInit(HINSTANCE hinst,int nCmdShow)
 	PPSize windowSize = myTracker->getWindowSizeFromDatabase();
 	pp_int32 scaleFactor = myTracker->getScreenScaleFactorFromDatabase();
 	bool fullScreen = myTracker->getFullScreenFlagFromDatabase();
-#ifdef __LOWRES__
-	windowSize.width = 320;
-	windowSize.height = 240;
-#endif
 
 	RECT rect;
 	rect.left = rect.top = 0;
@@ -1271,35 +1271,56 @@ int PASCAL WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 	MSG msg;
 	msg.wParam = 0;         /* In case something goes horribly wrong */
 
-	if (!AppInit(hinst, nCmdShow))
-		return -1;
-
-	// Convert command line parameters
-	CmdLineArgs args;
-	
-	if (args.size() >= 2)
+	try
 	{
-		// Retrieve second parameter (= input file)	
-		PPSystemString fileInput = args[1];
+		if (!AppInit(hinst, nCmdShow))
+			return -1;
 
-		// When there is something specified, check if it's an existing file
-		if (fileInput.length() && XMFile::exists(fileInput))
+		// Convert command line parameters
+		CmdLineArgs args;
+
+		if (args.size() >= 2)
 		{
-			SendFile(fileInput);
+			// Retrieve second parameter (= input file)	
+			PPSystemString fileInput = args[1];
+
+			// When there is something specified, check if it's an existing file
+			if (fileInput.length() && XMFile::exists(fileInput))
+			{
+				SendFile(fileInput);
+			}
+		}
+
+		if (hWnd)
+		{
+			MSG    Msg;
+
+			while (GetMessage(&Msg, NULL, 0, 0))
+			{
+				try
+				{
+					TranslateMessage(&Msg);
+					DispatchMessage(&Msg);
+				}
+
+				catch (const ErrorInfo& info)
+				{
+					PPMessageBox messageBox(nullptr, "Error", info.getMessage());		
+					messageBox.runModal();
+
+					if (info.isCritical())
+					{
+						break;
+					}
+				}
+			}
+
 		}
 	}
-	
-	if (hWnd) 
+	catch (const ErrorInfo& info)
 	{
-
-		MSG    Msg;
-
-		while (GetMessage(&Msg, NULL, 0, 0))
-		{
-			TranslateMessage(&Msg);
-			DispatchMessage(&Msg);
-		}
-	
+		PPMessageBox messageBox(nullptr, "Error", info.getMessage());		
+		messageBox.runModal();
 	}
 
 	delete myMidiInDevice;
@@ -1311,11 +1332,21 @@ int PASCAL WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR szCmdLine, int nC
 
 	delete g_globalMutex;
 
-	if (myDisplayDevice->isFullScreen())
-		myDisplayDevice->goFullScreen(false);
+	if (myDisplayDevice != nullptr)
+		if (myDisplayDevice->isFullScreen())
+			myDisplayDevice->goFullScreen(false);
 
 	delete myDisplayDevice;
 
 	return (int)msg.wParam;
 
 }
+
+extern "C" void TRAClog(char* str, char sep)
+{
+	char temp[2] = {sep, 0};
+
+	OutputDebugStringA(str);
+	OutputDebugStringA(temp);
+}
+

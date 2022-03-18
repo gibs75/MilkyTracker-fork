@@ -638,8 +638,8 @@ public:
 	///////////////////////////////////////////////////
 	// Module exporters								 //
 	///////////////////////////////////////////////////
-	mp_sint32		saveExtendedModule(const SYSCHAR* fileName);		// FT2 (.XM)
-	mp_sint32		saveProtrackerModule(const SYSCHAR* fileName);   // Protracker compatible (.MOD)
+	mp_sint32		saveExtendedModule(const SYSCHAR* fileName);	// FT2 (.XM)
+	mp_sint32		saveProtrackerModule(const SYSCHAR* fileName);  // Protracker compatible (.MOD)
 
 	///////////////////////////////////////////////////
 	// module loaded?								 //

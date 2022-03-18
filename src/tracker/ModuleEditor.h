@@ -20,13 +20,14 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef MODULEDITOR__H
 #define MODULEDITOR__H
 
 #include "MilkyPlay.h"
 #include "BasicTypes.h"
 #include "PatternEditorTools.h"
-#include "SongLengthEstimator.h"
 
 class XIInstrument;
 class PatternEditor;
@@ -34,6 +35,8 @@ class SampleEditor;
 class EnvelopeEditor;
 class ModuleServices;
 class PlayerCriticalSection;
+
+const mp_uint32 BLITRACKER_NBCHANNELS = 7; 
 
 class ModuleEditor
 {
@@ -95,7 +98,6 @@ private:
 	SampleEditor* sampleEditor;
 	EnvelopeEditor* envelopeEditor;
 	class ChangesListener* changesListener;
-	ModuleServices* moduleServices;
 	PlayerCriticalSection* playerCriticalSection;
 
 	bool changed;
@@ -146,7 +148,6 @@ public:
 	PatternEditor* getPatternEditor() { return patternEditor; }
 	SampleEditor* getSampleEditor() { return sampleEditor; }
 	EnvelopeEditor* getEnvelopeEditor() { return envelopeEditor; }
-	ModuleServices* getModuleServices() { return moduleServices; }
 	
 	void attachPlayerCriticalSection(PlayerCriticalSection* playerCriticalSection) { this->playerCriticalSection = playerCriticalSection; }
 
@@ -232,7 +233,7 @@ public:
 
 	TEnvelope* getEnvelope(mp_sint32 insIndex, mp_sint32 smpIndex, mp_sint32 type);
 
-	bool createNewSong(mp_uword numChannels = 8);
+	bool createNewSong(mp_uword numChannels);
 	void createEmptySong(bool clearPatterns = true, bool clearInstruments = true, mp_sint32 numChannels = 8);
 	bool isEmpty() const;
 						 

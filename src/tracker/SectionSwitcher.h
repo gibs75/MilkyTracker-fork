@@ -28,6 +28,8 @@
  *
  */
 
+ // 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef __SECTIONSWITCHER_H__
 #define __SECTIONSWITCHER_H__
 
@@ -43,27 +45,10 @@ public:
 		ActiveBottomSectionSampleEditor
 	};
 	
-#ifdef __LOWRES__
-	enum ActiveLowerSectionPages
-	{
-		ActiveLowerSectionPageMain = 0,
-		ActiveLowerSectionPageSong,
-		ActiveLowerSectionPageInstruments,
-		ActiveLowerSectionPageScopes,
-		ActiveLowerSectionPageJam
-	};
-#endif	
-	
 private:
 	class Tracker& tracker;
 
 	ActiveBottomSections bottomSection;
-#ifdef __LOWRES__
-	ActiveLowerSectionPages lowerSectionPage;
-	ActiveLowerSectionPages lastLowerSectionPage;
-	PPSize patternEditorSize;
-#endif
-
 	class SectionAbstract* currentUpperSection;	
 
 public:
@@ -72,14 +57,6 @@ public:
 	// General bottom sections show/hide
 	void showBottomSection(ActiveBottomSections section, bool paint = true);
 	void showUpperSection(SectionAbstract* section, bool hideSIP = true);
-	
-#ifdef __LOWRES__
-	void showSubMenu(ActiveLowerSectionPages section, bool repaint = true);
-	void showCurrentSubMenu(bool repaint = true) { showSubMenu(lowerSectionPage, repaint); }
-	void switchToSubMenu(ActiveLowerSectionPages lsPageNew);
-	void hideBottomSection();
-	void updateSubMenusButtons(bool repaint = true);
-#endif
 };
 
 #endif

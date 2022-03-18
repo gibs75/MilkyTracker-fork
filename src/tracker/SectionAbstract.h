@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef SECTIONABSTRACT__H
 #define SECTIONABSTRACT__H
 
@@ -75,42 +77,15 @@ public:
 	virtual void init(pp_int32 x, pp_int32 y) = 0;
 	virtual void show(bool bShow)
 	{
-#ifdef __LOWRES__
-		if (bShow)
-			lastFocusedControl = tracker.screen->getFocusedControl();
-		else
-			tracker.screen->setFocus(lastFocusedControl);
-#endif
 	}
 	
 	virtual void update(bool repaint = true) = 0;
 	
 	virtual void notifyInstrumentSelect(pp_int32 index) {}
-	virtual void notifySampleSelect(pp_int32 index) {}
+	//virtual void notifySampleSelect(pp_int32 index) {}
 	virtual void notifyTabSwitch() {}
 	
 	friend class Tracker;
-
-#ifdef __LOWRES__
-private:
-	PPSize oldInstrumentListSize;
-	PPPoint oldInstrumentListLocation;
-	PPSize oldSampleListSize;
-	PPPoint oldSampleListLocation;
-	PPSize oldInstrumentListContainerSize;
-	PPPoint oldInstrumentListContainerLocation;
-	PPPoint oldControlLocations[4];
-	bool visibility[10];
-
-protected:
-	enum
-	{
-		REPLACEDINSTRUMENTLISTBOXESHEIGHT = 37+15
-	};
-
-	void replaceAndResizeInstrumentListContainer(pp_int32 listBoxContainerHeight);
-	void replaceInstrumentListBoxes(bool b, pp_int32 listBoxContainerHeight = REPLACEDINSTRUMENTLISTBOXESHEIGHT);
-#endif
 };
 
 #endif

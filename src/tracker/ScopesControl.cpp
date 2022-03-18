@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "ScopesControl.h"
 #include "Screen.h"
 #include "GraphicsAbstract.h"
@@ -44,9 +46,6 @@
 
 pp_int32 ScopesControl::WRAPCHANNELS() const
 {
-#ifdef __LOWRES__
-    return 16;
-#else
     if (numChannels <= 32) {
         if (getSize().width < 800)
         {
@@ -66,7 +65,6 @@ pp_int32 ScopesControl::WRAPCHANNELS() const
     else
     {
         return 32;
-#endif
     }
 }
 
@@ -323,7 +321,15 @@ void ScopesControl::paint(PPGraphicsAbstract* g)
 	for (pp_int32 c = 0; c < numChannels; c++)
 	{
 		char buffer[8];
-		PPTools::convertToDec(buffer, c + 1, PPTools::getDecNumDigits(c+1));
+		
+		if (c < 4)
+		{
+			sprintf(buffer, "pcm%d", c + 1);
+		}
+		else
+		{
+			sprintf(buffer, "ym%d", c - 4 + 1);
+		}
 
         const mp_sint32 starty = location.y + yOffset + y*channelHeight;
 		mp_sint32 locy = starty + channelHeight / 2;

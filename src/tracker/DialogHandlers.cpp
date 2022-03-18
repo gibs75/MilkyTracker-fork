@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "DialogHandlers.h"
 #include "Tracker.h"
 #include "Zapper.h"
@@ -51,13 +53,13 @@ pp_int32 SampleLoadChannelSelectionHandler::ActionOkay(PPObject* sender)
 	if (preferredFileName.length())	
 		tracker.loadingParameters.res = tracker.moduleEditor->loadSample(fileName, 
 																		 tracker.listBoxInstruments->getSelectedIndex(), 
-																		 tracker.listBoxSamples->getSelectedIndex(), 
+																		 0, //tracker.listBoxSamples->getSelectedIndex(), 
 																		 listBox->getSelectedIndex(),
 																		 preferredFileName);
 	else
 		tracker.loadingParameters.res = tracker.moduleEditor->loadSample(fileName, 
 																		 tracker.listBoxInstruments->getSelectedIndex(), 
-																		 tracker.listBoxSamples->getSelectedIndex(), 
+																		 0, //tracker.listBoxSamples->getSelectedIndex(), 
 																		 listBox->getSelectedIndex());
 	
 	tracker.sectionSamples->updateAfterLoad();
@@ -74,13 +76,13 @@ pp_int32 SampleLoadChannelSelectionHandler::ActionUser1(PPObject* sender)
 	if (preferredFileName.length())	
 		tracker.loadingParameters.res = tracker.moduleEditor->loadSample(fileName, 
 																		 tracker.listBoxInstruments->getSelectedIndex(), 
-																		 tracker.listBoxSamples->getSelectedIndex(), 
+																		 0, //tracker.listBoxSamples->getSelectedIndex(), 
 																		 -1,
 																		 preferredFileName);
 	else
 		tracker.loadingParameters.res = tracker.moduleEditor->loadSample(fileName, 
 																		 tracker.listBoxInstruments->getSelectedIndex(), 
-																		 tracker.listBoxSamples->getSelectedIndex(), 
+																		 0, //tracker.listBoxSamples->getSelectedIndex(), 
 																		 -1);
 																	 
 	tracker.sectionSamples->updateAfterLoad();
@@ -142,7 +144,6 @@ pp_int32 ZapHandler::ActionUser4(PPObject* sender)
 pp_int32 ZapInstrumentHandler::ActionOkay(PPObject* sender)
 {
 	tracker.moduleEditor->zapInstrument(tracker.listBoxInstruments->getSelectedIndex());
-	tracker.sectionInstruments->resetEnvelopeEditor();
 	tracker.sectionSamples->resetSampleEditor();
 	tracker.sectionInstruments->updateAfterLoad();
 	return 0;

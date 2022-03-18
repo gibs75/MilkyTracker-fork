@@ -28,6 +28,9 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
+
 #include "SampleEditorResampler.h"
 #include "XModule.h"
 #include "ChannelMixer.h"
@@ -153,11 +156,11 @@ bool SampleEditorResampler::resample(float oldRate, float newRate)
 	mp_sint32* dsttmp = dst;
 	for (mp_sint32 k = 0; k < numBlocks; k++)
 	{
-		resampler->addChannel(&channel, dsttmp, 64, 1);
+		ChannelMixer::addChannelToResampler(resampler,&channel, dsttmp, 64, 1);
 		dsttmp+=64*2;
 	}
 	if (lastBlock)
-		resampler->addChannel(&channel, dsttmp, lastBlock, 1);
+		ChannelMixer::addChannelToResampler(resampler,&channel, dsttmp, lastBlock, 1);
 					
 	delete resampler;
 	TXMSample::freePaddedMem(buffer);

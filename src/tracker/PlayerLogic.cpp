@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "PlayerLogic.h"
 #include "Tracker.h"
 #include "PlayerMaster.h"
@@ -38,6 +40,9 @@
 #include "ListBox.h"
 #include "Screen.h"
 #include "PatternEditorControl.h"
+
+#include "ResamplerYM.h"
+
 
 PlayerLogic::PlayerLogic(Tracker& tracker) :
 	tracker(tracker),
@@ -110,6 +115,7 @@ void PlayerLogic::stopPlayer(PlayerController& playerController)
 {
 	playerController.stop();
 	playerController.resetPlayTimeCounter();
+	ResamplerYM::GetInstance()->Stop();
 }
 
 void PlayerLogic::stopSong()

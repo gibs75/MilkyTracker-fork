@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionDiskMenu.h"
 #include "Tracker.h"
 #include "TrackerConfig.h"
@@ -49,7 +51,6 @@
 #include "PatternEditorControl.h"
 
 #include "SectionSwitcher.h"
-#include "SectionHDRecorder.h"
 
 #include "DialogBase.h"
 
@@ -227,10 +228,6 @@ SectionDiskMenu::SectionDiskMenu(Tracker& theTracker) :
 
 	lastFocusedControl = NULL;
 
-#ifdef __LOWRES__
-	lastSIPOffsetMove = 0;
-#endif
-
 	colorQueryListener = new ColorQueryListener(*this);
 }
 
@@ -290,11 +287,7 @@ pp_int32 SectionDiskMenu::handleEvent(PPObject* sender, PPEvent* event)
 						
 					case 1:
 						tracker.saveTypeWithDialog(FileTypes::FileTypeSongMOD);
-						break;
-						
-					case 2:
-						tracker.sectionSwitcher->showUpperSection(tracker.sectionHDRecorder);
-						break;
+						break;					
 				}
 
 				break;
@@ -605,7 +598,6 @@ void SectionDiskMenu::init(pp_int32 px, pp_int32 py)
 
 	radioGroup->addItem(".xm");
 	radioGroup->addItem(".mod");
-	radioGroup->addItem(".wav");
 	container->addControl(radioGroup);
 
 	// ---- Pattern ----------
@@ -909,10 +901,6 @@ void SectionDiskMenu::show(bool bShow)
 	if (bShow == diskMenuVisible)
 		return;
 
-#ifdef __LOWRES__
-	tracker.screen->pauseUpdate(true);
-#endif
-
 	PPRadioGroup* radioGroup = static_cast<PPRadioGroup*>(static_cast<PPContainer*>(sectionContainer)->getControlByID(DISKMENU_NORMAL_RADIOGROUP_SONGTYPE));
 
 	if (bShow)
@@ -953,11 +941,6 @@ void SectionDiskMenu::show(bool bShow)
 	
 	if (bShow)
 	{
-#ifdef __LOWRES__
-		pp_int32 y = tracker.screen->getControlByID(CONTAINER_INPUTDEFAULT)->getLocation().y;
-		replaceInstrumentListBoxes(true, y);
-		tracker.getPatternEditorControl()->show(false);
-#endif		
 		prepareSection();
 		lastFocusedControl = tracker.screen->getFocusedControl();		
 		tracker.screen->setFocus(listBoxFiles);
@@ -972,35 +955,9 @@ void SectionDiskMenu::show(bool bShow)
 		}
 	}
 	else
-	{
-#ifdef __LOWRES__
-		replaceInstrumentListBoxes(false);
-		tracker.getPatternEditorControl()->show(true);
-#endif		
+	{	
 		tracker.screen->setFocus(lastFocusedControl);
 	}
-
-#ifdef __LOWRES__
-	pp_int32 deltay = sectionContainer->getSize().height - tracker.UPPERSECTIONDEFAULTHEIGHT();
-	
-	pp_int32 newSIPOffsetMove = bShow ? -deltay : deltay;
-
-	// Only move SIP panel up/down on show/hide when it's exactly the complementary
-	// to the previous move, otherwise we'll be moving it out of range
-	if ((lastSIPOffsetMove != 0 && lastSIPOffsetMove == -newSIPOffsetMove) ||
-		lastSIPOffsetMove == 0)
-	{
-		tracker.moveInputControls(newSIPOffsetMove);
-		lastSIPOffsetMove = newSIPOffsetMove;
-	}
-
-	tracker.screen->paint();
-	tracker.screen->pauseUpdate(false);
-	if (!bShow)
-	{
-		tracker.screen->update();
-	}
-#endif
 }
 
 void SectionDiskMenu::update(bool repaint/* = true*/)
@@ -1177,16 +1134,6 @@ PPString SectionDiskMenu::getCurrentPathASCII()
 
 void SectionDiskMenu::resizeInstrumentContainer()
 {
-#ifdef __LOWRES__
-	PPControl* ctrl1 = tracker.screen->getControlByID(CONTAINER_INPUTDEFAULT);
-	PPControl* ctrl2 = tracker.screen->getControlByID(CONTAINER_INPUTEXTENDED);
-
-	pp_int32 y = ctrl1->isVisible() ? ctrl1->getLocation().y : ctrl2->getLocation().y;
-
-	replaceAndResizeInstrumentListContainer(y);
-	
-	tracker.screen->paint(false);
-#endif	
 }
 
 void SectionDiskMenu::setCycleFilenames(bool cycleFilenames)
@@ -1382,12 +1329,12 @@ void SectionDiskMenu::updateFilenameEditField(ClassicViewStates viewState)
 			file->append(ext);
 			break;
 		}
-		case BrowseSamples:
+		/*case BrowseSamples:
 		{
 			*file = tracker.moduleEditor->getSampleFileName(tracker.listBoxInstruments->getSelectedIndex(), tracker.listBoxSamples->getSelectedIndex());
 			file->append(ext);
 			break;
-		}
+		}*/
 		case BrowsePatterns:
 		{
 			*file = tracker.moduleEditor->getModuleFileName().stripExtension();
@@ -1545,19 +1492,7 @@ void SectionDiskMenu::saveCurrent()
 					
 				case 1:
 					saveType = FileTypes::FileTypeSongMOD;
-					break;
-					
-				case 2:
-				{
-					tracker.sectionHDRecorder->setCurrentFileName(fileFullPath);
-					tracker.sectionSwitcher->showUpperSection(tracker.sectionHDRecorder);
-					if (dialog &&
-						tracker.screen->getModalControl() == dialog->getMessageBoxContainer())
-					{
-						tracker.screen->setModalControl(NULL);
-					}
-					return;
-				}
+					break;				
 			}
 			
 			break;

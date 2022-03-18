@@ -28,11 +28,15 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef __PLAYERCONTROLLER_H__
 #define __PLAYERCONTROLLER_H__
 
 #include "MilkyPlayCommon.h"
 #include "TrackerConfig.h"
+
+#include <map>
 
 class XModule;
 struct TXMSample;
@@ -54,7 +58,6 @@ public:
 	enum PlayModeOptions
 	{
 		PlayModeOptionPanning8xx = 1,
-		PlayModeOptionPanningE8x = 2,
 		// Only affects PTK playback mode
 		PlayModeOptionForcePTPitchLimit = 4
 	};
@@ -95,6 +98,8 @@ private:
 	mp_sint32 mixerDataCacheSize;
 	mp_sint32* mixerDataCache;
 
+	mp_sint32 YMscopeIndex;
+
 	void assureNotSuspended();
 	void continuePlaying(bool assureNotSuspended);
 	
@@ -105,6 +110,8 @@ private:
 
 	void reset();
 	
+	std::map<int, int> instrument2YMSoundsIndex;
+
 public:
 	~PlayerController();
 	
@@ -209,7 +216,6 @@ private:
 
 public:
 	bool isSamplePlaying(const TXMSample& smp, mp_sint32 channel, mp_sint32& pos, mp_sint32& vol, mp_sint32& pan);
-	bool isEnvelopePlaying(const TEnvelope& envelope, mp_sint32 envelopeType, mp_sint32 channel, mp_sint32& pos);
 	bool isNotePlaying(mp_sint32 ins, mp_sint32 channel, mp_sint32& note, bool& muted);
 	
 	class SampleDataFetcher
@@ -220,7 +226,9 @@ public:
 	void grabSampleData(mp_uint32 chnIndex, mp_sint32 count, mp_sint32 fMul, SampleDataFetcher& fetcher);
 	
 	bool hasSampleData(mp_uint32 chnIndex);
-	
+
+	void setInstrumentYMSoundsMapping(const std::map<int, int>& _instrument2YMSoundsIndex, bool _activate);
+
 	friend class PlayerMaster;
 	friend class PlayerStatusTracker;
 };

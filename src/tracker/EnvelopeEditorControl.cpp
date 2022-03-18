@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "EnvelopeEditorControl.h"
 #include "EnvelopeEditor.h"
 #include "Screen.h"
@@ -37,11 +39,7 @@
 #define YMAX 256
 #define XMAX 96
 
-#ifdef __LOWRES__
-	#define POINTCATCHBOUNDS 7
-#else
-	#define POINTCATCHBOUNDS 5
-#endif
+#define POINTCATCHBOUNDS 5
 
 EnvelopeEditorControl::EnvelopeEditorControl(pp_int32 id, 
 											 PPScreen* parentScreen, 

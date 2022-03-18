@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "DialogWithValues.h"
 #include "Screen.h"
 #include "StaticText.h"
@@ -57,19 +59,11 @@ DialogWithValues::DialogWithValues(PPScreen* screen,
 	switch (style)
 	{
 		case ValueStyleEnterOneValue:
-#ifdef __LOWRES__
-			initDialog(screen, responder, id, caption, 290, 110+15, 26+15, "Ok", "Cancel");
-#else
 			initDialog(screen, responder, id, caption, 290, 110, 26, "Ok", "Cancel");
-#endif
 			break;
 			
 		case ValueStyleEnterTwoValues:
-#ifdef __LOWRES__
-			initDialog(screen, responder, id, caption, 290, 142+15, 26+15, "Ok", "Cancel");
-#else
 			initDialog(screen, responder, id, caption, 290, 142, 26, "Ok", "Cancel");
-#endif
 			break;
 	}
 
@@ -104,42 +98,6 @@ DialogWithValues::DialogWithValues(PPScreen* screen,
 		button = new PPButton(MESSAGEBOX_BUTTON_DECREASE_VALUEONE, screen, this, PPPoint(x2 + listBox->getSize().width + 2 + button->getSize().width + 1, y2), PPSize(16, 11));
 		button->setText("-");
 		messageBoxContainerGeneric->addControl(button);
-
-#ifdef __LOWRES__
-		pp_int32 height = getMessageBoxContainer()->getSize().height;
-		pp_int32 y = getMessageBoxContainer()->getLocation().y;
-		
-		const char buttonTexts[] = {'1','2','3','4','5','6','7','8','9','0','+','-','.','<','>'};
-		
-		pp_int32 bWidth = (width - 22*2 - 2*3) / sizeof(buttonTexts);
-		pp_int32 x2_2 = x+4;
-		
-		pp_int32 y2_2 = y+height - 4 - 13;
-		
-		messageBoxContainerGeneric->addControl(new PPSeperator(0, screen, PPPoint(x2_2-1, y2_2-3), width-2*3, messageBoxContainerGeneric->getColor(), true));
-		
-		pp_uint32 i = 0;
-		for (i = 0; i < sizeof(buttonTexts); i++)
-		{
-			button = new PPButton(MESSAGEBOX_BUTTON_KEYS_BASE+i, screen, this, PPPoint(x2_2, y2_2), PPSize(bWidth+1, 13));
-			button->setText(buttonTexts[i]);
-			messageBoxContainerGeneric->addControl(button);
-			x2_2+=bWidth;
-		}
-		
-		bWidth = 22;
-		
-		button = new PPButton(MESSAGEBOX_BUTTON_KEYS_BASE+i, screen, this, PPPoint(x2_2, y2_2), PPSize(bWidth+1-3, 13));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Del");
-		messageBoxContainerGeneric->addControl(button);
-		x2_2+=bWidth-3;
-		i++;
-		button = new PPButton(MESSAGEBOX_BUTTON_KEYS_BASE+i, screen, this, PPPoint(x2_2, y2_2), PPSize(bWidth+1, 13));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Back");
-		messageBoxContainerGeneric->addControl(button);
-#endif
 	}
 	
 	if (style == ValueStyleEnterTwoValues)

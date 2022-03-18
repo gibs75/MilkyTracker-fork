@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Menu.h"
 #include "Font.h"
 #include "GraphicsAbstract.h"
@@ -62,11 +64,7 @@ pp_uint32 PPMenu::getMaxWidth() const
 
 pp_uint32 PPMenu::getEntryHeight() const
 {
-#ifndef __LOWRES__
 	return font->getCharHeight()+2;
-#else
-	return font->getCharHeight();
-#endif
 }
 
 PPRect PPMenu::getBoundingRect() const
@@ -100,11 +98,7 @@ void PPMenu::paint(PPGraphicsAbstract* g, pp_int32 px, pp_int32 py, pp_int32 men
 	
 	PPRect r = getBoundingRect();
 
-#ifndef __LOWRES__
 	const pp_int32 yOffset = 1;
-#else
-	const pp_int32 yOffset = 0;
-#endif
 
 	{
 		PPColor color = *backColor;

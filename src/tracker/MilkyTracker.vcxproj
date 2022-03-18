@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{45FCC521-2D0B-3212-A3DF-41714211D67F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>MilkyTracker</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\src\tracker\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MilkyTracker.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">BlitSTracker_debug</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\src\tracker\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MilkyTracker.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">BlitSTracker</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(SolutionDir)\src\tracker\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">MilkyTracker.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">MilkyTracker</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(SolutionDir)\src\tracker\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">MilkyTracker.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">MilkyTracker</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\midi\Debug\midi.lib;..\fx\Debug\fx.lib;..\milkyplay\Debug\milkyplay.lib;..\ppui\osinterface\Debug\osinterface.lib;..\ppui\Debug\ppui.lib;winmm.lib;dsound.lib;..\ppui\osinterface\Debug\osinterface.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>None</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\midi\Release\midi.lib;..\fx\Release\fx.lib;..\milkyplay\Release\milkyplay.lib;..\ppui\osinterface\Release\osinterface.lib;..\ppui\Release\ppui.lib;winmm.lib;dsound.lib;..\ppui\osinterface\Release\osinterface.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\midi\MinSizeRel\midi.lib;..\fx\MinSizeRel\fx.lib;..\milkyplay\MinSizeRel\milkyplay.lib;..\ppui\osinterface\MinSizeRel\osinterface.lib;..\ppui\MinSizeRel\ppui.lib;winmm.lib;dsound.lib;..\ppui\osinterface\MinSizeRel\osinterface.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;MILKYTRACKER;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\tracker;$(SolutionDir)src\compression;$(SolutionDir)src\fx;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;$(SolutionDir)src\ppui\sdl;$(SolutionDir)src\midi\win32;$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\ppui\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\midi\RelWithDebInfo\midi.lib;..\fx\RelWithDebInfo\fx.lib;..\milkyplay\RelWithDebInfo\milkyplay.lib;..\ppui\osinterface\RelWithDebInfo\osinterface.lib;..\ppui\RelWithDebInfo\ppui.lib;winmm.lib;dsound.lib;..\ppui\osinterface\RelWithDebInfo\osinterface.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)/src/tracker/$(Configuration)/MilkyTracker.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(SolutionDir)src\tracker\AnimatedFXControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\ColorExportImport.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\ColorPaletteContainer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogChannelSelector.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogEQ.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogGroupSelection.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogHandlers.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogListBox.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogPanning.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogQuickChooseInstrument.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogResample.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogWithValues.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\DialogZap.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\EQConstants.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\EditorBase.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\EnvelopeContainer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\EnvelopeEditor.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\EnvelopeEditorControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\Equalizer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\FileExtProvider.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\FileIdentificator.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\GlobalColorConfig.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\InputControlListener.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\LogoBig.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\LogoSmall.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\ModuleEditor.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditor.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditorClipBoard.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditorControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditorControlEventListener.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditorControlKeyboard.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditorControlTransposeHandler.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternEditorTools.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PatternTools.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PeakLevelControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\Piano.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PianoControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PlayerController.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PlayerLogic.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\PlayerMaster.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\RecPosProvider.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\RecorderLogic.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\ResamplerHelper.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SampleEditor.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SampleEditorControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SampleEditorControlToolHandler.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SampleEditorResampler.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SamplePlayer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\ScopesControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionAbout.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionAbstract.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionAdvancedEdit.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionDiskMenu.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionInstruments.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionOptimize.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionQuickOptions.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionSamples.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionSettings.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionSwitcher.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionTranspose.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SectionUpperLeft.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\SystemMessage.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TabHeaderControl.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TabManager.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TabTitleProvider.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TitlePageManager.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\ToolInvokeHelper.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\Tracker.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerConfig.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerInit.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerKeyboard.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerSettings.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerSettingsDatabase.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerShortCuts.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerShutDown.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerStartUp.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\TrackerUpdate.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\Undo.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\VRand.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\Zapper.cpp" />
+    <Object Include="$(SolutionDir)src\compression\compression.dir\$(Configuration)\Decompressor.obj" />
+    <Object Include="$(SolutionDir)src\compression\compression.dir\$(Configuration)\DecompressorLZX.obj" />
+    <Object Include="$(SolutionDir)src\compression\compression.dir\$(Configuration)\DecompressorPP20.obj" />
+    <Object Include="$(SolutionDir)src\compression\compression.dir\$(Configuration)\DecompressorUMX.obj" />
+    <Object Include="$(SolutionDir)src\compression\compression.dir\$(Configuration)\PP20.obj" />
+    <Object Include="$(SolutionDir)src\compression\compression.dir\$(Configuration)\unlzx.obj" />
+    <ClCompile Include="$(SolutionDir)src\tracker\win32\PreferencesDialog.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\win32\ThreadTimer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\tracker\win32\Win32_main.cpp" />
+    <ResourceCompile Include="$(SolutionDir)src\tracker\win32\Win32_resources.rc" />
+    <ClInclude Include="$(SolutionDir)src\tracker\version.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\AnimatedFXControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ColorExportImport.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ColorPaletteContainer.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ControlIDs.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogChannelSelector.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogEQ.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogGroupSelection.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogHandlers.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogListBox.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogPanning.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogQuickChooseInstrument.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogResample.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogWithValues.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\DialogZap.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\EQConstants.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\EditModes.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\EditorBase.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\EnvelopeContainer.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\EnvelopeEditor.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\EnvelopeEditorControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\Equalizer.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\FileExtProvider.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\FileIdentificator.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\FileTypes.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\FilterParameters.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\GlobalColorConfig.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\InputControlListener.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\LogoBig.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\LogoSmall.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ModuleEditor.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PatternEditor.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PatternEditorControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PatternEditorTools.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PatternTools.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PeakLevelControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\Piano.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PianoControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PlayerController.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PlayerCriticalSection.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PlayerLogic.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\PlayerMaster.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\RecPosProvider.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\RecorderLogic.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ResamplerHelper.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SIPButtons.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SampleEditor.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SampleEditorControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SampleEditorControlLastValues.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SampleEditorResampler.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SamplePlayer.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ScopesControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionAbout.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionAbstract.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionAdvancedEdit.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionDiskMenu.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionInstruments.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionOptimize.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionQuickOptions.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionSamples.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionSettings.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionSwitcher.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionTranspose.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SectionUpperLeft.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\SystemMessage.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\TabHeaderControl.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\TabManager.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\TabTitleProvider.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\TitlePageManager.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\ToolInvokeHelper.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\Tracker.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\TrackerConfig.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\TrackerSettingsDatabase.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\Undo.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\VRand.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\Zapper.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\win32\PreferencesDialog.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\win32\ThreadTimer.h" />
+    <ClInclude Include="$(SolutionDir)src\tracker\win32\Win32_resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)src\compression\compression.vcxproj">
+      <Project>{04042C0C-EF67-31D6-87E9-6D192D1155E2}</Project>
+      <Name>compression</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\fx\fx.vcxproj">
+      <Project>{249A697A-2925-37C1-908C-11BBF7F9B245}</Project>
+      <Name>fx</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\midi\midi.vcxproj">
+      <Project>{BFB8C548-2131-3185-B0A5-C310D5C642BA}</Project>
+      <Name>midi</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\milkyplay\milkyplay.vcxproj">
+      <Project>{7727679C-D41C-320F-9906-2A1212185FDD}</Project>
+      <Name>milkyplay</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\ppui\osinterface\osinterface.vcxproj">
+      <Project>{C2EA6484-1C0E-3514-BF47-79D21FE6B0F1}</Project>
+      <Name>osinterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\ppui\ppui.vcxproj">
+      <Project>{E19DCA45-3A87-3332-AD5C-F46D653B28B0}</Project>
+      <Name>ppui</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\_makedelivery.bat" />
+    <None Include="batchs\BlsConvert.bat" />
+    <None Include="batchs\BlsConvertNPlay.bat" />
+    <None Include="batchs\BlsConvertNPlay_debug.bat" />
+    <None Include="batchs\BlsConvert_debug.bat" />
+    <None Include="batchs\BlzConvertNPlay.bat" />
+    <None Include="batchs\BlzConvertNPlay_debug.bat" />
+    <None Include="batchs\SynthYMrun.bat" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

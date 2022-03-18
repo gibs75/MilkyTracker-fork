@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 ///////////////////////////////////////////////////////////////
 // Handle with care
 ///////////////////////////////////////////////////////////////
@@ -463,6 +465,12 @@ void PatternTools::convertEffectsToFT2(pp_int32& eff, pp_int32& op)
 	{
 		effOut = 0x02;
 		opOut = opIn>>2;
+	}
+	// Blitracker use unused for custom data
+	else if (effIn == 0x1E)
+	{
+		effOut = effIn;
+		opOut = opIn;
 	}
 
 	eff = effOut;

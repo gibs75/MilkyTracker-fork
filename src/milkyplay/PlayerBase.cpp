@@ -73,8 +73,8 @@ mp_sint32 PlayerBase::kick()
 	return MP_OK;
 }
 
-PlayerBase::PlayerBase(mp_uint32 frequency) : 
-	ChannelMixer(32, frequency),
+PlayerBase::PlayerBase(mp_uint32 frequency, MixerSettings::ResamplerTypes resampleTypes, bool mainplayer) : 
+	ChannelMixer(32, frequency, resampleTypes, mainplayer),
 	timeRecord(NULL)
 {
 	module = NULL;

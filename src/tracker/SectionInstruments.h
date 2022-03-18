@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef SECTIONINSTRUMENTS__H
 #define SECTIONINSTRUMENTS__H
 
@@ -47,18 +49,9 @@ class SectionInstruments : public SectionAbstract
 private:
 	PPContainer* containerEntire;
 
-	PPContainer* containerEnvelopes;
 	PPContainer* containerSampleSlider;
 	PPContainer* containerInstrumentSlider;
-	EnvelopeEditorControl* envelopeEditorControl;
-	PianoControl* pianoControl;
-	pp_int32 currentEnvelopeType; // 0 = Editing volume envelope, 1 = editing panning envelope
 	bool visible;
-
-	EnvelopeContainer* predefinedVolumeEnvelopes;
-	EnvelopeContainer* predefinedPanningEnvelopes;
-
-	bool storeEnvelope;
 
 	EnvelopeEditor* getEnvelopeEditor();
 	
@@ -67,7 +60,7 @@ protected:
 
 public:
 	SectionInstruments(Tracker& tracker);
-	virtual ~SectionInstruments();
+	virtual ~SectionInstruments() {}
 
 	// PPEvent listener
 	virtual pp_int32 handleEvent(PPObject* sender, PPEvent* event);
@@ -87,24 +80,9 @@ public:
 
 	virtual void notifyTabSwitch();
 
-	virtual void notifySampleSelect(pp_int32 index);
+	//virtual void notifySampleSelect(pp_int32 index);
 
 	void updateAfterLoad();
-
-	void updateEnvelopeWindow(bool repaint = true); 
-
-	void updateEnvelopeEditor(bool repaint = true, bool reAttach = false);
-
-	void resetEnvelopeEditor();
-	void resetPianoAssignment();
-
-	PianoControl* getPianoControl() { return pianoControl; }
-
-	pp_int32 getVisibleEnvelopeType() { return currentEnvelopeType; }
-	
-	bool isEnvelopeVisible();
-	
-	EnvelopeEditorControl* getEnvelopeEditorControl() { return envelopeEditorControl; }
 
 	bool isVisible() const { return visible; }
 	
@@ -116,9 +94,6 @@ public:
 		EnvelopeTypeVolume,
 		EnvelopeTypePanning
 	};
-	
-	PPString getEncodedEnvelope(EnvelopeTypes type, pp_int32 index);
-	void setEncodedEnvelope(EnvelopeTypes type, pp_int32 index, const PPString& str);
 	
 private:
 	void handleZapInstrument();

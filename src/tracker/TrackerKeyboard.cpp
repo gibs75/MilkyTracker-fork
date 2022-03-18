@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Tracker.h"
 #include "TabManager.h"
 #include "KeyBindings.h"
@@ -53,7 +55,6 @@
 #include "SectionTranspose.h"
 #include "SectionAdvancedEdit.h"
 #include "SectionDiskMenu.h"
-#include "SectionHDRecorder.h"
 #include "SectionQuickOptions.h"
 #include "SectionOptimize.h"
 #include "SectionAbout.h"
@@ -130,7 +131,6 @@ void Tracker::initKeyBindings()
 	eventKeyDownBindingsMilkyTracker->addBinding('A', KeyModifierCTRL|KeyModifierALT, &Tracker::eventKeyDownBinding_InvokeSectionAdvancedEdit);	
 	eventKeyDownBindingsMilkyTracker->addBinding('D', KeyModifierCTRL|KeyModifierALT, &Tracker::eventKeyDownBinding_InvokeSectionDiskMenu);	
 	eventKeyDownBindingsMilkyTracker->addBinding('T', KeyModifierCTRL|KeyModifierALT, &Tracker::eventKeyDownBinding_InvokeSectionTranspose);	
-	eventKeyDownBindingsMilkyTracker->addBinding('R', KeyModifierCTRL|KeyModifierALT, &Tracker::eventKeyDownBinding_InvokeSectionHDRecorder);	
 	eventKeyDownBindingsMilkyTracker->addBinding('O', KeyModifierCTRL|KeyModifierALT, &Tracker::eventKeyDownBinding_InvokeSectionQuickOptions);	
 	eventKeyDownBindingsMilkyTracker->addBinding('Z', KeyModifierCTRL|KeyModifierALT, &Tracker::eventKeyDownBinding_ToggleScopes);	
 	// handy toggle shortcuts
@@ -221,7 +221,6 @@ void Tracker::initKeyBindings()
 	eventKeyDownBindingsFastTracker->addBinding('A', KeyModifierCTRL, &Tracker::eventKeyDownBinding_InvokeSectionAdvancedEdit);	
 	eventKeyDownBindingsFastTracker->addBinding('D', KeyModifierCTRL, &Tracker::eventKeyDownBinding_InvokeSectionDiskMenu);	
 	eventKeyDownBindingsFastTracker->addBinding('T', KeyModifierCTRL, &Tracker::eventKeyDownBinding_InvokeSectionTranspose);	
-	eventKeyDownBindingsFastTracker->addBinding('R', KeyModifierCTRL, &Tracker::eventKeyDownBinding_InvokeSectionHDRecorder);	
 	eventKeyDownBindingsFastTracker->addBinding('O', KeyModifierCTRL, &Tracker::eventKeyDownBinding_InvokeSectionQuickOptions);	
 	//eventKeyDownBindingsFastTracker->addBinding('Z', KeyModifierCTRL, &Tracker::eventKeyDownBinding_InvokeSectionOptimize);	
 	eventKeyDownBindingsFastTracker->addBinding('Z', KeyModifierCTRL, &Tracker::eventKeyDownBinding_ToggleScopes);	
@@ -443,6 +442,7 @@ void Tracker::eventKeyDownBinding_Stop()
 
 	// is already playing? stop
 	playerController->resetPlayTimeCounter();
+	ResamplerYM::GetInstance()->Stop();
 
 	// stop song and reset main volume
 	ensureSongStopped(true, false);
@@ -594,14 +594,6 @@ void Tracker::eventKeyDownBinding_InvokeSectionDiskMenu()
 	sectionSwitcher->showUpperSection(sectionDiskMenu, false);
 }
 
-void Tracker::eventKeyDownBinding_InvokeSectionHDRecorder()
-{
-	if (screen->getModalControl())
-		return;
-
-	sectionSwitcher->showUpperSection(sectionHDRecorder);
-}
-
 void Tracker::eventKeyDownBinding_InvokeSectionSettings()
 {
 	if (screen->getModalControl())
@@ -655,24 +647,6 @@ void Tracker::eventKeyDownBinding_ToggleFT2Edit()
 	ASSERT(container);
 	
 	button->setTextColor(recorderLogic->getRecordMode() ? PPUIConfig::getInstance()->getColor(PPUIConfig::ColorDefaultButtonText) : TrackerConfig::colorRecordModeButtonText);
-	
-#ifdef __LOWRES__
-	container = static_cast<PPContainer*>(screen->getControlByID(CONTAINER_LOWRES_TINYMENU));
-	ASSERT(container);
-	
-	button = static_cast<PPButton*>(container->getControlByID(MAINMENU_EDIT));
-	ASSERT(button);
-	
-	button->setTextColor(recorderLogic->getRecordMode() ? PPUIConfig::getInstance()->getColor(PPUIConfig::ColorDefaultButtonText) : TrackerConfig::colorRecordModeButtonText);
-
-	container = static_cast<PPContainer*>(screen->getControlByID(CONTAINER_LOWRES_JAMMENU));
-	ASSERT(container);
-	
-	button = static_cast<PPButton*>(container->getControlByID(MAINMENU_EDIT));
-	ASSERT(button);
-	
-	button->setTextColor(recorderLogic->getRecordMode() ? PPUIConfig::getInstance()->getColor(PPUIConfig::ColorDefaultButtonText) : TrackerConfig::colorRecordModeButtonText);
-#endif
 
 	getPatternEditorControl()->setRecordMode(!recorderLogic->getRecordMode());
 	
@@ -713,9 +687,7 @@ void Tracker::eventKeyDownBinding_ToggleRecordKeyOff()
 
 void Tracker::eventKeyDownBinding_ToggleScopes()
 {
-#ifndef __LOWRES__
 	showScopes(scopesControl->isHidden(), settingsDatabase->restore("SCOPES")->getIntValue() >> 1);
-#endif
 }
 
 void Tracker::eventKeyDownBinding_InvokePatternToolVolumeScalePattern()
@@ -978,7 +950,7 @@ void Tracker::eventKeyDownBinding_TransposeAllInsBlockUp()
 void Tracker::eventKeyDownBinding_ExitApplication()
 {
 	if (!screen->getModalControl())
-		showQuitMessageBox("Quit MilkyTracker?", NULL, NULL);
+		showQuitMessageBox("Quit BlitSTracker ?", NULL, NULL);
 }
 
 

@@ -28,10 +28,13 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "PlayerController.h"
 #include "PlayerMaster.h"
 #include "MilkyPlay.h"
 #include "ResamplerMacros.h"
+#include "ResamplerYM.h"
 #include "PPSystem.h"
 #include "PlayerCriticalSection.h"
 #include "ModuleEditor.h"
@@ -255,6 +258,17 @@ void PlayerController::assureNotSuspended()
 	}
 }
 
+void PlayerController::setInstrumentYMSoundsMapping(const std::map<int, int>& _instrument2YMSoundsIndex, bool _activate) 
+{ 
+	instrument2YMSoundsIndex = _instrument2YMSoundsIndex; 
+
+	if (_activate)
+	{
+		player->setInstrumentYMSoundsMapping(instrument2YMSoundsIndex);
+	}
+}
+
+
 void PlayerController::reset()
 {
 	if (!player)
@@ -265,6 +279,8 @@ void PlayerController::reset()
 	player->reset();
 	// reset mixer channels (stop playing channels)
 	player->resetChannelsFull();
+
+	player->setInstrumentYMSoundsMapping(instrument2YMSoundsIndex);
 }
 
 bool PlayerController::detachDevice()
@@ -296,11 +312,12 @@ PlayerController::PlayerController(MasterMixer* mixer, bool fakeScopes) :
 	multiChannelKeyJazz(true),
 	multiChannelRecord(true),
 	mixerDataCacheSize(fakeScopes ? 0 : 512*2),
-	mixerDataCache(fakeScopes ? NULL : new mp_sint32[mixerDataCacheSize])
+	mixerDataCache(fakeScopes ? NULL : new mp_sint32[mixerDataCacheSize]),
+	YMscopeIndex(0)
 {
 	criticalSection = new PlayerCriticalSection(*this);
 
-	player = new PlayerSTD(mixer->getSampleRate(), playerStatusTracker);
+	player = new PlayerSTD(mixer->getSampleRate(), playerStatusTracker, true);
 	player->setPlayMode(PlayerBase::PlayMode_FastTracker2);
 	player->resetMainVolumeOnStartPlay(false);
 	player->setBufferSize(mixer->getBufferSize());
@@ -382,7 +399,7 @@ void PlayerController::playSong(mp_sint32 startIndex, mp_sint32 rowPosition, boo
 
 	if (!module->isModuleLoaded())
 		return;
-
+	
 	assureNotSuspended();
 
 	if (!suspended)
@@ -423,7 +440,7 @@ void PlayerController::playPattern(mp_sint32 index, mp_sint32 songPosition, mp_s
 
 	if (!module->isModuleLoaded())
 		return;
-
+	
 	assureNotSuspended();
 
 	if (!suspended)
@@ -1039,7 +1056,6 @@ void PlayerController::switchPlayMode(PlayModes playMode, bool exactSwitch/* = t
 		case PlayMode_ProTracker2:
 			if (exactSwitch)
 			{
-				player->enable(PlayerSTD::PlayModeOptionPanningE8x, false);
 				player->enable(PlayerSTD::PlayModeOptionPanning8xx, false);
 				player->enable(PlayerSTD::PlayModeOptionForcePTPitchLimit, true);
 			}
@@ -1048,7 +1064,6 @@ void PlayerController::switchPlayMode(PlayModes playMode, bool exactSwitch/* = t
 		case PlayMode_ProTracker3:
 			if (exactSwitch)
 			{
-				player->enable(PlayerSTD::PlayModeOptionPanningE8x, false);
 				player->enable(PlayerSTD::PlayModeOptionPanning8xx, false);
 				player->enable(PlayerSTD::PlayModeOptionForcePTPitchLimit, true);
 			}
@@ -1057,7 +1072,6 @@ void PlayerController::switchPlayMode(PlayModes playMode, bool exactSwitch/* = t
 		case PlayMode_FastTracker2:
 			if (exactSwitch)
 			{
-				player->enable(PlayerSTD::PlayModeOptionPanningE8x, false);
 				player->enable(PlayerSTD::PlayModeOptionPanning8xx, true);
 				player->enable(PlayerSTD::PlayModeOptionForcePTPitchLimit, false);
 			}
@@ -1099,9 +1113,6 @@ void PlayerController::enablePlayModeOption(PlayModeOptions option, bool b)
 		case PlayModeOptionPanning8xx:
 			player->enable(PlayerSTD::PlayModeOptionPanning8xx, b);			
 			break;
-		case PlayModeOptionPanningE8x:
-			player->enable(PlayerSTD::PlayModeOptionPanningE8x, b);
-			break;
 		case PlayModeOptionForcePTPitchLimit:
 			player->enable(PlayerSTD::PlayModeOptionForcePTPitchLimit, b);
 			break;
@@ -1119,8 +1130,6 @@ bool PlayerController::isPlayModeOptionEnabled(PlayModeOptions option)
 	{
 		case PlayModeOptionPanning8xx:
 			return player->isEnabled(PlayerSTD::PlayModeOptionPanning8xx);			
-		case PlayModeOptionPanningE8x:
-			return player->isEnabled(PlayerSTD::PlayModeOptionPanningE8x);
 		case PlayModeOptionForcePTPitchLimit:
 			return player->isEnabled(PlayerSTD::PlayModeOptionForcePTPitchLimit);
 		default:
@@ -1186,45 +1195,6 @@ bool PlayerController::isSamplePlaying(const TXMSample& smp, mp_sint32 channel, 
 	return false;
 }
 
-bool PlayerController::isEnvelopePlaying(const TEnvelope& envelope, mp_sint32 envelopeType, mp_sint32 channel, mp_sint32& pos)
-{
-	if (!player)
-		return false;
-
-	ChannelMixer* mixer = player;
-
-	const PlayerSTD::TPrEnv* env = NULL;
-	
-	switch (envelopeType)
-	{
-		case 0:
-			env = &player->chninfo[channel].venv;
-			break;
-		case 1:
-			env = &player->chninfo[channel].penv;
-			break;
-	}
-	
-	pp_int32 j = getCurrentBeatIndex();
-	pos = env->timeRecord[j].pos;
-	
-	if (env && env->timeRecord[j].envstruc && env->timeRecord[j].envstruc == &envelope)
-	{
-		
-		if ((env->timeRecord[j].envstruc->num && 
-			 !(env->timeRecord[j].envstruc->type & 4) &&
-			 pos >= env->timeRecord[j].envstruc->env[env->timeRecord[j].envstruc->num-1][0]) ||
-			!(mixer->channel[channel].timeRecord[j].volPan & 0xFFFF))
-		{
-			pos = -1;
-		}
-
-		return true;
-	}
-	
-	return false;
-}
-
 bool PlayerController::isNotePlaying(mp_sint32 ins, mp_sint32 channel, mp_sint32& note, bool& muted)
 {
 	if (!player)
@@ -1280,6 +1250,25 @@ void PlayerController::grabSampleData(mp_uint32 chnIndex, mp_sint32 count, mp_si
 		mixerDataCacheSize = count * 2 * 2;		
 		mixerDataCache = new mp_sint32[mixerDataCacheSize];
 	}
+
+	if (chnIndex >= 4)
+	{
+		if ((YMscopeIndex + count) > ResamplerYM::BUFFERCOPY_LENGTH)
+		{
+			YMscopeIndex = 0;
+		}
+
+		auto s = ResamplerYM::GetInstance()->getBufferCopy(YMscopeIndex, count);
+		YMscopeIndex += count;
+		
+		for (mp_sint32 i = 0; i < count; i++)
+		{
+			fetcher.fetchSampleData((s[0] + s[1]) >> 1);
+			s += 2;
+		}
+
+		return;
+	}
 	
 	ChannelMixer* mixer = player;
 
@@ -1320,6 +1309,19 @@ void PlayerController::grabSampleData(mp_uint32 chnIndex, mp_sint32 count, mp_si
 		// The scopes (which I assume is what this function is for) are currently
 		// using channel 33, to avoid interfering with playback
 		
+		channel.bitmask = chn->bitmask;
+		channel.bitshift = chn->bitshift;
+
+		if ((chnIndex == 0) || (chnIndex == 3))
+		{
+			channel.STebalanceLeft = chn->STebalanceLeft;
+		}
+		else
+		{
+			channel.STebalanceLeft = chn->STebalanceRight;
+		}
+		channel.STebalanceRight = 0;
+
 		channel.smpadd = (channel.smpadd*fMul) / (!count ? 1 : count);		
 		chn = &channel;
 				
@@ -1334,7 +1336,7 @@ void PlayerController::grabSampleData(mp_uint32 chnIndex, mp_sint32 count, mp_si
 			channel.finalvolr = 0;
 			channel.rampFromVolStepL = channel.rampFromVolStepR = 0;
 			
-			player->getCurrentResampler()->addChannel(chn, mixerDataCache, count, count);
+			mixer->addChannelToResampler(player->getCurrentResampler(), chn, mixerDataCache, count, count);
 		
 			for (mp_sint32 i = 0; i < count; i++)
 				fetcher.fetchSampleData(mixerDataCache[i*2]);
@@ -1359,11 +1361,18 @@ bool PlayerController::hasSampleData(mp_uint32 chnIndex)
 	if (!player)
 		return false;	
 
-	ChannelMixer* mixer = player;
+	if (chnIndex >= 4)
+	{
+		return true;
+	}
+	else
+	{
+		ChannelMixer* mixer = player;
 
-	ChannelMixer::TMixerChannel* chn = &mixer->channel[chnIndex];
+		ChannelMixer::TMixerChannel* chn = &mixer->channel[chnIndex];
 
-	pp_int32 j = getCurrentBeatIndex();
+		pp_int32 j = getCurrentBeatIndex();
 
-	return ((chn->timeRecord[j].flags & ChannelMixer::MP_SAMPLE_PLAY) && (chn->timeRecord[j].volPan & 0xFFFF));
+		return ((chn->timeRecord[j].flags & ChannelMixer::MP_SAMPLE_PLAY) && (chn->timeRecord[j].volPan & 0xFFFF));
+	}
 }

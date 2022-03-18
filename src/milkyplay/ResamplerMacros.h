@@ -103,6 +103,14 @@
 	/* adjust volume for right channel & mix */ \
 	(*buffer++)+=((sd1*(volr>>15))>>15); 
 
+#define NOCHECKMIXER_8BIT_BLS \
+	sd1 = mp_sint32(mp_sbyte((sample[posfixed>>16] >> chn->bitshift) & chn->bitmask)) << 8; \
+	\
+	/* adjust volume for left channel & mix */ \
+	(*buffer++)+=((sd1*(voll>>0))>>8); \
+	/* adjust volume for right channel & mix */ \
+	(*buffer++)+=((sd1*(volr>>0))>>8); 
+
 #define NOCHECKMIXER_16BIT_NORMAL \
 	sd1 = sample[posfixed>>16]; \
 	\
@@ -468,6 +476,15 @@ continueWithBiDir16_## LABELNO: \
 	(*buffer++)+=((sd1*(voll>>15))>>15); \
 	/* adjust volume for right channel & mix */ \
 	(*buffer++)+=((sd1*(volr>>15))>>15);
+
+#define FULLMIXER_8BIT_BLS \
+	/* 8 bit sample */ \
+	sd1 = mp_sint32(mp_sbyte((sample[smppos] >> chn->bitshift) & chn->bitmask))<<8; \
+	/* adjust volume for left channel & mix */ \
+	(*buffer++)+=((sd1*(voll>>0))>>8); \
+	/* adjust volume for right channel & mix */ \
+	(*buffer++)+=((sd1*(volr>>0))>>8);
+
 
 #define FULLMIXER_16BIT_NORMAL \
 	/* 16 bit sample */ \

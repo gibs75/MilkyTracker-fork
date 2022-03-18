@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Tracker.h"
 #include "XMFile.h"
 #include "TrackerSettingsDatabase.h"
@@ -39,7 +41,7 @@
 #include "version.h"
 
 // Logo picture
-#if defined(__EXCLUDE_BIGLOGO__) || defined(__LOWRES__)
+#if defined(__EXCLUDE_BIGLOGO__)
 	#include "LogoSmall.h"
 #else
 	#include "LogoBig.h"
@@ -121,7 +123,7 @@ void Tracker::showSplash()
 	while (shade <= 256.0f)
 	{
 		pp_int32 startTime = ::PPGetTickCount();
-#if defined(__EXCLUDE_BIGLOGO__) || defined(__LOWRES__)
+#if defined(__EXCLUDE_BIGLOGO__)
 		screen->paintSplash(LogoSmall::rawData, LogoSmall::width, LogoSmall::height, LogoSmall::width*4, 4, (int)shade); 		
 #else
 		screen->paintSplash(LogoBig::rawData, LogoBig::width, LogoBig::height, LogoBig::width*3, 3, (int)shade); 		
@@ -130,7 +132,7 @@ void Tracker::showSplash()
 		deltaT = abs((pp_int32)::PPGetTickCount() - startTime);
 		if (!deltaT) deltaT++;
 	}
-#if defined(__EXCLUDE_BIGLOGO__) || defined(__LOWRES__)
+#if defined(__EXCLUDE_BIGLOGO__)
 	screen->paintSplash(LogoSmall::rawData, LogoSmall::width, LogoSmall::height, LogoSmall::width*4, 4); 		
 #else
 	screen->paintSplash(LogoBig::rawData, LogoBig::width, LogoBig::height, LogoBig::width*3, 3); 		
@@ -141,7 +143,7 @@ void Tracker::showSplash()
 void Tracker::hideSplash()
 {
 	screen->clear();
-#if defined(__EXCLUDE_BIGLOGO__) || defined(__LOWRES__)
+#if defined(__EXCLUDE_BIGLOGO__)
 	screen->paintSplash(LogoSmall::rawData, LogoSmall::width, LogoSmall::height, LogoSmall::width*4, 4); 		
 #else
 	screen->paintSplash(LogoBig::rawData, LogoBig::width, LogoBig::height, LogoBig::width*3, 3); 		
@@ -152,7 +154,7 @@ void Tracker::hideSplash()
 	while (shade >= 0.0f)
 	{
 		pp_int32 startTime = ::PPGetTickCount();
-#if defined(__EXCLUDE_BIGLOGO__) || defined(__LOWRES__)
+#if defined(__EXCLUDE_BIGLOGO__)
 		screen->paintSplash(LogoSmall::rawData, LogoSmall::width, LogoSmall::height, LogoSmall::width*4, 4, (int)shade); 		
 #else
 		screen->paintSplash(LogoBig::rawData, LogoBig::width, LogoBig::height, LogoBig::width*3, 3, (int)shade); 		

@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef SECTIONSETTINGS__H
 #define SECTIONSETTINGS__H
 
@@ -36,11 +38,7 @@
 #include "SectionAbstract.h"
 #include "GlobalColorConfig.h"
 
-#ifdef __LOWRES__
-#define NUMSETTINGSPAGES	4
-#else
 #define NUMSETTINGSPAGES	5
-#endif
 
 class PPControl;
 class PPContainer;
@@ -148,10 +146,7 @@ private:
 
 	// Message box which asks for an audio driver
 	void showSelectDriverMessageBox();
-
-	// Message box with list of resampler
-	void showResamplerMessageBox();
-
+	
 	void storeAudioDriver(const char* driverName);
 	void storeResampler(pp_uint32 resampler);
 

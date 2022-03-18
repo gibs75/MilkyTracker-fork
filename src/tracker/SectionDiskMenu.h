@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef SECTIONDISKMENU__H
 #define SECTIONDISKMENU__H
 
@@ -78,12 +80,6 @@ private:
 	PPSystemString* file;
 	PPSystemString* fileFullPath;
 	PPSystemString currentPath;
-
-#ifdef __LOWRES__
-	pp_int32 lastSIPOffsetMove;
-	PPPoint lastPatternEditorControlLocation;
-	PPSize lastPatternEditorControlSize;
-#endif
 
 	PPSize fileBrowserExtent;
 	

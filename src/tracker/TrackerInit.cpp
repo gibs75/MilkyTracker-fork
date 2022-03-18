@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "Tracker.h"
 #include "TrackerConfig.h"
 #include "TabManager.h"
@@ -46,7 +48,6 @@
 #include "SectionTranspose.h"
 #include "SectionAdvancedEdit.h"
 #include "SectionDiskMenu.h"
-#include "SectionHDRecorder.h"
 #include "SectionSettings.h"
 #include "SectionInstruments.h"
 #include "SectionSamples.h"
@@ -68,192 +69,6 @@ void Tracker::initUI()
 	for (pp_int32 i = 0; i < sections->size(); i++)
 		sections->get(i)->init();
 
-#ifdef __LOWRES__
-	pp_int32 height2 = screen->getHeight()-UPPERSECTIONDEFAULTHEIGHT();
-
-	PPContainer* containerAbout = new PPContainer(CONTAINER_ABOUT, screen, this, PPPoint(116-2, height2), PPSize((306-116+2)+14,24), false);
-	containerAbout->setColor(TrackerConfig::colorThemeMain);
-
-	// Song title edit field
-	PPListBox* listBox = new PPListBox(LISTBOX_SONGTITLE, screen, this, PPPoint(116-2+2, height2+2+8), PPSize(200+2,12), true, true, false);
-	listBox->showSelection(false);
-	listBox->setSingleButtonClickEdit(true);
-	listBox->setBorderColor(TrackerConfig::colorThemeMain);
-
-	char str[MP_MAXTEXT+1];
-	moduleEditor->getTitle(str, ModuleEditor::MAX_TITLETEXT);
-
-	listBox->addItem(str);
-	listBox->setMaxEditSize(ModuleEditor::MAX_TITLETEXT);
-
-	containerAbout->addControl(listBox);
-
-	PPStaticText* staticText = playTimeText = new PPStaticText(STATICTEXT_ABOUT_TIME, screen, this, PPPoint(116+2, height2+2+8+3), "", false);
-	containerAbout->addControl(staticText);
-	
-	button = new PPButton(BUTTON_ABOUT_ESTIMATESONGLENGTH, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width - 6*8-4, height2+2+8+2), PPSize(6*8, 9));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Estimate");
-	containerAbout->addControl(button);
-
-	peakLevelControl = new PeakLevelControl(PEAKLEVEL_CONTROL, screen, this, PPPoint(116-2+2, height2+10), PPSize(200+2,12));
-	peakLevelControl->setBorderColor(TrackerConfig::colorThemeMain);
-	peakLevelControl->hide(true);
-	containerAbout->addControl(peakLevelControl);
-
-	// switch to Peak level
-	pp_int32 aboutButtonOffset = -33 - 30 - 30 - 23*3 - 14;
-
-	button = new PPButton(BUTTON_ABOUT_SHOWTITLE, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset, height2+1), PPSize(29, 9), false, true, false);
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Title");
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	containerAbout->addControl(button);
-
-	button = new PPButton(BUTTON_ABOUT_SHOWTIME, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + 29, height2+1), PPSize(24, 9), false, true, false);
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Time");
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	containerAbout->addControl(button);
-	
-	button = new PPButton(BUTTON_ABOUT_SHOWPEAK, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + 29+24, height2+1), PPSize(24, 9), false, true, false);
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Peak");
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	containerAbout->addControl(button);
-
-	button = new PPButton(MAINMENU_PLAY_SONG, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + (29+24+24) + 2, height2+1), PPSize(23, 9), false);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Play");
-	containerAbout->addControl(button);
-
-	button = new PPButton(MAINMENU_PLAY_PATTERN, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + (29+24+24) + 2 + 23, height2+1), PPSize(23, 9), false);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Pat");
-	containerAbout->addControl(button);
-
-	button = new PPButton(MAINMENU_STOP, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + (29+24+24) + 2 + 23*2, height2+1), PPSize(23, 9), false);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Stop");
-	containerAbout->addControl(button);
-
-	button = new PPButton(BUTTON_ABOUT_FOLLOWSONG, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + (29+24+24) + 2 + 23*3, height2+1), PPSize(12, 9), false, true, false);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("F");
-	containerAbout->addControl(button);
-
-	button = new PPButton(BUTTON_ABOUT_LIVESWITCH, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width + aboutButtonOffset + (29+24+24) + 2 + 23*3 + 12, height2+1), PPSize(12, 9), false, true, false);
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("L");
-	containerAbout->addControl(button);
-	
-	staticText = new PPStaticText(STATICTEXT_ABOUT_HEADING, screen, this, PPPoint(116, height2+3), "Title:", true);
-	staticText->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	containerAbout->addControl(staticText);
-
-	screen->addControl(containerAbout);
-
-	// small sections
-	initSectionOrderlist(0,0+height2);
-
-	initSectionSpeed(116-2,24+height2);
-
-	initSectionPattern(116-4+99,24+height2);
-
-	// Main options
-	initSectionMainOptions(0, 0+height2);
-	initListboxesSection(0, 0+height2);
-
-	// add scopes (hidden by default)
-	scopesControl = new ScopesControl(SCOPES_CONTROL, screen, this, 
-									  PPPoint(0, 0 + height2), 
-									  PPSize(SCOPESWIDTH(), SCOPESHEIGHT()));
-	scopesControl->setBorderColor(TrackerConfig::colorThemeMain);
-	scopesControl->show(false);
-	screen->addControl(scopesControl);
-
-	// add sub menu selection buttons (pages)
-	{
-		PPButton* button;
-	
-		PPContainer* container = new PPContainer(CONTAINER_SCOPECONTROL, screen, this, PPPoint(scopesControl->getSize().width, 0 + height2), PPSize(screen->getWidth()-scopesControl->getSize().width,SCOPESHEIGHT()), false);
-		container->setColor(TrackerConfig::colorThemeMain);
-		
-		pp_int32 dy = (container->getSize().height-2) / 5;
-		button = new PPButton(BUTTON_SCOPECONTROL_MUTE, screen, this, PPPoint(container->getLocation().x + 1, container->getLocation().y + 2), PPSize(container->getSize().width-3, dy), false, true, false);
-		button->setText("Mute");
-		button->setColor(TrackerConfig::colorThemeMain);
-		button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-		container->addControl(button);
-		
-		button = new PPButton(BUTTON_SCOPECONTROL_SOLO, screen, this, PPPoint(container->getLocation().x + 1, container->getLocation().y + 2 + dy), PPSize(container->getSize().width-3, dy), false, true, false);
-		button->setText("Solo");
-		button->setColor(TrackerConfig::colorThemeMain);
-		button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-		container->addControl(button);
-
-		button = new PPButton(BUTTON_SCOPECONTROL_REC, screen, this, PPPoint(container->getLocation().x + 1, container->getLocation().y + 2 + dy*2), PPSize(container->getSize().width-3, dy), false, true, false);
-		button->setText("Rec.");
-		button->setColor(TrackerConfig::colorThemeMain);
-		button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-		container->addControl(button);
-
-		button = new PPButton(MAINMENU_PLAY_SONG, screen, this, PPPoint(container->getLocation().x + 1, container->getLocation().y + 2 + dy*3), PPSize(container->getSize().width-3, dy), false);
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Play");
-		container->addControl(button);
-
-		button = new PPButton(MAINMENU_STOP, screen, this, PPPoint(container->getLocation().x + 1, container->getLocation().y + 2 + dy*4), PPSize(container->getSize().width-3, dy), false);
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Stop");
-		container->addControl(button);
-
-		container->show(false);
-		screen->addControl(container);
-
-		pp_int32 y = height2 + 64;
-
-		container = new PPContainer(CONTAINER_LOWRES_MENUSWITCH, screen, this, PPPoint(0, y), PPSize(screen->getWidth(),16), false);
-		container->setColor(TrackerConfig::colorThemeMain);
-		
-		const pp_int32 numSubMenus = NUMSUBMENUS();
-		
-		const char* subMenuTexts[] = {"Main","Song","Ins.","Scopes","Jam"};	
-		const pp_int32 subMenuIDs[] = {BUTTON_0, BUTTON_0+1, BUTTON_0+2, BUTTON_0+3, BUTTON_0+4};
-
-		pp_int32 dx = (screen->getWidth() - (4+38))/numSubMenus;
-		
-		for (pp_int32 i = 0; i < numSubMenus; i++)
-		{
-			button = new PPButton(subMenuIDs[i], screen, this, PPPoint(0 + 2+i*dx, y+1), PPSize(dx, 13), false, true, false);
-			button->setColor(TrackerConfig::colorThemeMain);
-			button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-			button->setText(subMenuTexts[i]);
-			container->addControl(button);	
-		}
-		
-		button = new PPButton(BUTTON_APP_EXIT, screen, this, PPPoint(0 + 6+numSubMenus*dx, y+2), PPSize(35,11));
-		button->setText("Exit");
-		container->addControl(button);
-		
-		screen->addControl(container);
-	}
-
-	sectionSwitcher->updateSubMenusButtons(false);
-	sectionSwitcher->showCurrentSubMenu(false);
-
-	pp_int32 peCtrlHeight = screen->getHeight()-UPPERSECTIONDEFAULTHEIGHT()-INPUTCONTAINERHEIGHT_DEFAULT;
-	
-	patternEditorControl = new PatternEditorControl(PATTERN_EDITOR, screen, this, 
-													PPPoint(0,0), 
-													PPSize(screen->getWidth(),peCtrlHeight));
-
-	initInputContainerDefault(0, screen->getHeight()-UPPERSECTIONDEFAULTHEIGHT()-INPUTCONTAINERHEIGHT_DEFAULT);
-	initInputContainerExtended(0, screen->getHeight()-UPPERSECTIONDEFAULTHEIGHT()-INPUTCONTAINERHEIGHT_EXTENDED);
-#else
 	PPContainer* containerAbout = new PPContainer(CONTAINER_ABOUT, screen, this, PPPoint(116-2, 0), PPSize((306-116+2)+14,24), false);
 	containerAbout->setColor(TrackerConfig::colorThemeMain);
 
@@ -273,11 +88,6 @@ void Tracker::initUI()
 	
 	PPStaticText* staticText = playTimeText = new PPStaticText(STATICTEXT_ABOUT_TIME, screen, this, PPPoint(116+2, 2+8+3), "", false);
 	containerAbout->addControl(staticText);
-
-	button = new PPButton(BUTTON_ABOUT_ESTIMATESONGLENGTH, screen, this, PPPoint(containerAbout->getLocation().x + containerAbout->getSize().width - 6*8-4, 2+8+2), PPSize(6*8, 9));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("estimate");
-	containerAbout->addControl(button);
 
 	peakLevelControl = new PeakLevelControl(PEAKLEVEL_CONTROL, screen, this, PPPoint(116-2+2, 2+8), PPSize(200+2,12));
 	peakLevelControl->setBorderColor(TrackerConfig::colorThemeMain);
@@ -353,7 +163,6 @@ void Tracker::initUI()
 	// ---------- Instrument & Sample listboxes ---------- 
 	initListboxesSection(320, 0);
 	
-#ifndef __LOWRES__
 	scopesControl = new ScopesControl(SCOPES_CONTROL, screen, this, 
 									  PPPoint(0, UPPERSECTIONDEFAULTHEIGHTWOINS()), 
 									  PPSize(screen->getWidth(), SCOPESHEIGHT()));
@@ -390,12 +199,10 @@ void Tracker::initUI()
 	tabHeader->setColor(TrackerConfig::colorThemeMain);
 	screen->addControl(tabHeader);
 	
-#endif
-
 	patternEditorControl = new PatternEditorControl(PATTERN_EDITOR, screen, this, 
 													PPPoint(0,UPPERSECTIONDEFAULTHEIGHT()), 
 													PPSize(screen->getWidth(),MAXEDITORHEIGHT()-UPPERSECTIONDEFAULTHEIGHT()));
-#endif
+	
 	// first thing to do is, attach pattern editor
 	patternEditorControl->attachPatternEditor(moduleEditor->getPatternEditor());
 	patternEditorControl->setColor(TrackerConfig::colorPatternEditorBackground);
@@ -404,7 +211,6 @@ void Tracker::initUI()
 	screen->addControl(patternEditorControl);
 
 	// ---------- update fields --------------
-	updateSamplesListBox(false);
 	updateSongLength(false);
 	updateSongRepeat(false);
 
@@ -417,19 +223,10 @@ void Tracker::initUI()
 
 	updatePatternEditorControl(false);
 
-#ifdef __LOWRES__
-	switchEditMode(EditModeMilkyTracker);
-#else
 	switchEditMode(EditModeFastTracker);
-#endif
 
 	screen->setFocus(patternEditorControl);
 	
-#ifdef __LOWRES__
-	setInputControl(SIPDefault);
-	updateJamMenuOrder(false);
-#endif
-
 	TitlePageManager titlePageManager(*screen);	
 	titlePageManager.showSongTitleEditField(false);
 
@@ -592,9 +389,11 @@ void Tracker::initSectionSpeed(pp_int32 x, pp_int32 y)
 
 	const pp_int32 bSize = 14;
 
-	PPButton* button = new PPButton(BUTTON_BPM_PLUS, screen, this, PPPoint(x + 2 + 54, y+2), PPSize(bSize, 11));
-	button->setText(TrackerConfig::stringButtonPlus);
-	containerSpeed->addControl(button);
+	PPButton* button;
+
+	//button = new PPButton(BUTTON_BPM_PLUS, screen, this, PPPoint(x + 2 + 54, y+2), PPSize(bSize, 11));
+	//button->setText(TrackerConfig::stringButtonPlus);
+	//containerSpeed->addControl(button);
 
 	// octave plus button, hidden by default
 	button = new PPButton(BUTTON_OCTAVE_PLUS, screen, this, PPPoint(x + 2 + 54, y+2), PPSize(bSize, 11));
@@ -602,9 +401,9 @@ void Tracker::initSectionSpeed(pp_int32 x, pp_int32 y)
 	button->hide(true);
 	containerSpeed->addControl(button);
 
-	button = new PPButton(BUTTON_BPM_MINUS, screen, this, PPPoint(x + 2 + 54 + bSize+1, y+2), PPSize(bSize-1, 11));
-	button->setText(TrackerConfig::stringButtonMinus);
-	containerSpeed->addControl(button);
+	//button = new PPButton(BUTTON_BPM_MINUS, screen, this, PPPoint(x + 2 + 54 + bSize+1, y+2), PPSize(bSize-1, 11));
+	//button->setText(TrackerConfig::stringButtonMinus);
+	//containerSpeed->addControl(button);
 
 	// octave minus button, hidden by default
 	button = new PPButton(BUTTON_OCTAVE_MINUS, screen, this, PPPoint(x + 2 + 54 + bSize+1, y+2), PPSize(bSize-1, 11));
@@ -700,21 +499,12 @@ void Tracker::initSectionMainOptions(pp_int32 x, pp_int32 y)
 {
 	pp_int32 i,j;
 
-#ifndef __LOWRES__
 	pp_int32 bHeight = 12;
 	PPSize size(320, 54);
-#else
-	pp_int32 bHeight = 14;
-	PPSize size(320, 64);
-#endif
 
 	PPContainer* container = new PPContainer(CONTAINER_MENU, screen, this, PPPoint(x, y), size, false);
 	container->setColor(TrackerConfig::colorThemeMain);
 
-#ifdef __LOWRES__
-	y+=2;
-#endif
-	
 	PPButton* button;
 	
 	for (j = 0; j < 4; j++)
@@ -775,13 +565,13 @@ void Tracker::initSectionMainOptions(pp_int32 x, pp_int32 y)
 	static_cast<PPButton*>(container->getControlByID(MAINMENU_ABOUT))->setText("About");
 
 	// add/subtract channels
-	button = new PPButton(BUTTON_MENU_ITEM_ADDCHANNELS, screen, this, PPPoint(x+4 + 3*78, y + 3 + 3*bHeight), PPSize((77>>1) - 1, bHeight-1));
+/*	button = new PPButton(BUTTON_MENU_ITEM_ADDCHANNELS, screen, this, PPPoint(x+4 + 3*78, y + 3 + 3*bHeight), PPSize((77>>1) - 1, bHeight-1));
 	button->setText("Add");
 	container->addControl(button);
 
 	button = new PPButton(BUTTON_MENU_ITEM_SUBCHANNELS, screen, this, PPPoint(x+4 + 3*78 + (77>>1), y + 3 + 3*bHeight), PPSize((77>>1)+1, bHeight-1));
 	button->setText("Sub");
-	container->addControl(button);
+	container->addControl(button);*/
 
 	button = static_cast<PPButton*>(container->getControlByID(MAINMENU_PLAY_PATTERN));
 	button->setText("Pat");
@@ -804,266 +594,27 @@ void Tracker::initListboxesSection(pp_int32 x, pp_int32 y)
 	if (size > 236)
 		size = 236;
 
-#ifndef __LOWRES__
 	const pp_int32 tinyButtonHeight = 10;
 	const pp_int32 tinyButtonOffset = -1;
 	pp_int32 height = 118;
 	pp_int32 dy = 4;
-#else
-	const pp_int32 tinyButtonHeight = 9;
-	const pp_int32 tinyButtonOffset = -1;
-	pp_int32 height = 64;
-	pp_int32 dy = 3;
-#endif
+
 
 	PPButton* button;
 
 	// Crippled main menu & jam menu
-#ifdef __LOWRES__
-	pp_int32 myDx = 55;
-	{
-		pp_int32 bHeight = 14;
-		
-		pp_int32 x2 = x+4;
-		pp_int32 y2 = y+2+3;
-
-		PPContainer* container = new PPContainer(CONTAINER_LOWRES_TINYMENU, screen, this, PPPoint(x, y), PPSize((size-myDx)+7,height), false);
-		container->setColor(TrackerConfig::colorThemeMain);
-		
-		button = new PPButton(MAINMENU_PLAY_SONG, screen, this, PPPoint(x2, y2), PPSize(73, bHeight-1));
-		button->setText("Play Sng");		
-		container->addControl(button);
-		
-		button = new PPButton(MAINMENU_PLAY_PATTERN, screen, this, PPPoint(x2, y2 + 1*bHeight), PPSize(73, bHeight-1));
-		button->setText("Play Pat");		
-		container->addControl(button);
-		
-		/*button = new PPButton(MAINMENU_STOP, screen, this, PPPoint(x2, y2 + 2*bHeight), PPSize(73, bHeight-1));
-		button->setText("Stop");		
-		container->addControl(button);*/
-
-		button = new PPButton(MAINMENU_STOP, screen, this, PPPoint(x2, y2 + 2*bHeight), PPSize((73>>1) - 1, bHeight-1));
-		button->setText("Stop");
-		container->addControl(button);
-		
-		button = new PPButton(MAINMENU_EDIT, screen, this, PPPoint(x2 + (73>>1), y2 + 2*bHeight), PPSize((73>>1)+1, bHeight-1), true, true, false);
-		button->setText("Rec");
-		container->addControl(button);
-		
-		button = new PPButton(BUTTON_MENU_ITEM_ADDCHANNELS, screen, this, PPPoint(x2, y2 + 3*bHeight), PPSize((73>>1) - 1, bHeight-1));
-		button->setText("Add");
-		container->addControl(button);
-		
-		button = new PPButton(BUTTON_MENU_ITEM_SUBCHANNELS, screen, this, PPPoint(x2 + (73>>1), y2 + 3*bHeight), PPSize((73>>1)+1, bHeight-1));
-		button->setText("Sub");
-		container->addControl(button);
-
-		x2+=74;
-
-		button = new PPButton(MAINMENU_INSEDIT, screen, this, PPPoint(x2, y2), PPSize(26, bHeight-1));
-		button->setText("Ins");		
-		container->addControl(button);
-		
-		button = new PPButton(MAINMENU_SMPEDIT, screen, this, PPPoint(x2, y2 + 1*bHeight), PPSize(26, bHeight-1));
-		button->setText("Smp");		
-		container->addControl(button);
-		
-		button = new PPButton(MAINMENU_ADVEDIT, screen, this, PPPoint(x2, y2 + 2*bHeight), PPSize(26, bHeight-1));
-		button->setText("Adv");		
-		container->addControl(button);
-
-		button = new PPButton(MAINMENU_TRANSPOSE, screen, this, PPPoint(x2, y2 + 3*bHeight), PPSize(26, bHeight-1));
-		button->setText("Trn");		
-		container->addControl(button);
-		
-		// play pattern/position
-		button = static_cast<PPButton*>(container->getControlByID(MAINMENU_PLAY_PATTERN));
-		button->setText("Pat");
-		button->setSize(PPSize((73>>1)-1, bHeight-1));
-		
-		PPPoint p = button->getLocation();
-		p.x+=button->getSize().width+1;
-		
-		button = new PPButton(MAINMENU_PLAY_POSITION, screen, this, p, PPSize((73>>1)+1, bHeight-1));
-		button->setText("Pos");
-		container->addControl(button);
-		
-		screen->addControl(container);
-		
-		x+=(size-myDx)+7;
-	}
-
-	size-=4;
-
-	{
-		pp_int32 height2 = height + 39 + 14;
-		pp_int32 y3 = y - 39 - 14;
-		
-		pp_int32 x2 = 0+4;
-
-		PPContainer* container = new PPContainer(CONTAINER_LOWRES_JAMMENU, screen, this, PPPoint(0, y3), PPSize(screen->getWidth(),height2), false);
-		container->setColor(TrackerConfig::colorThemeMain);
-
-		pp_int32 bHeight = 12;
-		pp_int32 y2 = y3 + 1;
-
-		PianoControl* pianoControl = new PianoControl(PIANO_CONTROL, screen, inputControlListener, 
-													  PPPoint(container->getLocation().x+2, y2), PPSize(screen->getWidth() - 4, 25*3+12), ModuleEditor::MAX_NOTE); 
-		// show C-3
-		pianoControl->setBorderColor(TrackerConfig::colorThemeMain);
-		pianoControl->setMode(PianoControl::ModePlay);
-		pianoControl->setxScale(6);
-		pianoControl->setyScale(3);		
-		pianoControl->assureNoteVisible(12*4);
-		
-		container->addControl(pianoControl);
-		
-		x2 = 0+4;
-		y2+=pianoControl->getSize().height+1;
-		
-		PPStaticText* staticText = new PPStaticText(0, NULL, NULL, PPPoint(x2, y2+2), "Pos", true);
-		container->addControl(staticText);	
-		
-		staticText = new PPStaticText(STATICTEXT_JAMMENU_CURORDER, NULL, NULL, PPPoint(x2 + 3*8+4, y2+2), "FF");
-		container->addControl(staticText);	
-
-		button = new PPButton(BUTTON_JAMMENU_NEXTORDERLIST, screen, this, PPPoint(x2 + 5*8+4 + 1, y2), PPSize(12, 11));
-		button->setText(TrackerConfig::stringButtonPlus);
-		container->addControl(button);
-		
-		button = new PPButton(BUTTON_JAMMENU_PREVORDERLIST, screen, this, PPPoint(button->getLocation().x + button->getSize().width+1, y2), PPSize(12, 11));
-		button->setText(TrackerConfig::stringButtonMinus);
-		container->addControl(button);
-		
-		pp_int32 x3 = button->getLocation().x + button->getSize().width+3;
-		
-		staticText = new PPStaticText(0, NULL, NULL, PPPoint(x3, y2+2), "Pat", true);
-		container->addControl(staticText);	
-
-		staticText = new PPStaticText(STATICTEXT_JAMMENU_CURPATTERN, NULL, NULL, PPPoint(x3 + 3*8+4, y2+2), "FF");
-		container->addControl(staticText);	
-
-		button = new PPButton(BUTTON_PATTERN_PLUS, screen, this, PPPoint(x3 + 5*8+4 + 1, y2), PPSize(12, 11));
-		button->setText(TrackerConfig::stringButtonPlus);
-		container->addControl(button);
-		
-		button = new PPButton(BUTTON_PATTERN_MINUS, screen, this, PPPoint(button->getLocation().x + button->getSize().width+1, y2), PPSize(12, 11));
-		button->setText(TrackerConfig::stringButtonMinus);
-		container->addControl(button);
-
-		x3 = button->getLocation().x + button->getSize().width+3;
-		
-		staticText = new PPStaticText(0, NULL, NULL, PPPoint(x3, y2+2), "Ins", true);
-		container->addControl(staticText);	
-
-		staticText = new PPStaticText(STATICTEXT_JAMMENU_CURINSTRUMENT, NULL, NULL, PPPoint(x3 + 3*8+4, y2+2), "FF");
-		container->addControl(staticText);	
-
-		button = new PPButton(BUTTON_JAMMENU_NEXTINSTRUMENT, screen, this, PPPoint(x3 + 5*8+4 + 1, y2), PPSize(12, 11));
-		button->setText(TrackerConfig::stringButtonUp);
-		container->addControl(button);
-		
-		button = new PPButton(BUTTON_JAMMENU_PREVINSTRUMENT, screen, this, PPPoint(button->getLocation().x + button->getSize().width+1, y2), PPSize(12, 11));
-		button->setText(TrackerConfig::stringButtonDown);
-		container->addControl(button);
-
-		button = new PPButton(INPUT_BUTTON_INS, screen, inputControlListener, PPPoint(button->getLocation().x + button->getSize().width+1 + 2, y2), PPSize(17, 11));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Ins");
-		container->addControl(button);
-
-		button = new PPButton(INPUT_BUTTON_DEL, screen, inputControlListener, PPPoint(button->getLocation().x + button->getSize().width+1, y2), PPSize(17, 11));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Del");
-		container->addControl(button);
-
-		button = new PPButton(INPUT_BUTTON_BACK, screen, inputControlListener, PPPoint(button->getLocation().x + button->getSize().width+1, y2), PPSize(22, 11));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Back");
-		container->addControl(button);
-
-		button = new PPButton(INPUT_BUTTON_KEYOFF, screen, inputControlListener, PPPoint(button->getLocation().x + button->getSize().width+1, y2), PPSize(17, 11));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Off");
-		container->addControl(button);
-
-		button = new PPButton(BUTTON_JAMMENU_TOGGLEPIANOSIZE, screen, this, PPPoint(button->getLocation().x + button->getSize().width+3, y2+1), PPSize(12, 11), false);
-		button->setColor(TrackerConfig::colorThemeMain);
-		button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-		button->setText(TrackerConfig::stringButtonCollapsed);
-		container->addControl(button);
-
-		x2 = 0+4;
-		y2+=14;
-		
-		button = new PPButton(MAINMENU_PLAY_SONG, screen, this, PPPoint(x2, y2), PPSize(77, bHeight-1));
-		button->setText("Play Sng");		
-		container->addControl(button);
-		
-		x2+=button->getSize().width+1;
-		button = new PPButton(MAINMENU_PLAY_PATTERN, screen, this, PPPoint(x2, y2), PPSize((77>>1)-1, bHeight-1));
-		button->setText("Pat");		
-		container->addControl(button);
-
-		x2+=button->getSize().width+1;
-		button = new PPButton(MAINMENU_PLAY_POSITION, screen, this, PPPoint(x2, y2), PPSize((77>>1)+1, bHeight-1));
-		button->setText("Pos");
-		container->addControl(button);
-		
-		x2+=button->getSize().width+1;
-		button = new PPButton(MAINMENU_STOP, screen, this, PPPoint(x2, y2), PPSize((77>>1), bHeight-1));
-		button->setText("Stop");		
-		container->addControl(button);
-		
-		// Add "Edit" button
-		x2+=button->getSize().width+1;
-		button = new PPButton(MAINMENU_EDIT, screen, this, PPPoint(x2, y2), PPSize((77>>1), bHeight-1), true, true, false);
-		button->setText("Rec");
-		container->addControl(button);	
-		
-		x2+=button->getSize().width+1;
-		button = new PPButton(BUTTON_MENU_ITEM_ADDCHANNELS, screen, this, PPPoint(x2, y2), PPSize((77>>1) - 1, bHeight-1));
-		button->setText("Add");
-		container->addControl(button);
-		
-		x2+=button->getSize().width+1;
-		button = new PPButton(BUTTON_MENU_ITEM_SUBCHANNELS, screen, this, PPPoint(x2, y2), PPSize((77>>1)+1, bHeight-1));
-		button->setText("Sub");
-		container->addControl(button);		
-
-		screen->addControl(container);		
-	}
-#else
 	pp_int32 myDx = 0;
-#endif
 
 	PPContainer* container = new PPContainer(CONTAINER_INSTRUMENTLIST, screen, this, PPPoint(x, y), PPSize(screen->getWidth()-x,height), false);
 	container->setColor(TrackerConfig::colorThemeMain);
 	
 	// Instruments
-#ifndef __LOWRES__
 	button = new PPButton(BUTTON_INSTRUMENT, screen, this, PPPoint(x+2, y+dy-2), PPSize(screen->getWidth() < 800 ? 3*8+4 : 11*8+4, 12), false, true, false);
 	button->setText(screen->getWidth() < 800 ? "Ins" : "Instruments");
 	button->setColor(TrackerConfig::colorThemeMain);
 	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
 	button->setPressed(true);
 	//PPStaticText* staticText = new PPStaticText(0, NULL, NULL, PPPoint(x+3, y+dy), screen->getWidth() < 800 ? "Ins" : "Instruments", true);
-#else
-	button = new PPButton(BUTTON_INSTRUMENT, screen, this, PPPoint(x+2, y+dy-2), PPSize(11*8+4, 11), false, true, false);
-	button->setText("Instruments");
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	button->setPressed(true);
-	{
-		PPStaticText* staticText = new PPStaticText(STATICTEXT_INSTRUMENTS_ALTERNATIVEHEADER, screen, this, PPPoint(x+3, y+dy), "Samples / Ins:", true);
-		staticText->hide(true);
-		container->addControl(staticText);
-		
-		staticText = new PPStaticText(STATICTEXT_INSTRUMENTS_ALTERNATIVEHEADER2, screen, this, PPPoint(x+3 + 14*8, y+dy), "xx", false);
-		staticText->hide(true);
-		container->addControl(staticText);
-	}
-#endif
 	container->addControl(button);
 
 	button = new PPButton(BUTTON_INSTRUMENTS_PLUS, screen, this, PPPoint(x+button->getSize().width+4, y+dy+tinyButtonOffset), PPSize(15, tinyButtonHeight));
@@ -1073,37 +624,6 @@ void Tracker::initListboxesSection(pp_int32 x, pp_int32 y)
 	button = new PPButton(BUTTON_INSTRUMENTS_MINUS, screen, this, PPPoint(button->getLocation().x + 16, y+dy+tinyButtonOffset), PPSize(15, tinyButtonHeight));
 	button->setText(TrackerConfig::stringButtonMinus);
 	container->addControl(button);
-
-#ifndef __LOWRES__
-	button = new PPButton(BUTTON_INSTRUMENTEDITOR_CLEAR, screen, sectionInstruments, PPPoint(x+2 + size - 2 - 92, y+dy+tinyButtonOffset), PPSize(30, tinyButtonHeight));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Zap");
-	container->addControl(button);	
-
-	button = new PPButton(BUTTON_INSTRUMENTEDITOR_LOAD, screen, sectionInstruments, PPPoint(x+2 + size - 2 - 61, y+dy+tinyButtonOffset), PPSize(30, tinyButtonHeight));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Load");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_INSTRUMENTEDITOR_SAVE, screen, sectionInstruments, PPPoint(x+2 + size - 2 - 30, y+dy+tinyButtonOffset), PPSize(30, tinyButtonHeight));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Save");
-	container->addControl(button);
-#else
-	button = new PPButton(BUTTON_INSTRUMENTS_FLIP, screen, this, PPPoint(container->getLocation().x + container->getSize().width - 27, y+dy+tinyButtonOffset - 1), PPSize(24, 11), false);
-	button->setText("Flip");
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_JAMMENU_PREVINSTRUMENT, screen, this, PPPoint(button->getLocation().x - 16, y+dy+tinyButtonOffset), PPSize(15, tinyButtonHeight));
-	button->setText(TrackerConfig::stringButtonUp);
-	container->addControl(button);
-	
-	button = new PPButton(BUTTON_JAMMENU_NEXTINSTRUMENT, screen, this, PPPoint(button->getLocation().x - 16, y+dy+tinyButtonOffset), PPSize(15, tinyButtonHeight));
-	button->setText(TrackerConfig::stringButtonDown);
-	container->addControl(button);
-#endif
 
 	listBoxInstruments = new PPListBox(LISTBOX_INSTRUMENTS, screen, this, PPPoint(x+2, y + 7 + dy + dy), PPSize(size+myDx,height-(10+2*dy)), true, true, true, true);
 	listBoxInstruments->setBorderColor(TrackerConfig::colorThemeMain);
@@ -1115,38 +635,91 @@ void Tracker::initListboxesSection(pp_int32 x, pp_int32 y)
 
 	container->addControl(listBoxInstruments);
 
+	// Instruments
+	{
+	auto offsetx = x+4 + size + myDx;
+	auto offsety = y+dy+tinyButtonOffset+tinyButtonHeight+4;
+
 	// Samples
-#ifndef __LOWRES__
-	button = new PPButton(BUTTON_SAMPLE_EDIT_CLEAR, screen, sectionSamples, PPPoint(x+2 + size*2 + 4 - 2 - 92, y+dy+tinyButtonOffset), PPSize(30, tinyButtonHeight));
+	button = new PPButton(BUTTON_SAMPLE_EDIT_CLEAR, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Clear");
+	button->setText("Clear sample");
+	container->addControl(button);	
+	offsety += tinyButtonHeight + 1;
+
+	button = new PPButton(BUTTON_SAMPLE_LOAD, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setText("Load sample");
+	container->addControl(button);
+	offsety += tinyButtonHeight + 1;
+
+	button = new PPButton(BUTTON_SAMPLE_SAVE, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setText("Save sample");
+	container->addControl(button);
+	}
+
+	{
+	auto offsetx = x+ size + 90;
+	auto offsety = y+dy+tinyButtonOffset+tinyButtonHeight;
+
+	PPPoint listYMOrigin (offsetx, offsety);
+	listBoxYMsounds = new PPListBox(LISTBOX_YMSOUNDS, screen, this, listYMOrigin, PPSize(151, height-offsety-13), true, true, true, false);
+	listBoxYMsounds->setBorderColor(TrackerConfig::colorThemeMain);
+	listBoxYMsounds->setShowIndex(false);
+	listBoxYMsounds->setIndexBaseCount(0);
+
+	container->addControl(listBoxYMsounds);
+	offsety += height-offsety-12;
+
+	button = new PPButton(BUTTON_YM_EDIT, screen, this, PPPoint(offsetx, offsety), PPSize(tinyButtonHeight, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setText("x");
 	container->addControl(button);	
 
-	button = new PPButton(BUTTON_SAMPLE_LOAD, screen, sectionSamples, PPPoint(x+2 + size*2 + 4 - 2 - 61, y+dy+tinyButtonOffset), PPSize(30, tinyButtonHeight));
+	PPStaticText* staticTextymsoundfilename = new PPStaticText(STATICTEXT_YMSOUNDFILENAME, NULL, NULL, PPPoint(offsetx+tinyButtonHeight, offsety+2), ResamplerYM::GetInstance()->GetSndSynFilename(), true);
+	staticTextymsoundfilename->setFont(PPFont::getFont(PPFont::FONT_TINY));
+
+	container->addControl(staticTextymsoundfilename);
+	}
+
+	{	
+	auto offsetx = x+4 + size*2 + 6;
+	auto offsety = y+dy+tinyButtonOffset+tinyButtonHeight+4;
+
+
+	button = new PPButton(BUTTON_YM_TEST, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Load");
+	button->setText("Test YM ini file in SynthYM");
 	container->addControl(button);
+	offsety += tinyButtonHeight + 1;
 
-	button = new PPButton(BUTTON_SAMPLE_SAVE, screen, sectionSamples, PPPoint(x+2 + size*2 + 4 - 2 - 30, y+dy+tinyButtonOffset), PPSize(30, tinyButtonHeight));
+	button = new PPButton(BUTTON_YM_RELOAD, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Save");
+	button->setText("Load YM ini file");
 	container->addControl(button);
-#endif
+	offsety += tinyButtonHeight + 1;
 
-	PPStaticText* staticText = new PPStaticText(STATICTEXT_SAMPLEHEADER, NULL, NULL, PPPoint(x+size+myDx+4+3, y+dy), "Samples", true);
-	container->addControl(staticText);
+	button = new PPButton(BUTTON_BLS_CONVERT, screen, this, PPPoint(offsetx,offsety), PPSize(149, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setText("Save > Convert");
+	container->addControl(button);
+	offsety += tinyButtonHeight + 1;
 
-	listBoxSamples = new PPListBox(LISTBOX_SAMPLES, screen, this, PPPoint(x+2 + size+4, y + 7 + dy + dy), PPSize(size,height-(10+2*dy)), true, true, true, true);
-	listBoxSamples->setBorderColor(TrackerConfig::colorThemeMain);
-	listBoxSamples->setShowIndex(true);
-	listBoxSamples->setMaxEditSize(ModuleEditor::MAX_SMPTEXT);
-	listBoxSamples->setIndexBaseCount(0);
+	button = new PPButton(BUTTON_BLS_CONVERT_N_PLAY_BLS, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setText("Save > Convert > Play BLS");
+	container->addControl(button);
+	offsety += tinyButtonHeight + 1;
 
-	container->addControl(listBoxSamples);
+	button = new PPButton(BUTTON_BLS_CONVERT_N_PLAY_BLZ, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setText("Save > Convert > Play BLZ");
+	container->addControl(button);
+	offsety += tinyButtonHeight + 1;
+	}
 
-#ifdef __LOWRES__
-	listBoxSamples->hide(true);
-#endif
+	fillYMSoundsListBox(listBoxYMsounds);
 
 	screen->addControl(container);
 }

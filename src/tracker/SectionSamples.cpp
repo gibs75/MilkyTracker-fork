@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionSamples.h"
 
 #include "PPUI.h"
@@ -481,7 +483,6 @@ void SectionSamples::init(pp_int32 x, pp_int32 y)
 	containerEntire = new PPTransparentContainer(CONTAINER_ENTIRESMPSECTION, screen, this, 
 												 PPPoint(0, 0), PPSize(screen->getWidth(), screen->getHeight()));
 
-#ifndef __LOWRES__
 	pp_int32 conSize1 = (pp_int32)(screen->getWidth()*0.1359375f);
 	pp_int32 conSize2 = (pp_int32)(screen->getWidth()*0.215625f);
 	pp_int32 conSize3 = (pp_int32)(screen->getWidth()*0.0734375f);
@@ -754,272 +755,7 @@ void SectionSamples::init(pp_int32 x, pp_int32 y)
 	container->addControl(button);
 
 	containerEntire->addControl(container);
-#else
-	// sample editor
-	PPContainer* sampleEditorContainer = new PPContainer(CONTAINER_SAMPLEEDITOR, screen, this, PPPoint(x, y), PPSize(320, 92), false);
-	sampleEditorContainer->setColor(TrackerConfig::colorThemeMain);
 
-	sampleEditorControl = new SampleEditorControl(SAMPLE_EDITOR, screen, this, PPPoint(x+2, y+2), PPSize(316, 92-4));
-	sampleEditorControl->attachSampleEditor(tracker.moduleEditor->getSampleEditor());
-	sampleEditorControl->setBorderColor(TrackerConfig::colorThemeMain);
-
-	sampleEditorContainer->addControl(sampleEditorControl);
-	containerEntire->addControl(sampleEditorContainer);
-
-	pp_int32 x2 = x;
-	pp_int32 y2 = sampleEditorContainer->getSize().height + y;
-
-	PPContainer* container = new PPContainer(CONTAINER_SAMPLE_PLAY, screen, this, PPPoint(x2, y2), PPSize(87,12*3+4), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	container->addControl(new PPStaticText(0, NULL, NULL, PPPoint(x2 + 4, y2 + 2), "Play:", true));		
-	container->addControl(new PPStaticText(STATICTEXT_SAMPLE_PLAYNOTE, screen, this, PPPoint(x2 + 8, y2 + 2 + 14), "C-5", false));		
-
-	PPButton* button = new PPButton(BUTTON_SAMPLE_PLAY_UP, screen, this, PPPoint(x2+38, y2+2+12), PPSize(18, 11));
-	button->setText("Up");
-	container->addControl(button);
-	
-	button = new PPButton(BUTTON_SAMPLE_PLAY_DOWN, screen, this, PPPoint(x2+38, y2+2+24), PPSize(18, 11));
-	button->setText("Dn");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_PLAY_STOP, screen, this, PPPoint(x2+2, y2+2+24), PPSize(34, 11));
-	button->setText("Stop");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_PLAY_WAVE, screen, this, PPPoint(x2+2 + 56, y2+2), PPSize(26, 11));
-	button->setText("Wav");
-	container->addControl(button);
-	
-	button = new PPButton(BUTTON_SAMPLE_PLAY_RANGE, screen, this, PPPoint(x2+2 + 56, y2+2+12), PPSize(26, 11));
-	button->setText("Rng");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_PLAY_DISPLAY, screen, this, PPPoint(x2+2 + 56, y2+2+12*2), PPSize(26, 11));
-	button->setText("Dsp");
-	container->addControl(button);
-
-	containerEntire->addControl(container);
-
-	x2+=container->getSize().width;
-	container = new PPContainer(CONTAINER_SAMPLE_RANGE, screen, this, PPPoint(x2, y2), PPSize(66*2+6,12*3+4), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	button = new PPButton(BUTTON_SAMPLE_RANGE_SHOW, screen, this, PPPoint(x2+2, y2+2), PPSize(66, 11));
-	button->setText("Show rng");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_RANGE_ALL, screen, this, PPPoint(x2+2, y2+2+12), PPSize(66, 11));
-	button->setText("Rng all");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_UNDO, screen, this, PPPoint(x2+2, y2+2+12*2), PPSize(32, 11));
-	button->setText("Undo");
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_REDO, screen, this, PPPoint(x2 + 2 + 33, y2+2+12*2), PPSize(33, 11));
-	button->setText("Redo");
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_RANGE_ZOOMOUT, screen, this, PPPoint(x2+2 + 67, y2+2), PPSize(66, 11));
-	button->setText("Zoom out");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_RANGE_SHOWALL, screen, this, PPPoint(x2+2 + 67, y2+2+12), PPSize(66, 11));
-	button->setText("Show all");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_APPLY_LASTFILTER, screen, this, PPPoint(x2+2 + 67, y2+2+12*2), PPSize(66, 11));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Redo filter");
-	container->addControl(button);
-
-	containerEntire->addControl(container);
-	
-	x2 += container->getSize().width;
-
-	container = new PPContainer(CONTAINER_SAMPLE_EDIT1, screen, this, PPPoint(x2, y2), PPSize(47,12*3+4), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_CUT, screen, this, PPPoint(x2+2, y2+2), PPSize(42, 11));
-	button->setText("Cut");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_COPY, screen, this, PPPoint(x2+2, y2+2+12), PPSize(42, 11));
-	button->setText("Copy");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_PASTE, screen, this, PPPoint(x2+2, y2+2+12*2), PPSize(42, 11));
-	button->setText("Paste");
-	container->addControl(button);
-
-	containerEntire->addControl(container);
-
-	x2 += container->getSize().width;
-
-	container = new PPContainer(CONTAINER_SAMPLE_EDIT2, screen, this, PPPoint(x2, y2), PPSize(48,12*3+4), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_CROP, screen, this, PPPoint(x2+2, y2+2), PPSize(43, 11));
-	button->setText("Crop");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_VOL, screen, this, PPPoint(x2+2, y2+2+12), PPSize(43, 11));
-	button->setText("Vol");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_DRAW, screen, this, PPPoint(x2+2, y2+2+12*2), PPSize(43, 11), true, true, false);
-	button->setText("Draw");
-	container->addControl(button);
-
-	containerEntire->addControl(container);
-
-	x2 = x;
-
-	y2+=container->getSize().height;
-	
-	container = new PPContainer(CONTAINER_SHOWCONTEXTMENU, screen, this, PPPoint(x2, y2), PPSize(17,52), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	button = new PPButton(BUTTON_SHOWCONTEXTMENU, screen, this, PPPoint(x2+2, y2+2), PPSize(12, container->getSize().height - 5));
-	button->setVerticalText(true);
-	button->setText("Menu");
-	container->addControl(button);	
-
-	containerEntire->addControl(container);
-
-	x2+=container->getSize().width;		
-
-	container = new PPContainer(CONTAINER_SAMPLE_EDIT3, screen, this, PPPoint(x2, y2), PPSize(65,52), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	PPRadioGroup* radioGroup = new PPRadioGroup(RADIOGROUP_SAMPLE_LOOPTYPE, screen, this, PPPoint(x2+3, y2+1), PPSize(65, 50));
-	radioGroup->setColor(TrackerConfig::colorThemeMain);
-	radioGroup->setFont(PPFont::getFont(PPFont::FONT_TINY));
-
-	radioGroup->addItem("No loop");
-	radioGroup->addItem("Forward");
-	radioGroup->addItem("Ping-pong");
-	radioGroup->addItem("One shot");
-
-	container->addControl(radioGroup);	
-	
-	containerEntire->addControl(container);
-
-	x2+=container->getSize().width;
-
-	container = new PPContainer(CONTAINER_SAMPLE_EDIT4, screen, this, PPPoint(x2, y2), PPSize(66-16,25), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	radioGroup = new PPRadioGroup(RADIOGROUP_SAMPLE_RESTYPE, screen, this, PPPoint(x2+1, y2-1), PPSize(65-16, 25));
-	radioGroup->setColor(TrackerConfig::colorThemeMain);
-	radioGroup->setFont(PPFont::getFont(PPFont::FONT_TINY));
-
-	radioGroup->addItem("8-bit");
-	radioGroup->addItem("16-bit");
-
-	container->addControl(radioGroup);	
-	
-	containerEntire->addControl(container);
-
-	// Zoom container
-	container = new PPContainer(CONTAINER_SAMPLE_ZOOMIN, screen, this, PPPoint(x2 + container->getSize().width, y2), PPSize(16,25), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	button = new PPButton(BUTTON_SAMPLE_ZOOM_PLUS, screen, this, PPPoint(container->getLocation().x+2, y2+2), PPSize(11, 10));
-	button->setText("+");
-	container->addControl(button);	
-
-	button = new PPButton(BUTTON_SAMPLE_ZOOM_MINUS, screen, this, PPPoint(button->getLocation().x, y2+2+button->getSize().height+1), PPSize(11, 9));
-	button->setText("-");
-	container->addControl(button);	
-
-	containerEntire->addControl(container);	
-
-	pp_int32 y3 = y2 + container->getSize().height;
-
-	container = new PPContainer(CONTAINER_SAMPLE_LOADSAVE, screen, this, PPPoint(x2, y3), PPSize(66,27), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	button = new PPButton(MAINMENU_INSEDIT, screen, &tracker, PPPoint(x2+2, y3+2+12), PPSize(34, 10));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Ins.Ed.");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLEEDITOR_EXIT, screen, &tracker, PPPoint(x2+2+35, y3+2+12), PPSize(26, 10));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Exit");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_LOAD, screen, this, PPPoint(x2+2, y3+2), PPSize(30, 11));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Load");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_SAVE, screen, this, PPPoint(x2+2+31, y3+2), PPSize(30, 11));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Save");
-	container->addControl(button);
-
-	containerEntire->addControl(container);
-
-	x2+=container->getSize().width;
-
-	container = new PPContainer(CONTAINER_SAMPLE_EDIT5, screen, this, PPPoint(x2, y2), PPSize(172,52), false);
-	container->setColor(TrackerConfig::colorThemeMain);
-
-	container->addControl(new PPStaticText(STATICTEXT_DISPLAY, NULL, NULL, PPPoint(x2 + 2, y2 + 4), "Display", true));		
-	container->addControl(new PPStaticText(STATICTEXT_LENGTH, NULL, NULL, PPPoint(x2 + 2, y2 + 4+12), "Length", true));		
-	container->addControl(new PPStaticText(STATICTEXT_REPSTART, screen, this, PPPoint(x2 + 2, y2 + 4+12*2), "Repeat", true));		
-	container->addControl(new PPStaticText(STATICTEXT_REPLEN, screen, this, PPPoint(x2 + 2, y2 + 4+12*3), "Replen.", true));		
-
-	container->addControl(new PPStaticText(STATICTEXT_SAMPLE_DISPLAY, screen, this, PPPoint(x2 + 2 + 58, y2 + 4), "12345678", false));		
-	container->addControl(new PPStaticText(STATICTEXT_SAMPLE_LENGTH, screen, this, PPPoint(x2 + 2 + 58, y2 + 4+12), "12345678", false));		
-	container->addControl(new PPStaticText(STATICTEXT_SAMPLE_REPSTART, screen, this, PPPoint(x2 + 2 + 58, y2 + 4+12*2), "12345678", false));		
-	container->addControl(new PPStaticText(STATICTEXT_SAMPLE_REPLENGTH, screen, this, PPPoint(x2 + 2 + 58, y2 + 4+12*3), "12345678", false));		
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_CLEAR, screen, this, PPPoint(x2+126, y2+2), PPSize(43, 11));
-	button->setText("Clear");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_MINIMIZE, screen, this, PPPoint(x2+126, y2+2+12), PPSize(27, 11));
-	button->setText("Min");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_FLIPNUMBERFORMAT, screen, this, PPPoint(x2+126+28, y2+2+12), PPSize(15, 11));
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	button->setText("H");
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_REPSTARTPLUS, screen, this, PPPoint(x2+126, y2+2+12*2), PPSize(13, 11));
-	button->setText(TrackerConfig::stringButtonPlus);
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_REPSTARTMINUS, screen, this, PPPoint(x2+126+14, y2+2+12*2), PPSize(13, 11));
-	button->setText(TrackerConfig::stringButtonMinus);
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_REPLENPLUS, screen, this, PPPoint(x2+126, y2+2+12*3), PPSize(13, 11));
-	button->setText(TrackerConfig::stringButtonPlus);
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SAMPLE_EDIT_REPLENMINUS, screen, this, PPPoint(x2+126+14, y2+2+12*3), PPSize(13, 11));
-	button->setText(TrackerConfig::stringButtonMinus);
-	container->addControl(button);
-
-	button = new PPButton(BUTTON_SHOWRANGE, screen, this, PPPoint(x2+126+14*2, y2+2+12*2), PPSize(15, 11*2+1));
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Rng");
-	button->setVerticalText(true);
-	container->addControl(button);
-
-	containerEntire->addControl(container);
-#endif
 	containerEntire->adjustContainerSize();
 	screen->addControl(containerEntire);
 
@@ -1060,10 +796,6 @@ void SectionSamples::realign()
 
 void SectionSamples::show(bool bShow)
 {
-#ifdef __LOWRES__
-	PPScreen* screen = tracker.screen;
-	screen->pauseUpdate(true);
-#endif
 	SectionAbstract::show(bShow);
 
 	visible = bShow;
@@ -1077,47 +809,16 @@ void SectionSamples::show(bool bShow)
 	{
 		PatternEditorControl* control = tracker.getPatternEditorControl();
 
-#ifndef __LOWRES__
 		realign();
-#endif		
 
 		if (bShow)
 		{
-			if (control)
-			{
-#ifdef __LOWRES__
-				control->show(false);
-				replaceInstrumentListBoxes(true, 56);
-#endif
-			}
 			tracker.hideInputControl();
-		}
-		else if (control)
-		{
-#ifdef __LOWRES__
-			control->show(true);
-			replaceInstrumentListBoxes(false);
-#endif
 		}
 		
 		update();
 		showSection(bShow);
 	}	
-
-#ifdef __LOWRES__
-	// If instrument section is shown (bShow = true)
-	// set focus to the Instrumentlist container (instrument listbox)
-	// but before disable screen updates to prevent flickering
-	if (bShow)
-	{
-		screen->setFocus(screen->getControlByID(CONTAINER_INSTRUMENTLIST));
-	}
-	screen->pauseUpdate(false);
-	if (!bShow)
-	{
-		screen->update();
-	}
-#endif
 }
 
 void SectionSamples::update(bool repaint/* = true*/)
@@ -1149,7 +850,7 @@ void SectionSamples::realUpdate(bool repaint, bool force, bool reAttach)
 		return;
 
 	if (reAttach)
-		tracker.moduleEditor->reloadSample(tracker.listBoxInstruments->getSelectedIndex(), tracker.listBoxSamples->getSelectedIndex());
+		tracker.moduleEditor->reloadSample(tracker.listBoxInstruments->getSelectedIndex(), 0); //tracker.listBoxSamples->getSelectedIndex());
 
 	if (!visible)
 		return;
@@ -1257,7 +958,7 @@ void SectionSamples::updateSampleWindow(bool repaint/* = true*/)
 void SectionSamples::updateAfterLoad()
 {
 	tracker.updateInstrumentsListBox(false);
-	tracker.updateSamplesListBox(false);
+	//tracker.updateSamplesListBox(false);
 	tracker.sectionInstruments->update(false);
 	update(false);	
 }
@@ -1268,7 +969,7 @@ SampleEditorControl* SectionSamples::getSampleEditorControl(bool forceAttach/* =
 		sampleEditorControl && 
 		sampleEditorControl->getSampleEditor()->getSample() == NULL)
 	{
-		tracker.moduleEditor->reloadSample(tracker.listBoxInstruments->getSelectedIndex(), tracker.listBoxSamples->getSelectedIndex());
+		tracker.moduleEditor->reloadSample(tracker.listBoxInstruments->getSelectedIndex(), 0); //tracker.listBoxSamples->getSelectedIndex());
 	}
 	
 	return sampleEditorControl; 

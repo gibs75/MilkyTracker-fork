@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionOptimize.h"
 #include "SectionInstruments.h"
 #include "Tracker.h"
@@ -182,7 +184,7 @@ void SectionOptimize::refresh()
 {
 	tracker.updateOrderlist(false);
 	tracker.updateInstrumentsListBox(false);
-	tracker.updateSamplesListBox(false);
+	//tracker.updateSamplesListBox(false);
 	// update instrument/sample editor
 	tracker.updateSampleEditorAndInstrumentSection(false);
 	tracker.updateWindowTitle();

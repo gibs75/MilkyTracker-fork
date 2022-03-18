@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "AnimatedFXControl.h"
 #include "Screen.h"
 #include "GraphicsAbstract.h"
@@ -40,17 +42,8 @@
 
 #undef FXTOGGLE
 
-#ifdef __LOWRES__
-#define __SIMPLEFX__
-#endif
-
-#ifdef __SIMPLEFX__
-#include "Starfield.h"
-#undef FXTOGGLE
-#else
 #include "TwisterFX.h"
 #include "Fire.h"
-#endif
 
 static const char* text =
 "Welcome to MilkyTracker! The open-source, cross-platform FastTracker II "
@@ -303,7 +296,7 @@ void AnimatedFXControl::show(bool bShow)
 	PPControl::show(bShow);
 	if (!bShow)
 	{
-#if defined(FXTOGGLE) || defined(__LOWRES__) 
+#if defined(FXTOGGLE)
 		delete fx;
 		fx = NULL;
 		delete[] vscreen;
@@ -313,7 +306,7 @@ void AnimatedFXControl::show(bool bShow)
 	}
 	else
 	{
-#if defined(FXTOGGLE) || defined(__LOWRES__) 
+#if defined(FXTOGGLE)
 		createFX();
 #endif
 	}

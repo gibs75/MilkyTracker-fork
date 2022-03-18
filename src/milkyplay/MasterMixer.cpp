@@ -435,10 +435,13 @@ inline void MasterMixer::prepareBuffer()
 	memset(buffer, 0, bufferSize*MP_NUMCHANNELS*sizeof(mp_sint32)); 
 }
 
+
 inline void MasterMixer::swapOutBuffer(mp_sword* bufferOut)
 {
 	if (filterHook)
 		filterHook->mix(buffer, bufferSize);
+
+	auto bufhead = bufferOut;
 
 	register mp_sint32* bufferIn = buffer;
 	const register mp_sint32 sampleShift = this->sampleShift; 
@@ -448,12 +451,13 @@ inline void MasterMixer::swapOutBuffer(mp_sword* bufferOut)
 	
 	for (mp_sint32 i = 0; i < bufferSize; i++)
 	{
-		mp_sint32 b = *bufferIn++;
+		signed int b = *bufferIn++;
 		if (b>upperBound) b = upperBound; 
 		else if (b<lowerBound) b = lowerBound; 
-		*bufferOut++ = b>>sampleShift;
+		signed int loweredvalue = b >> sampleShift;
+		*bufferOut++ = (mp_sword)loweredvalue;
 	}
-	
+
 	/*
 	mp_sint32* buffer32 = mixbuff32;
 	mp_sint32 lsampleShift = sampleShift; 

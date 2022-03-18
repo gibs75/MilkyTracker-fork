@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriverBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriverManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriver_NULL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriver_WAVWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\ChannelMixer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\ExporterXM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LittleEndian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\Loader669.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderAMF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderAMS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderCBA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDBM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDIGI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDSM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDTM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderFAR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderGDM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderIMF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderIT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMDL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMOD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMTM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMXM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderOKT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderPLM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderPSM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderPTM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderS3M.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderSTM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderULT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderUNI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderXM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\MasterMixer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\PlayerBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\PlayerSTD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\ResamplerFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderAIFF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderALL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderAbstract.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderGeneric.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderIFF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderWAV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\XIInstrument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\XMFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\XModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\drivers\windows\AudioDriver_MMSYSTEM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ym\DEMOSDK\PC\YMEMUL.CPP">
+      <Filter>YM\DEMOSDK\PC</Filter>
+    </ClCompile>
+    <ClCompile Include="ym\DEMOSDK\STANDARD.C">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="ym\DEMOSDK\SYNTHYM.C">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="ym\EXTERN\sound.c">
+      <Filter>YM\EXTERN</Filter>
+    </ClCompile>
+    <ClCompile Include="ResamplerYM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ym\DEMOSDK\SYNTHYMD.C">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriverBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriverManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriver_COMPENSATE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriver_NULL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriver_WAVWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ChannelMixer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\LittleEndian.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\Loaders.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MasterMixer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlayCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlayResults.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlayTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\Mixable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\PlayerBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\PlayerSTD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ResamplerFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ResamplerFast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ResamplerMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderAIFF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderALL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderAbstract.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderGeneric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderIFF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderWAV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\XIInstrument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\XMFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\XModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\computed-blep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)src\milkyplay\drivers\windows\AudioDriver_MMSYSTEM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\DEMOSDK\PC\YMEMUL.H">
+      <Filter>YM\DEMOSDK\PC</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\DEMOSDK\BASTYPES.H">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\DEMOSDK\STANDARD.H">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\DEMOSDK\SYNTHYM.H">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\EXTERN\sound.h">
+      <Filter>YM\EXTERN</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\EXTERN\ym2149_fixed_vol.h">
+      <Filter>YM\EXTERN</Filter>
+    </ClInclude>
+    <ClInclude Include="ResamplerYM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ym\DEMOSDK\SYNTHYMD.H">
+      <Filter>YM\DEMOSDK</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{C542CE97-EC39-3BEA-9BAB-7C09187DEB26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BF354C6D-D1C1-3327-B91F-A7FBB571FBF3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YM">
+      <UniqueIdentifier>{550f5893-4c93-4b48-9e15-3cd136343f49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YM\DEMOSDK">
+      <UniqueIdentifier>{646e071e-d547-4f5e-98ec-b8ae1d6f6764}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YM\DEMOSDK\PC">
+      <UniqueIdentifier>{78959278-b848-4fa1-9e35-e93b0eb9f769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YM\EXTERN">
+      <UniqueIdentifier>{f327d510-f385-450a-bf91-36b3e0eaaaea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

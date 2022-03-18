@@ -28,6 +28,9 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
+
 #include "DialogBase.h"
 #include "Screen.h"
 #include "StaticText.h"
@@ -84,9 +87,6 @@ void PPDialogBase::initCommon(PPScreen* screen,
 	parentScreen = screen;
 	messageBoxContainerGeneric = NULL;
 
-/*#ifdef __LOWRES__
-	height+=15;
-#endif*/
 	x = screen->getWidth() / 2 - width/2;
 	y = screen->getHeight() / 2 - height/2;
 
@@ -120,9 +120,6 @@ void PPDialogBase::initDialog(PPScreen* screen,
 
 	pp_uint32 height = 62 + stringList.size()*12;
 
-/*#ifdef __LOWRES__
-	height+=15;
-#endif*/
 	pp_int32 x = screen->getWidth() / 2 - width/2;
 	pp_int32 y = screen->getHeight() / 2 - height/2;
 
@@ -139,11 +136,6 @@ void PPDialogBase::initDialog(PPScreen* screen,
 		y2+=12;
 	}
 
-/*#ifdef __LOWRES__
-	pp_int32 y3 = y + height - (26 + 15);
-#else
-	pp_int32 y3 = y + height - 26;
-#endif*/
 	pp_int32 y3 = y + height - captionOffset;
 
 	PPButton* button;
@@ -165,11 +157,6 @@ void PPDialogBase::initDialog(PPScreen* screen,
 	pp_int32 x,y;
 	initCommon(screen, responder, id, caption, width, height, x, y);
 
-/*#ifdef __LOWRES__
-	pp_int32 y3 = y + height - (26 + 15);
-#else
-	pp_int32 y3 = y + height - 26;
-#endif*/
 	pp_int32 y3 = y + height - captionOffset;
 
 	PPButton* button;
@@ -192,11 +179,6 @@ void PPDialogBase::initDialog(PPScreen* screen,
 	pp_int32 x,y;
 	initCommon(screen, responder, id, caption, width, height, x, y);
 
-/*#ifdef __LOWRES__
-	pp_int32 y3 = y + height - (26 + 15);
-#else
-	pp_int32 y3 = y + height - 26;
-#endif*/
 	pp_int32 y3 = y + height - captionOffset;
 
 	PPButton* button;
@@ -224,11 +206,6 @@ void PPDialogBase::initDialog(PPScreen* screen,
 	pp_int32 x,y;
 	initCommon(screen, responder, id, caption, width, height, x, y);
 
-/*#ifdef __LOWRES__
-	pp_int32 y3 = y + height - (26 + 15);
-#else
-	pp_int32 y3 = y + height - 26;
-#endif*/
 	pp_int32 y3 = y + height - captionOffset;
 
 	PPButton* button;
@@ -324,11 +301,6 @@ void PPDialogBase::sendKey(EEventDescriptor event, pp_uint16 vk, pp_uint16 sc, p
 
 pp_int32 PPDialogBase::handleEvent(PPObject* sender, PPEvent* event)
 {
-#ifdef __LOWRES__
-	static const pp_uint16 scanCodesNumbers[] = {SC_1, SC_2, SC_3, SC_4, SC_5, SC_6, SC_7, SC_8, SC_9, SC_0, SC_PLUS, SC_MINUS, SC_PERIOD, 0, 0, 0, 0};
-	static const pp_uint16 asciiCodesNumbers[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '-', '.', VK_LEFT, VK_RIGHT, VK_DELETE, VK_BACK};
-#endif
-
 	if (event->getID() == eKeyDown && keyDownInvokeKeyCode > 0 && *(((pp_int16*)event->getDataPtr())) == keyDownInvokeKeyCode)
 	{
 		event->cancel();
@@ -388,50 +360,7 @@ pp_int32 PPDialogBase::handleEvent(PPObject* sender, PPEvent* event)
 			{
 				CALLHANDLER(ActionUser4);
 				break;
-			}
-						
-			// Input keys
-#ifdef __LOWRES__
-			case MESSAGEBOX_BUTTON_KEYS_BASE:	// 1
-			case MESSAGEBOX_BUTTON_KEYS_BASE+1:	// 2
-			case MESSAGEBOX_BUTTON_KEYS_BASE+2: // 3
-			case MESSAGEBOX_BUTTON_KEYS_BASE+3: // 4
-			case MESSAGEBOX_BUTTON_KEYS_BASE+4: // 5
-			case MESSAGEBOX_BUTTON_KEYS_BASE+5: // 6
-			case MESSAGEBOX_BUTTON_KEYS_BASE+6: // 7
-			case MESSAGEBOX_BUTTON_KEYS_BASE+7: // 8
-			case MESSAGEBOX_BUTTON_KEYS_BASE+8: // 9
-			case MESSAGEBOX_BUTTON_KEYS_BASE+9: // 0
-			case MESSAGEBOX_BUTTON_KEYS_BASE+10: // +
-			case MESSAGEBOX_BUTTON_KEYS_BASE+11: // -
-			case MESSAGEBOX_BUTTON_KEYS_BASE+12: // .
-			{
-				pp_int32 i = (reinterpret_cast<PPControl*>(sender)->getID() - MESSAGEBOX_BUTTON_KEYS_BASE);
-				pp_uint16 key[3];
-				key[0] = key[2] = (pp_uint16)asciiCodesNumbers[i];
-				key[1] = scanCodesNumbers[i];
-				sendKey(eKeyDown, key[0], key[1], key[2]);
-				
-				sendKey(eKeyChar, key[0], key[1], 0);
-				sendKey(eKeyUp, key[0], key[1], key[2]);
-				break;
-			}
-			
-			case MESSAGEBOX_BUTTON_KEYS_BASE+13: // LEFT
-			case MESSAGEBOX_BUTTON_KEYS_BASE+14: // RIGHT
-			case MESSAGEBOX_BUTTON_KEYS_BASE+15: // DEL
-			case MESSAGEBOX_BUTTON_KEYS_BASE+16: // BACK
-			{
-				pp_int32 i = (reinterpret_cast<PPControl*>(sender)->getID() - MESSAGEBOX_BUTTON_KEYS_BASE);
-				pp_uint16 key[2];
-				key[0] = (pp_uint16)asciiCodesNumbers[i];
-				key[1] = scanCodesNumbers[i];
-				key[2] = 0;
-				sendKey(eKeyDown, key[0], key[1], key[2]);				
-				sendKey(eKeyUp, key[0], key[1], key[2]);
-				break;
-			}
-#endif
+			}					
 		}
 	}
 	

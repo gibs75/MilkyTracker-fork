@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "TitlePageManager.h"
 #include "Screen.h"
 #include "Container.h"
@@ -72,23 +74,17 @@ void TitlePageManager::showSongTitleEditField(bool update/* = true*/)
 	PPButton* buttonShowPeak = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWPEAK));
 	PPButton* buttonShowTime = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWTIME));
 	PPButton* buttonShowTitle = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWTITLE));
-	PPButton* buttonTimeEstimate = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_ESTIMATESONGLENGTH));
 	PPStaticText* text = static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_ABOUT_HEADING));
 	PPStaticText* text2 = static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_ABOUT_TIME));
 	
 	static_cast<PPListBox*>(container->getControlByID(LISTBOX_SONGTITLE))->hide(false);
 	peakLevelControl->hide(true);
 	text2->hide(true);
-	buttonTimeEstimate->hide(true);
 
 	buttonShowPeak->setPressed(false);
 	buttonShowTime->setPressed(false);
 	buttonShowTitle->setPressed(true);
-#ifdef __LOWRES__
-	text->setText("Title:");
-#else
 	text->setText("Song Title:");
-#endif
 	text->setColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
 
 	if (update)
@@ -102,15 +98,13 @@ void TitlePageManager::showTimeCounter(bool update/* = true*/)
 	PPButton* buttonShowPeak = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWPEAK));
 	PPButton* buttonShowTime = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWTIME));
 	PPButton* buttonShowTitle = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWTITLE));
-	PPButton* buttonTimeEstimate = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_ESTIMATESONGLENGTH));
 	PPStaticText* text = static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_ABOUT_HEADING));
 	PPStaticText* text2 = static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_ABOUT_TIME));
 	
 	static_cast<PPListBox*>(container->getControlByID(LISTBOX_SONGTITLE))->hide(true);
 	peakLevelControl->hide(true);
 	text2->hide(false);
-	buttonTimeEstimate->hide(false);
-
+	
 	buttonShowPeak->setPressed(false);
 	buttonShowTime->setPressed(true);
 	buttonShowTitle->setPressed(false);
@@ -128,23 +122,17 @@ void TitlePageManager::showPeakControl(bool update/* = true*/)
 	PPButton* buttonShowPeak = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWPEAK));
 	PPButton* buttonShowTime = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWTIME));
 	PPButton* buttonShowTitle = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_SHOWTITLE));
-	PPButton* buttonTimeEstimate = static_cast<PPButton*>(container->getControlByID(BUTTON_ABOUT_ESTIMATESONGLENGTH));
 	PPStaticText* text = static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_ABOUT_HEADING));
 	PPStaticText* text2 = static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_ABOUT_TIME));
 	
 	static_cast<PPListBox*>(container->getControlByID(LISTBOX_SONGTITLE))->hide(true);
 	peakLevelControl->hide(false);
 	text2->hide(true);
-	buttonTimeEstimate->hide(true);
 
 	buttonShowPeak->setPressed(true);
 	buttonShowTime->setPressed(false);
 	buttonShowTitle->setPressed(false);
-#ifdef __LOWRES__
-	text->setText("Peak:");
-#else
 	text->setText("Peak level:");
-#endif
 	text->setColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
 
 	if (update)

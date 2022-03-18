@@ -75,7 +75,6 @@ public:
 	{
 		PlayModeOptionFirst = 0,
 		PlayModeOptionPanning8xx = 0,
-		PlayModeOptionPanningE8x = 1,
 		// Only affects PTK playback mode
 		PlayModeOptionForcePTPitchLimit = 2,
 		PlayModeOptionLast
@@ -190,7 +189,7 @@ protected:
 	virtual void clearEffectMemory() { }	
 
 public:
-	PlayerBase(mp_uint32 frequency);
+	PlayerBase(mp_uint32 frequency, MixerSettings::ResamplerTypes resampleTypes, bool mainplayer = false);
 
 	virtual ~PlayerBase();
 	

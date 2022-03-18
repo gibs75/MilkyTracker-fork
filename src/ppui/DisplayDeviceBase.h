@@ -20,17 +20,14 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef __DISPLAYDEVICEBASE_H__
 #define __DISPLAYDEVICEBASE_H__
 
 // Some default values
-#ifndef __LOWRES__
-	#define DISPLAYDEVICE_WIDTH 640
-	#define DISPLAYDEVICE_HEIGHT 480
-#else
-	#define DISPLAYDEVICE_WIDTH 320
-	#define DISPLAYDEVICE_HEIGHT 240
-#endif
+#define DISPLAYDEVICE_WIDTH 960
+#define DISPLAYDEVICE_HEIGHT 480
 
 #include "BasicTypes.h"
 #include "Font.h"

@@ -40,7 +40,6 @@
 #include "AudioDriverManager.h"
 #include "MasterMixer.h"
 #include "PlayerSTD.h"
-#include "PlayerGeneric.h"
 #include "XModule.h"
 
 #ifdef MILKYTRACKER

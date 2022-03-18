@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionSettings.h"
 #include "Tracker.h"
 #include "TrackerConfig.h"
@@ -64,11 +66,7 @@
 
 #include "ControlIDs.h"
 
-#ifdef __LOWRES__
-#define SECTIONHEIGHT		148
-#else
 #define SECTIONHEIGHT		118
-#endif
 #define UPPERFRAMEHEIGHT	118
 
 // small custom button class which will be used to show a color preview
@@ -151,11 +149,8 @@ enum ControlIDs
 	STATICTEXT_SETTINGS_FORCEPOWER2BUFF,
 	CHECKBOX_SETTINGS_FORCEPOWER2BUFF,
 	RADIOGROUP_SETTINGS_AMPLIFY,
-	BUTTON_SETTINGS_RESAMPLING,
-	CHECKBOX_SETTINGS_RAMPING,
 	RADIOGROUP_SETTINGS_MIXFREQ,
 	BUTTON_SETTINGS_CHOOSEDRIVER,
-    RADIOGROUP_SETTINGS_XMCHANNELLIMIT,
 
 	// PAGE I (2)
 	CHECKBOX_SETTINGS_VIRTUALCHANNELS,
@@ -273,8 +268,7 @@ enum ControlIDs
 
 	RESPONDMESSAGEBOX_CUSTOMRESOLUTION,
 	RESPONDMESSAGEBOX_RESTOREPALETTES,
-	RESPONDMESSAGEBOX_SELECTAUDIODRV,
-	RESPONDMESSAGEBOX_SELECTRESAMPLER
+	RESPONDMESSAGEBOX_SELECTAUDIODRV
 };
 
 struct TScreenRes
@@ -334,13 +328,6 @@ public:
 			{
 				PPListBox* listBox = reinterpret_cast<DialogListBox*>(sender)->getListBox();
 				section.storeAudioDriver(listBox->getItem(listBox->getSelectedIndex()));
-				break;
-			}
-
-			case RESPONDMESSAGEBOX_SELECTRESAMPLER:
-			{
-				PPListBox* listBox = reinterpret_cast<DialogListBox*>(sender)->getListBox();
-				section.storeResampler(listBox->getSelectedIndex());
 				break;
 			}
 		}
@@ -469,19 +456,7 @@ public:
 		container->addControl(radioGroup);
 
 		y2 += 2 + 11*7 - 4;
-
-		container->addControl(new PPStaticText(0, NULL, NULL, PPPoint(x + 4, y2), "Resampling:", true));
-		button = new PPButton(BUTTON_SETTINGS_RESAMPLING, screen, this, PPPoint(x + 4 + 11*8 + 4, y2-2), PPSize(6*9 + 4, 11));
-		button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-		button->setText("Select" PPSTR_PERIODS);
-		container->addControl(button);
-
-		y2+=12;
-
-		checkBox = new PPCheckBox(CHECKBOX_SETTINGS_RAMPING, screen, this, PPPoint(x + 4 + 17 * 8 + 4, y2 - 1));
-		container->addControl(checkBox);
-		container->addControl(new PPCheckBoxLabel(0, NULL, this, PPPoint(x + 4, y2), "Volume ramping:", checkBox, true));
-		
+	
 		//container->addControl(new PPSeperator(0, screen, PPPoint(x + 158, y+4), UPPERFRAMEHEIGHT-8, TrackerConfig::colorThemeMain, false));
 	}
 
@@ -563,10 +538,6 @@ public:
 		v = settingsDatabase->restore("MIXERSHIFT")->getIntValue();
 
 		static_cast<PPRadioGroup*>(container->getControlByID(RADIOGROUP_SETTINGS_AMPLIFY))->setChoice(v);
-
-		// checkboxes
-		v = settingsDatabase->restore("RAMPING")->getIntValue();
-		static_cast<PPCheckBox*>(container->getControlByID(CHECKBOX_SETTINGS_RAMPING))->checkIt(v!=0);
 	}
 
 };
@@ -756,39 +727,11 @@ public:
         pp_int32 x = 0;
         pp_int32 y = 0;
         
-        container = new PPTransparentContainer(id, screen, this, PPPoint(x, y), PPSize(PageWidth,PageHeight));
-        
-        pp_int32 x2 = x;
-        pp_int32 y2 = y;
-        
-        container->addControl(new PPStaticText(0, NULL, NULL, PPPoint(x2 + 2, y2 + 2), "XM channel limit", true, true));
-        
-        PPRadioGroup* radioGroup = new PPRadioGroup(RADIOGROUP_SETTINGS_XMCHANNELLIMIT, screen, this, PPPoint(x2, y2+2+11), PPSize(160, 3*14));
-        radioGroup->setColor(TrackerConfig::colorThemeMain);
-        radioGroup->addItem("32");
-        radioGroup->addItem("64");
-        radioGroup->addItem("128");
-        
-        container->addControl(radioGroup);
+        container = new PPTransparentContainer(id, screen, this, PPPoint(x, y), PPSize(PageWidth,PageHeight));       
     }
     
     virtual void update(PPScreen* screen, TrackerSettingsDatabase* settingsDatabase, ModuleEditor& moduleEditor)
     {
-        // mixer resolution
-        pp_int32 v = settingsDatabase->restore("XMCHANNELLIMIT")->getIntValue();
-        
-        switch (v) {
-            case 32:
-                static_cast<PPRadioGroup*>(container->getControlByID(RADIOGROUP_SETTINGS_XMCHANNELLIMIT))->setChoice(0);
-                break;
-            case 64:
-                static_cast<PPRadioGroup*>(container->getControlByID(RADIOGROUP_SETTINGS_XMCHANNELLIMIT))->setChoice(1);
-                break;
-            case 128:
-                static_cast<PPRadioGroup*>(container->getControlByID(RADIOGROUP_SETTINGS_XMCHANNELLIMIT))->setChoice(2);
-                break;
-                
-        }
     }
     
 };
@@ -1005,11 +948,7 @@ public:
 			sectionSettings.listBoxColors->addItem(sectionSettings.colorDescriptors[j].readableDecription);
 		}
 
-#ifdef __LOWRES__
-		y2+=sectionSettings.listBoxColors->getSize().height + 2;
-#else
 		y2+=sectionSettings.listBoxColors->getSize().height + 4;
-#endif
 		container->addControl(sectionSettings.listBoxColors);
 
 		button = new PPColPrevButton(BUTTON_COLOR, screen, this, PPPoint(x2 + 88, y2 + 1), PPSize(31, 34));
@@ -1576,12 +1515,10 @@ public:
 
 		y2+=10;
 
-#ifndef __LOWRES__
 		checkBox = new PPCheckBox(CHECKBOX_SETTINGS_SCOPES, screen, this, PPPoint(x2 + 4 + 17 * 8 + 4, y2 - 1));
 		container->addControl(checkBox);
 		container->addControl(new PPCheckBoxLabel(0, NULL, this, PPPoint(x2 + 2, y2), "Show scopes:", checkBox, true));
 		y2+=12;
-#endif
 
 		container->addControl(new PPStaticText(STATICTEXT_SETTINGS_SCOPESAPPEARANCE, NULL, NULL, PPPoint(x2 + 2, y2), "Scope Style:", true));
 
@@ -1608,12 +1545,10 @@ public:
 		static_cast<PPCheckBox*>(container->getControlByID(CHECKBOX_SETTINGS_SHOWSPLASH))->checkIt(v!=0);
 
 		v = settingsDatabase->restore("SCOPES")->getIntValue();
-#ifndef __LOWRES__
 		static_cast<PPCheckBox*>(container->getControlByID(CHECKBOX_SETTINGS_SCOPES))->checkIt(v & 1);
 
 		static_cast<PPRadioGroup*>(container->getControlByID(RADIOGROUP_SETTINGS_SCOPESAPPEARANCE))->enable((v & 1) != 0);
 		static_cast<PPStaticText*>(container->getControlByID(STATICTEXT_SETTINGS_SCOPESAPPEARANCE))->enable((v & 1) != 0);
-#endif
 		static_cast<PPRadioGroup*>(container->getControlByID(RADIOGROUP_SETTINGS_SCOPESAPPEARANCE))->setChoice(v >> 1);
 	}
 
@@ -1926,25 +1861,6 @@ pp_int32 SectionSettings::handleEvent(PPObject* sender, PPEvent* event)
 					break;
 
 				showSelectDriverMessageBox();
-				break;
-			}
-
-			case CHECKBOX_SETTINGS_RAMPING:
-			{
-				if (event->getID() != eCommand)
-					break;
-
-				tracker.settingsDatabase->store("RAMPING", (pp_int32)reinterpret_cast<PPCheckBox*>(sender)->isChecked());
-				update();
-				break;
-			}
-
-			case BUTTON_SETTINGS_RESAMPLING:
-			{
-				if (event->getID() != eCommand)
-					break;
-
-				showResamplerMessageBox();
 				break;
 			}
 
@@ -2540,16 +2456,6 @@ pp_int32 SectionSettings::handleEvent(PPObject* sender, PPEvent* event)
 				break;
 			}
                 
-            case RADIOGROUP_SETTINGS_XMCHANNELLIMIT:
-            {
-                pp_int32 v = reinterpret_cast<PPRadioGroup*>(sender)->getChoice();
-                
-                ASSERT(v >= 0 && v < 3);
-                tracker.settingsDatabase->store("XMCHANNELLIMIT", 1 << (v + 5));
-                update();
-                break;
-            }
-
 			case RADIOGROUP_SETTINGS_PATTERNFONT:
 			{
 				pp_int32 v = reinterpret_cast<PPRadioGroup*>(sender)->getChoice();
@@ -2561,13 +2467,6 @@ pp_int32 SectionSettings::handleEvent(PPObject* sender, PPEvent* event)
 			case RADIOGROUP_SETTINGS_EDITMODE:
 			{
 				pp_int32 v = reinterpret_cast<PPRadioGroup*>(sender)->getChoice();
-#ifdef __LOWRES__
-				if (v != 0)
-				{
-					SystemMessage message(*tracker.screen, SystemMessage::MessageLimitedInput);
-					message.show();
-				}
-#endif
 				tracker.settingsDatabase->store("EDITMODE", v);
 				update();
 				break;
@@ -2675,10 +2574,6 @@ void SectionSettings::show(bool bShow)
 /*#ifndef
 				control->setLocation(PPPoint(0, SECTIONHEIGHT));
 				control->setSize(PPSize(screen->getWidth(),screen->getHeight()-SECTIONHEIGHT));*/
-#ifdef __LOWRES__
-				control->setLocation(PPPoint(0, 0));
-				control->setSize(PPSize(screen->getWidth(),tracker.MAXEDITORHEIGHT()-SECTIONHEIGHT));
-#endif
 			}
 			tracker.hideInputControl();
 
@@ -2723,11 +2618,7 @@ void SectionSettings::cancelSettings()
 
 void SectionSettings::init()
 {
-#ifndef __LOWRES__
 	init(0,0);
-#else
-	init(0,tracker.screen->getHeight()-SECTIONHEIGHT);
-#endif
 }
 
 void SectionSettings::init(pp_int32 x, pp_int32 y)
@@ -2741,11 +2632,7 @@ void SectionSettings::init(pp_int32 x, pp_int32 y)
 	sectionContainer = new PPContainer(CONTAINER_SETTINGS, screen, this, PPPoint(x, y2), PPSize(screen->getWidth(),SECTIONHEIGHT), false);
 	static_cast<PPContainer*>(sectionContainer)->setColor(TrackerConfig::colorThemeMain);
 
-#ifdef __LOWRES__
-	pp_int32 x2 = 0;
-#else
 	pp_int32 x2 = 160;
-#endif
 
 	while (x2 < screen->getWidth())
 	{
@@ -2757,16 +2644,12 @@ void SectionSettings::init(pp_int32 x, pp_int32 y)
 	tabPages.get(0)->add(new TabPageIO_1(PAGE_IO_1, *this));
 	tabPages.get(0)->add(new TabPageIO_2(PAGE_IO_2, *this));
 	tabPages.get(0)->add(new TabPageIO_3(PAGE_IO_3, *this));
-#ifndef __LOWRES__
     tabPages.get(0)->add(new TabPageIO_4(PAGE_IO_4, *this));
-#endif
 
 	tabPages.get(1)->add(new TabPageLayout_1(PAGE_LAYOUT_1, *this));
 	tabPages.get(1)->add(new TabPageLayout_2(PAGE_LAYOUT_2, *this));
-#ifndef __LOWRES__
 	tabPages.get(1)->add(new TabPageLayout_3(PAGE_LAYOUT_3, *this));
 	tabPages.get(1)->add(new TabPageLayout_4(PAGE_LAYOUT_4, *this));
-#endif
 
 	tabPages.get(2)->add(new TabPageFonts_1(PAGE_FONTS_1, *this));
 	tabPages.get(2)->add(new TabPageFonts_2(PAGE_FONTS_2, *this));
@@ -2776,9 +2659,7 @@ void SectionSettings::init(pp_int32 x, pp_int32 y)
 	tabPages.get(3)->add(new TabPageMisc_3(PAGE_MISC_3, *this));
 	tabPages.get(3)->add(new TabPageMisc_4(PAGE_MISC_4, *this));
 
-#ifndef __LOWRES__
 	tabPages.get(4)->add(new TabPageTabs_1(PAGE_TABS_1, *this));
-#endif
 
 	for (i = 0; i < tabPages.size(); i++)
 		for (pp_int32 j = 0; j < tabPages.get(i)->size(); j++)
@@ -2791,7 +2672,6 @@ void SectionSettings::init(pp_int32 x, pp_int32 y)
 
 	const pp_int32 numSettingsPages = NUMSETTINGSPAGES;
 
-#ifndef __LOWRES__
 	const char* subSettingsTexts[] = {"I/O","Layout","Fonts","Misc.","Tabs"};
 
 	x2 = x;
@@ -2829,45 +2709,6 @@ void SectionSettings::init(pp_int32 x, pp_int32 y)
 	}
 	x2++;
 
-#else
-	const char* subSettingsTexts[] = {"I/O","Layout","Fonts","Misc."};
-
-	x2 = screen->getWidth()-160 + 4;
-
-	//static_cast<PPContainer*>(sectionContainer)->addControl(new PPSeperator(0, screen, PPPoint(x2 - 4, y+4), UPPERFRAMEHEIGHT-8, TrackerConfig::colorThemeMain, false));
-	static_cast<PPContainer*>(sectionContainer)->addControl(new PPSeperator(0, screen, PPPoint(x + 2, y+UPPERFRAMEHEIGHT-4), screen->getWidth()-4, TrackerConfig::colorThemeMain, true));
-
-	pp_int32 bWidth = (screen->getWidth()-8-26) / numSettingsPages;
-	pp_int32 bHeight = 13;
-
-	pp_int32 sx = x + 4;
-	pp_int32 sy = y + UPPERFRAMEHEIGHT;
-
-	for (i = 0; i < numSettingsPages; i++)
-	{
-		button = new PPButton(PAGE_BUTTON_0+i, screen, this, PPPoint(sx, sy), PPSize(bWidth, bHeight), false, true, false);
-		button->setColor(TrackerConfig::colorThemeMain);
-		button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-		button->setText(subSettingsTexts[i]);
-		static_cast<PPContainer*>(sectionContainer)->addControl(button);
-		sx+=bWidth;
-	}
-
-	sx+=1;
-	button = new PPButton(SUBPAGE_BUTTON_LEFT_0, screen, this, PPPoint(sx, sy), PPSize(13, bHeight), false);
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	button->setText("<");
-	static_cast<PPContainer*>(sectionContainer)->addControl(button);
-
-	button = new PPButton(SUBPAGE_BUTTON_RIGHT_0, screen, this, PPPoint(sx+13, sy), PPSize(13, bHeight), false);
-	button->setColor(TrackerConfig::colorThemeMain);
-	button->setTextColor(PPUIConfig::getInstance()->getColor(PPUIConfig::ColorStaticText));
-	button->setText(">");
-	static_cast<PPContainer*>(sectionContainer)->addControl(button);
-
-	//static_cast<PPContainer*>(sectionContainer)->addControl(new PPSeperator(0, screen, PPPoint(x + 2, sy + bHeight + 1), screen->getWidth()-4, TrackerConfig::colorThemeMain, true));
-#endif
 
 	button = new PPButton(BUTTON_SETTINGS_OK, screen, this, PPPoint(x2+3, y+SECTIONHEIGHT-2-12), PPSize(46, 11));
 	button->setText("Ok");
@@ -2900,17 +2741,8 @@ void SectionSettings::update(bool repaint/* = true*/)
 
 	pp_int32 i, j;
 
-#ifdef __LOWRES__
-	pp_int32 x = 0;
-#else
 	pp_int32 x = 160;
-#endif
 	pp_int32 y = sectionContainer->getLocation().y;
-
-#ifdef __LOWRES__
-	static_cast<PPButton*>(sectionContainer->getControlByID(SUBPAGE_BUTTON_LEFT_0))->enable(false);
-	static_cast<PPButton*>(sectionContainer->getControlByID(SUBPAGE_BUTTON_RIGHT_0))->enable(false);
-#endif
 
 	// hide all tab pages first
 	for (i = 0; i < tabPages.size(); i++)
@@ -2921,10 +2753,8 @@ void SectionSettings::update(bool repaint/* = true*/)
 			tabPages.get(i)->get(j)->setVisible(false);
 		}
 
-#ifndef __LOWRES__
 		static_cast<PPButton*>(sectionContainer->getControlByID(SUBPAGE_BUTTON_LEFT_0+i))->enable(false);
 		static_cast<PPButton*>(sectionContainer->getControlByID(SUBPAGE_BUTTON_RIGHT_0+i))->enable(false);
-#endif
 	}
 
 	PPPoint location(x, y);
@@ -2954,9 +2784,7 @@ void SectionSettings::update(bool repaint/* = true*/)
 	}
 
 	i = currentActiveTabNum;
-#ifdef __LOWRES__
-	i = 0;
-#endif
+
 	PPButton* button = static_cast<PPButton*>(sectionContainer->getControlByID(SUBPAGE_BUTTON_RIGHT_0+i));
 	button->enable(lastVisiblePage < tabPages.get(currentActiveTabNum)->size() - 1);
 
@@ -3182,30 +3010,6 @@ void SectionSettings::showSelectDriverMessageBox()
 
 	if (selectedIndex != -1)
 		listBox->setSelectedIndex(selectedIndex, false);
-
-	dialog->show();
-}
-
-void SectionSettings::showResamplerMessageBox()
-{
-	if (dialog)
-	{
-		delete dialog;
-		dialog = NULL;
-	}
-
-	dialog = new DialogListBox(tracker.screen,
-							   responder,
-							   RESPONDMESSAGEBOX_SELECTRESAMPLER,
-							   "Select Resampler",
-							   true);
-	PPListBox* listBox = static_cast<DialogListBox*>(dialog)->getListBox();
-
-	ResamplerHelper resamplerHelper;
-	for (pp_uint32 i = 0; i < resamplerHelper.getNumResamplers(); i++)
-		listBox->addItem(resamplerHelper.getResamplerName(i));
-
-	listBox->setSelectedIndex(tracker.settingsDatabase->restore("INTERPOLATION")->getIntValue(), false);
 
 	dialog->show();
 }

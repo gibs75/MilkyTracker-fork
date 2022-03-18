@@ -28,11 +28,12 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionAbout.h"
 #include "Tracker.h"
 #include "TrackerConfig.h"
 #include "PlayerController.h"
-#include "PlayerGeneric.h"
 #include "AnimatedFXControl.h"
 
 #include "ControlIDs.h"

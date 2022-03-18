@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E19DCA45-3A87-3332-AD5C-F46D653B28B0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ppui</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\src\ppui\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ppui.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ppui</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\src\ppui\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ppui.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ppui</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(SolutionDir)\src\ppui\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ppui.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">ppui</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(SolutionDir)\src\ppui\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ppui.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">ppui</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\ppui\osinterface\win32;$(SolutionDir)src\milkyplay;$(SolutionDir)src\ppui;$(SolutionDir)src\ppui\osinterface;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(SolutionDir)src\ppui\Button.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\CheckBox.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\CheckBoxLabel.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Container.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\ContextMenu.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Control.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\DialogBase.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\DialogFileSelector.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Dictionary.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\DictionaryKey.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Event.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Font.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_15BIT.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_16BIT.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_24bpp_generic.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_32bpp_generic.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_ARGB32.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_BGR24.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Graphics_BGR24_SLOW.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\KeyboardBindingHandler.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\ListBox.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\ListBoxFileBrowser.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Menu.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\MessageBoxContainer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\PPUIConfig.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\RadioGroup.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Screen.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Scrollbar.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Seperator.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Slider.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\StaticText.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\Tools.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\TransparentContainer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\ppui\win32\DisplayDevice_WIN32.cpp" />
+    <ClInclude Include="$(SolutionDir)src\ppui\BasicTypes.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Button.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\CheckBox.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\CheckBoxLabel.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Container.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\ContextMenu.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Control.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\DialogBase.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\DialogFileSelector.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Dictionary.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\DictionaryKey.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\DisplayDeviceBase.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Event.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\fastfill.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Font.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\GraphicsAbstract.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Graphics.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\KeyBindings.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\KeyboardBindingHandler.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\ListBoxFileBrowser.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\ListBox.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Menu.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\MessageBoxContainer.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Object.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\PPPath.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\PPUIConfig.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\PPUI.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\RadioGroup.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\ScanCodes.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Screen.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\ScrollBar.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Seperator.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\SimpleVector.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Singleton.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Slider.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\StaticText.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\Tools.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\TransparentContainer.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\UndoStack.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\VirtualKeys.h" />
+    <ClInclude Include="$(SolutionDir)src\ppui\win32\DisplayDevice_WIN32.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)src\ppui\osinterface\osinterface.vcxproj">
+      <Project>{C2EA6484-1C0E-3514-BF47-79D21FE6B0F1}</Project>
+      <Name>osinterface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -40,6 +40,8 @@
 #ifndef __CHANNELMIXER_H__
 #define __CHANNELMIXER_H__
 
+#include <math.h>
+
 #include "MilkyPlayCommon.h"
 #include "AudioDriverBase.h"
 #include "Mixable.h"
@@ -56,18 +58,31 @@
 		fracpart&=(1<<(fractbits))-1; \
 	} 
 
+class ErrorInfo
+{
+	char message[256];
+	bool critical;
+public:
+
+	ErrorInfo(const char* _message, bool _critical = false)
+		: critical (_critical)
+	{
+		strncpy(message, _message, sizeof(message));
+		message[sizeof(message)-1] = 0;
+	}
+
+	const char* getMessage() const { return message; }
+	bool isCritical() const { return critical; }
+};
+
+
 class ChannelMixer;  
 typedef void (ChannelMixer::*TSetFreq)(mp_sint32 c, mp_sint32 f);
 
-class MixerSettings
-{
-protected:
-	enum
-	{
-		NUMRESAMPLERTYPES = 21,
-	};
+class ResamplerYM;
 
-public:
+struct MixerSettings
+{
 	// These are arranged in a way, so that the ramping flag toggles with the
 	// LSB (bit 0) if you count through them 
 	enum ResamplerTypes
@@ -78,30 +93,9 @@ public:
 		MIXER_LERPING,
 		MIXER_LERPING_RAMPING,
 
-		MIXER_LAGRANGE,
-		MIXER_LAGRANGE_RAMPING,
-
-		MIXER_SPLINE,
-		MIXER_SPLINE_RAMPING,
-
-		MIXER_SINCTABLE,
-		MIXER_SINCTABLE_RAMPING,
-
-		MIXER_SINC,
-		MIXER_SINC_RAMPING,
-
-		MIXER_AMIGA500,
-		MIXER_AMIGA500_RAMPING,
-
-		MIXER_AMIGA500LED,
-		MIXER_AMIGA500LED_RAMPING,
-
-		MIXER_AMIGA1200,
-		MIXER_AMIGA1200_RAMPING,
-
-		MIXER_AMIGA1200LED,
-		MIXER_AMIGA1200LED_RAMPING,
-
+		MIXER_BLS,
+		MIXER_BLS_RAMPING,
+		
 		MIXER_DUMMY,
 		
 		MIXER_INVALID
@@ -112,9 +106,14 @@ public:
 		// pretty large buffer for most systems
 		BUFFERSIZE_DEFAULT	= 8192
 	};
+
+	enum
+	{
+		NUMRESAMPLERTYPES = MIXER_INVALID,
+	};
 };
 
-class ChannelMixer : public MixerSettings, public Mixable
+class ChannelMixer : public Mixable
 {
 public:
 	enum
@@ -201,6 +200,7 @@ public:
 		mp_sint32			finalvolr;
 		mp_sint32			finalvoll;
 
+		mp_ubyte			shiftvol;
 		mp_sint32			vol;
 		mp_sint32			pan;
 		
@@ -220,12 +220,26 @@ public:
 		mp_uint32			timeRecordSize;
 		TTimeRecord*		timeRecord;
 		mp_sint32			index;					// For Amiga resampler
+		
+        // BLS hack
+        mp_ubyte		    bitmask;
+		mp_ubyte			bitshift;
+		mp_ubyte			STebalanceLeft;	
+		mp_ubyte			STebalanceRight;	
+		mp_char				mute;
+		mp_sint32			STemastervol;
+
+		static mp_ubyte		amplitudeToLMC[65];
+
+		// YM hack
+		mp_ubyte			isymchannel;
+		mp_ubyte			ymchannel;
 
 		TMixerChannel() :
 			timeRecordSize(0),
 			timeRecord(NULL)
 		{
-			clear();
+			clear(0);
 		}
 
 		TMixerChannel(bool fastContruction) :
@@ -240,7 +254,7 @@ public:
 				delete[] timeRecord;
 		}
 
-		void clear()
+		void clear(mp_uint32 _channel)
 		{
 			flags				= 0;
 			sample				= NULL;
@@ -273,6 +287,33 @@ public:
 			fixedtimefrac		= 0;
 			index				= -1;		// is filled during runtime
 			
+			bitshift			= 0;
+			bitmask				= 0xFF;
+
+			isymchannel			= false;
+
+			switch (_channel)
+			{
+			case 0:
+			case 3:
+				STebalanceLeft		= amplitudeToLMC[64];
+				STebalanceRight		= 0;
+				break;
+			case 1:
+			case 2:
+				STebalanceLeft		= 0;
+				STebalanceRight		= amplitudeToLMC[64];
+				break;
+			case 4:
+			case 5:
+			case 6:
+				isymchannel			= true;
+				ymchannel			= _channel - 4;
+			}
+
+			mute = false;
+			STemastervol			= 255 * 255;
+
 			if (timeRecord)
 				memset(timeRecord, 0, sizeof(TTimeRecord) * timeRecordSize);
 		}
@@ -283,36 +324,47 @@ public:
 			timeRecordSize = size;
 			timeRecord = new TTimeRecord[size];
 		}
+
+		static mp_ubyte GetShiftFromVolume (mp_uword vol)
+		{
+			if (vol > 48)
+				return 0;
+			else if (vol > 24)  
+				return 1;
+			else if (vol > 12) 
+				return 2;
+			else if (vol > 6) 
+				return 3;
+			else if (vol > 3) 
+				return 4;
+			else if (vol > 1) 
+				return 5;
+			else if (vol > 0)
+				return 6;
+			else if (vol == 0)
+				return 8;
+
+			return 8;
+		}
 	};
 	
 	class ResamplerBase
 	{
-	private:
-		// add channels without volume ramping
-		void addChannelsNormal(ChannelMixer* mixer, mp_uint32 numChannels, mp_sint32* buffer32,mp_sint32 beatNum, mp_sint32 beatlength);		
-		// add channels with volume ramping
-		void addChannelsRamping(ChannelMixer* mixer, mp_uint32 numChannels, mp_sint32* buffer32,mp_sint32 beatNum, mp_sint32 beatlength);		
-
 	public:
-		virtual ~ResamplerBase()
-		{
-		}
-		
-		void addChannels(ChannelMixer* mixer, mp_uint32 numChannels, mp_sint32* buffer32,mp_sint32 beatNum, mp_sint32 beatlength);
-		void addChannel(TMixerChannel* chn, mp_sint32* buffer32, const mp_sint32 beatlength, const mp_sint32 beatSize);		
-		
+		virtual ~ResamplerBase() {}
+			
 		// walk along the sample
 		// intpart is the 32 bit integer part of the position
 		// fracpart is the fractional part of the position
 		// fp is the amount of samples to advance
 		// is the resolution of the fractional part in bits (default is 16)
-		static inline void advanceSamplePosition(mp_sint32& intpart, 
+/*		static inline void advanceSamplePosition(mp_sint32& intpart, 
 												 mp_sint32& fracpart, 
 												 const mp_sint32 fp, 
 												 const mp_sint32 fracbits = 16)
 		{
 			MP_INCREASESMPPOS(intpart, fracpart, fp, fracbits);
-		}
+		}*/
 		
 		// if this resampler is doing ramping
 		virtual bool isRamping() = 0;
@@ -341,8 +393,6 @@ public:
 		virtual void setNumChannels(mp_sint32 num) { }
 	};
 
-	friend class ChannelMixer::ResamplerBase;
-
 private:	
 	mp_uint32	mixerNumAllocatedChannels;	// Number of channels to be allocated by mixer
 	mp_uint32	mixerNumActiveChannels;		// Number of channels to be mixed
@@ -364,23 +414,19 @@ private:
 	mp_sint32		masterVolume;			// mixer master volume	
 	mp_sint32		panningSeparation;		// panning separation from 0 (mono) to 256 (full stereo)
 	
-	ResamplerTypes	resamplerType;
-	TSetFreq		setFreqFuncTable[NUMRESAMPLERTYPES];			// If different precisions are used, use other frequency calculation procedures	
-	ResamplerBase*  resamplerTable[NUMRESAMPLERTYPES];
-	
+	MixerSettings::ResamplerTypes	resamplerType;
+	TSetFreq		setFreqFuncTable[MixerSettings::NUMRESAMPLERTYPES];			// If different precisions are used, use other frequency calculation procedures	
+	ResamplerBase*  resamplerTable[MixerSettings::NUMRESAMPLERTYPES];
+
 	bool			paused;
 	bool			disableMixing;
 	bool			allowFilters;
 
 	void			setFrequency(mp_sint32 frequency);
 	
-	void			mixBeatPacket(mp_uint32 numChannels,
-								  mp_sint32* buffer32,
-								  mp_sint32 beatPacketIndex, 
-								  mp_sint32 beatPacketSize) 
-	{ 
-		resamplerTable[resamplerType]->addChannels(this, numChannels, buffer32, beatPacketIndex, beatPacketSize);
-	}
+	void			addChannels(mp_uint32 numChannels, mp_sint32* buffer32,mp_sint32 beatNum, mp_sint32 beatlength);
+	void		    addChannelsNormal(mp_uint32 numChannels, mp_sint32* buffer32,mp_sint32 beatNum, mp_sint32 beatlength);		
+	void			addChannelsRamping(mp_uint32 numChannels, mp_sint32* buffer32,mp_sint32 beatNum, mp_sint32 beatlength);		
 	
 	inline void		timer(mp_uint32 beatIndex)
 	{
@@ -390,12 +436,20 @@ private:
 	void			reallocChannels();
 	void			clearChannels();
 
+protected: 
+	bool			isYMChannel (mp_uint32 channelindex) const { assert(channelindex < mixerNumActiveChannels); return channel[channelindex].isymchannel; }
+	mp_uint32		getYMChannel(mp_uint32 channelindex) const { assert(channelindex < mixerNumActiveChannels); assert(channel[channelindex].isymchannel); return channel[channelindex].ymchannel; }
+
 public:
 					ChannelMixer(mp_uint32 numChannels, 
-								 mp_uint32 frequency);				
+								 mp_uint32 frequency, 
+								 MixerSettings::ResamplerTypes resampleTypes,
+								 bool mainplayer);				
 	
 	virtual			~ChannelMixer();
 	
+	static void		addChannelToResampler(ResamplerBase* resampler, TMixerChannel* chn, mp_sint32* buffer32, const mp_sint32 beatlength, const mp_sint32 beatSize);		
+
 	mp_uint32		getMixBufferSize() const { return mixBufferSize; }	
 	void			mix(mp_sint32* buffer, mp_uint32 numSamples);	
 	void			updateSampleCounter(mp_sint32 numSamples) { sampleCounter+=numSamples; }
@@ -415,8 +469,8 @@ public:
 	void			resetChannelsFull();
 	void			resetChannelsWithoutMuting();
 	
-	void			setResamplerType(ResamplerTypes type);
-	ResamplerTypes	getResamplerType() const { return resamplerType; }
+	void			setResamplerType(MixerSettings::ResamplerTypes type);
+	MixerSettings::ResamplerTypes	getResamplerType() const { return resamplerType; }
 	bool			isRamping()  const { return resamplerTable[resamplerType]->isRamping(); }
 	
 	virtual mp_sint32 adjustFrequency(mp_uint32 frequency);
@@ -462,12 +516,23 @@ protected:
 
 	void			setActiveChannels(mp_uint32 num);
 
+	ResamplerYM*     ymresampler;
+
 public:
+	void			setBitmask(mp_sint32 c,mp_ubyte bitmask) { channel[c].bitmask = bitmask; }
 	void			setVol(mp_sint32 c,mp_sint32 v) { channel[c].vol = v; }
 	mp_sint32		getVol(mp_sint32 c) { return channel[c].vol; }
 				
 	void			setPan(mp_sint32 c,mp_sint32 p)	{ channel[c].pan = p; }
-				
+
+	void			setSTeBalance(mp_sint32 c,mp_ubyte STebalance);
+	void			setSTeVolume(mp_sint32 c,mp_sint32 vol,mp_sint32 mainVolume,mp_sint32 mastervolume)
+	{
+		channel[c].STemastervol = mainVolume * mastervolume;
+		channel[c].bitshift = TMixerChannel::GetShiftFromVolume(vol >> 2);
+	}
+
+
 	void			setFreq(mp_sint32 c,mp_sint32 f) 
 	{ 
 		(this->*setFreqFuncTable[resamplerType])(c,f);

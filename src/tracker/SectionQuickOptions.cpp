@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "SectionQuickOptions.h"
 #include "Tracker.h"
 #include "TrackerConfig.h"
@@ -53,8 +55,6 @@ enum ControlIDs
 
 	QUICKOPTIONS_STATICTEXT_ALLOW8XX,
 	QUICKOPTIONS_CHECKBOX_ALLOW8XX,
-	QUICKOPTIONS_STATICTEXT_ALLOWE8X,
-	QUICKOPTIONS_CHECKBOX_ALLOWE8X,
 	QUICKOPTIONS_STATICTEXT_PTPERIODRANGE,
 	QUICKOPTIONS_CHECKBOX_PTPERIODRANGE,
 	QUICKOPTIONS_STATICTEXT_SETDEFAULTPANNING,
@@ -101,14 +101,6 @@ pp_int32 SectionQuickOptions::handleEvent(PPObject* sender, PPEvent* event)
 
 				b = tracker.playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionPanning8xx);
 				tracker.playerController->enablePlayModeOption(PlayerController::PlayModeOptionPanning8xx, !b);
-				break;
-
-			case QUICKOPTIONS_CHECKBOX_ALLOWE8X:
-				if (event->getID() != eCommand)
-					break;
-
-				b = tracker.playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionPanningE8x);
-				tracker.playerController->enablePlayModeOption(PlayerController::PlayModeOptionPanningE8x, !b);
 				break;
 
 			case QUICKOPTIONS_CHECKBOX_PTPERIODRANGE:
@@ -274,12 +266,6 @@ void SectionQuickOptions::init(pp_int32 px, pp_int32 py)
 
 	y2+=13;
 
-	checkBox = new PPCheckBox(QUICKOPTIONS_CHECKBOX_ALLOWE8X, screen, this, PPPoint(x2 + 19*8 + 4, y2-1));
-	container->addControl(new PPCheckBoxLabel(QUICKOPTIONS_STATICTEXT_ALLOWE8X, NULL, this, PPPoint(x2, y2), "Allow E8x panning", checkBox, true));
-	container->addControl(checkBox);
-
-	y2+=13;
-
 	checkBox = new PPCheckBox(QUICKOPTIONS_CHECKBOX_PTPERIODRANGE, screen, this, PPPoint(x2 + 19*8 + 4, y2-1));
 	container->addControl(new PPCheckBoxLabel(QUICKOPTIONS_STATICTEXT_PTPERIODRANGE, NULL, this, PPPoint(x2, y2), "PT 3 octaves limit", checkBox, true));
 	container->addControl(checkBox);
@@ -365,9 +351,6 @@ void SectionQuickOptions::update(bool repaint/* = true*/)
 	
 	PPCheckBox* checkBox = static_cast<PPCheckBox*>(container->getControlByID(QUICKOPTIONS_CHECKBOX_ALLOW8XX));
 	checkBox->checkIt(tracker.playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionPanning8xx));
-
-	checkBox = static_cast<PPCheckBox*>(container->getControlByID(QUICKOPTIONS_CHECKBOX_ALLOWE8X));
-	checkBox->checkIt(tracker.playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionPanningE8x));
 
 	checkBox = static_cast<PPCheckBox*>(container->getControlByID(QUICKOPTIONS_CHECKBOX_PTPERIODRANGE));
 	checkBox->checkIt(tracker.playerController->isPlayModeOptionEnabled(PlayerController::PlayModeOptionForcePTPitchLimit));

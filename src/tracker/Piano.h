@@ -20,6 +20,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #ifndef PIANO__H
 #define PIANO__H
 
@@ -87,7 +89,6 @@ public:
 	friend class PPSingleton<PianoBitmapSmall>;
 };
 
-#ifndef __LOWRES__
 class PianoBitmapLarge : public PianoBitmapBase, public PPSingleton<PianoBitmapLarge>
 {
 private:
@@ -129,27 +130,5 @@ public:
 	
 	friend class PPSingleton<PianoBitmapLarge>;
 };
-#else
-class PianoBitmapLarge : public PianoBitmapBase, public PPSingleton<PianoBitmapLarge>
-{
-private:
-	PianoBitmapLarge()
-	{
-	}
-
-public:
-	virtual const pp_uint8* getBitmap() { return NULL; }
-	virtual const pp_uint8* getBitmapLUT() { return NULL; }
-
-	virtual pp_int32 getBitmapWidth() { return 0; }
-	virtual pp_int32 getBitmapHeight() { return 0; }
-	virtual pp_int32 getBitmapLUTWidth() { return 0; }
-
-	virtual const pp_int32* getDIVLUT() { return NULL; }
-	virtual const pp_int32* getMODLUT() { return NULL; }
-	
-	friend class PPSingleton<PianoBitmapLarge>;
-};
-#endif
 
 #endif

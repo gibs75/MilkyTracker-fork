@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "ResamplerHelper.h"
 
 const char* ResamplerHelper::resamplerNames[] =
@@ -41,7 +43,8 @@ const char* ResamplerHelper::resamplerNames[] =
 	"Amiga 500",
 	"Amiga 500 LED",
 	"Amiga 1200",
-	"Amiga 1200 LED"
+	"Amiga 1200 LED",
+	"BLitSnd resample"
 };
 
 const char* ResamplerHelper::resamplerNamesShort[] =
@@ -55,7 +58,8 @@ const char* ResamplerHelper::resamplerNamesShort[] =
 	"A500",
 	"A500LED",
 	"A1200",
-	"A1200LED"
+	"A1200LED",
+	"BLS"
 };
 
 pp_uint32 ResamplerHelper::getNumResamplers()
@@ -76,8 +80,8 @@ ChannelMixer::ResamplerBase* ResamplerHelper::createResamplerFromIndex(pp_uint32
 	return ResamplerFactory::createResampler((MixerSettings::ResamplerTypes)(index << 1));
 }
 
-ChannelMixer::ResamplerTypes ResamplerHelper::getResamplerType(pp_uint32 index, bool ramping)
+MixerSettings::ResamplerTypes ResamplerHelper::getResamplerType(pp_uint32 index, bool ramping)
 {
-	return (ChannelMixer::ResamplerTypes)((index << 1) | (ramping ? 1 : 0));
+	return (MixerSettings::ResamplerTypes)((index << 1) | (ramping ? 1 : 0));
 }
 

@@ -28,6 +28,8 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "PlayerMaster.h"
 #include "MasterMixer.h"
 #include "SimpleVector.h"
@@ -82,36 +84,14 @@ void PlayerMaster::applySettingsToPlayerController(PlayerController& playerContr
 		player->setMasterVolume(settings.mixerVolume);
 	}
 	
-	mp_sint32 resamplerType = player->getResamplerType();			
-	mp_sint32 oldResamplerType = resamplerType;
+	mp_sint32 oldResamplerType = player->getResamplerType();			
+	mp_sint32 resamplerType = MixerSettings::ResamplerTypes::MIXER_BLS;
 
-	if (settings.ramping >= 0)
-	{
-		// ramping flag is stored in the LSB of the resampler type
-		if (settings.ramping != 0)
-			resamplerType |= 1;
-		else
-			resamplerType &= ~1;			
-	}
-	
-	// remember if ramping needs to be set
-	bool ramping = (resamplerType & 1) != 0;
-	
-	// now check if the resampler has changed at all
-	if (settings.resampler >= 0)
-	{
-		// we have a class that translates the resampler index (which maps to a
-		// human readable name of the resampler) back to an enum that can be
-		// set on the ChannelMixer class
-		ResamplerHelper resamplerHelper;
-		resamplerType = resamplerHelper.getResamplerType(settings.resampler, ramping);
-	}
-	
 	// now let's see if something has changed at all
 	if (resamplerType != oldResamplerType)
 	{
 		playerController.getCriticalSection()->enter();
-		player->setResamplerType((ChannelMixer::ResamplerTypes)resamplerType);	
+		player->setResamplerType((MixerSettings::ResamplerTypes)resamplerType);	
 		playerController.getCriticalSection()->leave();
 	}
 	

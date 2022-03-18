@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7727679C-D41C-320F-9906-2A1212185FDD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>milkyplay</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\src\milkyplay\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">milkyplay.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">milkyplay</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\src\milkyplay\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">milkyplay.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">milkyplay</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(SolutionDir)\src\milkyplay\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">milkyplay.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">milkyplay</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(SolutionDir)\src\milkyplay\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">milkyplay.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">milkyplay</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\drivers\windows;..\tracker;.\;.\ym;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\drivers\windows;..\tracker;.\;.\ym;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\drivers\windows;..\tracker;.\;.\ym;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\drivers\windows;..\tracker;.\;.\ym;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;NOMINMAX;__SKIPRTAUDIO__;MILKYTRACKER;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\milkyplay\drivers\windows;$(SolutionDir)src\tracker;$(SolutionDir)src\milkyplay;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriverBase.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriverManager.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriver_NULL.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\AudioDriver_WAVWriter.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\ChannelMixer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\ExporterXM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LittleEndian.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\Loader669.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderAMF.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderAMS.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderCBA.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDBM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDIGI.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDSM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderDTM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderFAR.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderGDM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderIMF.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderIT.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMDL.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMOD.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMTM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderMXM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderOKT.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderPLM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderPSM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderPTM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderS3M.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderSTM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderULT.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderUNI.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\LoaderXM.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\MasterMixer.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\PlayerBase.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\PlayerSTD.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\ResamplerFactory.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderAIFF.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderALL.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderAbstract.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderGeneric.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderIFF.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\SampleLoaderWAV.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\XIInstrument.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\XMFile.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\XModule.cpp" />
+    <ClCompile Include="$(SolutionDir)src\milkyplay\drivers\windows\AudioDriver_MMSYSTEM.cpp" />
+    <ClCompile Include="ResamplerYM.cpp" />
+    <ClCompile Include="ym\DEMOSDK\PC\YMEMUL.CPP" />
+    <ClCompile Include="ym\DEMOSDK\STANDARD.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="ym\DEMOSDK\SYNTHYM.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="ym\DEMOSDK\SYNTHYMD.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Default</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="ym\EXTERN\sound.c" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriverBase.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriverManager.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriver_COMPENSATE.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriver_NULL.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\AudioDriver_WAVWriter.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ChannelMixer.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\LittleEndian.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\Loaders.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MasterMixer.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlay.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlayCommon.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlayResults.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\MilkyPlayTypes.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\Mixable.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\PlayerBase.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\PlayerSTD.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ResamplerFactory.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ResamplerFast.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\ResamplerMacros.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderAIFF.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderALL.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderAbstract.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderGeneric.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderIFF.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\SampleLoaderWAV.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\XIInstrument.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\XMFile.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\XModule.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\computed-blep.h" />
+    <ClInclude Include="$(SolutionDir)src\milkyplay\drivers\windows\AudioDriver_MMSYSTEM.h" />
+    <ClInclude Include="ResamplerYM.h" />
+    <ClInclude Include="ym\DEMOSDK\BASTYPES.H" />
+    <ClInclude Include="ym\DEMOSDK\PC\YMEMUL.H" />
+    <ClInclude Include="ym\DEMOSDK\STANDARD.H" />
+    <ClInclude Include="ym\DEMOSDK\SYNTHYM.H" />
+    <ClInclude Include="ym\DEMOSDK\SYNTHYMD.H" />
+    <ClInclude Include="ym\EXTERN\sound.h" />
+    <ClInclude Include="ym\EXTERN\ym2149_fixed_vol.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

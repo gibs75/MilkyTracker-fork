@@ -28,9 +28,14 @@
  *
  */
 
+// 02.05.2022: changes for BlitStracker fork by J.Hubert 
+
 #include "PPSystem_WIN32.h"
 #include <windows.h>
 #include <tchar.h>
+
+#define TRACKER_NAME "BlitSTracker"
+#define TRACKER_CONFIG_VERSION "v2"
 
 SYSCHAR System::buffer[MAX_PATH+1];
 
@@ -43,7 +48,7 @@ const SYSCHAR* System::getTempFileName()
 	if (dwRetVal != 0 || dwRetVal <= MAX_PATH)
 		result = GetTempFileName(szPath, _T("mt"), ::GetTickCount(), buffer);
 	if (result == 0)
-		return getConfigFileName(_T("milkytracker_temp"));
+		return getConfigFileName(_T(TRACKER_NAME "_temp"));
 
 	return buffer;
 }
@@ -56,14 +61,14 @@ const SYSCHAR* System::getConfigFileName(SYSCHAR *fileName/* = NULL*/)
 
 	if (size)
 	{
-		_tcscat_s(szPath, MAX_PATH, _T("\\MilkyTracker"));
+		_tcscat_s(szPath, MAX_PATH, _T("\\" TRACKER_NAME));
 		CreateDirectory(szPath, NULL);
 		_tcscat_s(szPath, MAX_PATH, _T("\\"));
 	}
 	if (fileName)
 		_tcscat_s(szPath, MAX_PATH, fileName);
 	else
-		_tcscat_s(szPath, MAX_PATH, _T("milkytracker.cfg"));
+		_tcscat_s(szPath, MAX_PATH, _T(TRACKER_NAME "_" TRACKER_CONFIG_VERSION ".cfg"));
 	_tcscpy(buffer, szPath);
 
 	return buffer;
