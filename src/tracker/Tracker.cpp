@@ -1016,15 +1016,38 @@ pp_int32 Tracker::handleEvent(PPObject* sender, PPEvent* event)
 				{
 					fillYMSoundsListBox(listBoxYMsounds);
 					refreshYMSoundsIntrumentsMapping();
+					RefreshSndSynFilename();
 					screen->paint();
 				}
 				else
 				{
-					char temp[512];
+					PPOpenPanel* openPanel = new PPOpenPanel(screen, "Open YM bank");
+					const char* extensions [] = {"ini", "YM bank", NULL, NULL};
 
-					sprintf(temp, "Error loading %s", ResamplerYM::GetInstance()->GetSndSynFilename());
-					PPMessageBox messageBox(nullptr, temp, ResamplerYM::GetInstance()->GetError());		
-					messageBox.runModal();
+					openPanel->addExtensions(extensions);
+
+					if (openPanel->runModal() == PPModalDialog::ReturnCodeOK)
+					{
+						ResamplerYM::GetInstance()->SetSndSynFilename(openPanel->getFileName().getStrBuffer());
+
+						if (ResamplerYM::GetInstance()->Reload())
+						{
+							fillYMSoundsListBox(listBoxYMsounds);
+							refreshYMSoundsIntrumentsMapping();
+							RefreshSndSynFilename();
+							screen->paint();
+						}
+						else
+						{
+							char temp[512];
+
+							sprintf(temp, "Error loading %s", ResamplerYM::GetInstance()->GetSndSynFilename());
+							PPMessageBox messageBox(nullptr, temp, ResamplerYM::GetInstance()->GetError());
+							messageBox.runModal();
+						}
+					}
+
+					delete openPanel;
 				}
 				break;
 			}
@@ -1073,25 +1096,6 @@ pp_int32 Tracker::handleEvent(PPObject* sender, PPEvent* event)
 				pp_int32 index = *((pp_int32*)event->getDataPtr()) + 1;
 				selectInstrument(index);		
 				screen->update();
-				break;
-			}
-
-			case LISTBOX_YMSOUNDS:
-			{
-				pp_int32 instruIndex = listBoxInstruments->getSelectedIndex();
-
-				if ( instruIndex >= 0 )
-				{
-					pp_int32 indexYMsounds = *((pp_int32*)event->getDataPtr());
-
-					const PPString& ymSoundName = listBoxYMsounds->getItem(indexYMsounds);
-
-					moduleEditor->setInstrumentName(instruIndex, ymSoundName.getStrBuffer(), ModuleEditor::MAX_INSTEXT);
-					listBoxInstruments->updateItem(instruIndex, ymSoundName);
-					screen->paintControl(listBoxInstruments);
-					
-					refreshYMSoundsIntrumentsMapping();
-				}
 				break;
 			}
 
@@ -2833,14 +2837,12 @@ bool Tracker::saveTypeWithDialog(FileTypes eSaveType, EventListenerInterface* fi
 
 void Tracker::RefreshSndSynFilename()
 {
-	const char* str = ResamplerYM::GetInstance()->GetSndSynFilename();
+	PPString filename(ResamplerYM::GetInstance()->GetSndSynFilename());
 
-	if (strlen(str) >= 64)
-	{
-		str = str + strlen(str) - 64;
-	}
+	for (unsigned i = 0 ; i < filename.length() ; i++)
+		if (filename.charAt(i) == '\\')
+			filename.charAt(i) = '/';
 
-	PPString filename(str);
 	static_cast<PPStaticText*>(screen->getControlByID(STATICTEXT_YMSOUNDFILENAME))->setText(filename);
 }
 

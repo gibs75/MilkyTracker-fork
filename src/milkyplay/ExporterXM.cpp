@@ -1363,14 +1363,20 @@ static void IfCopySndSynthYMFile(const SYSCHAR* _filename)
 
 	if (XMFile::exists(path) == false)
 	{
-		void* temp = nullptr;
-		size_t size = 0;
+		const char* ymfilename = ResamplerYM::GetInstance()->GetSndSynFilename();
 
-		{ // Load default
-			FILE* file = fopen(ResamplerYM::GetInstance()->GetSndSynDefaultFilename(), "rb");
+		if ((ymfilename != nullptr) && (ymfilename[0] != 0))
+		{
+			void* temp = nullptr;
+			size_t size = 0;
+
+			FILE* file = fopen(ResamplerYM::GetInstance()->GetSndSynFilename(), "rb");
 			if (file == nullptr)
 			{
-				throw ErrorInfo("Cannot open SYNTHYM.INI file for read");
+				char message[512];
+
+				sprintf(message, "Cannot open YM bank %s file for read", ResamplerYM::GetInstance()->GetSndSynFilename());
+				throw ErrorInfo(message);
 			}
 
 			fseek(file, 0, SEEK_END);
@@ -1381,28 +1387,28 @@ static void IfCopySndSynthYMFile(const SYSCHAR* _filename)
 
 			if (fread(temp, size, 1, file) != 1)
 			{
-				throw ErrorInfo("Error while reading SYNTHYM.INI for copy");
+				throw ErrorInfo("Error while reading YM bank for copy");
 			}
 
 			fclose(file);
-		}
 
-		{ // Save .ini
-			FILE* file = fopen(path, "wb");
-			if (file == nullptr)
-			{
-				throw ErrorInfo("Cannot open module synth snd .INI file for write");
+			{ // Save .ini
+				FILE* file = fopen(path, "wb");
+				if (file == nullptr)
+				{
+					throw ErrorInfo("Cannot open module synth snd .INI file for write");
+				}
+
+				if (fwrite(temp, size, 1, file) != 1)
+				{
+					throw ErrorInfo("Error while writing module synth snd .INI file");
+				}
+				fclose(file);
 			}
 
-			if (fwrite(temp, size, 1, file) != 1)
-			{
-				throw ErrorInfo("Error while writing module synth snd .INI file");
-			}
-			fclose(file);
+			ResamplerYM::GetInstance()->SetSndSynFilename(path);
 		}
 	}
-
-	ResamplerYM::GetInstance()->SetSndSynFilename(path);
 }
 
 mp_sint32 XModule::saveExtendedModule(const SYSCHAR* fileName)

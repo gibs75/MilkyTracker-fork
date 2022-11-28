@@ -25,3 +25,17 @@ of MilkyTracker.
 YM2149 emulation code integrated courtesy of *N.Pomarede*
 
 ![](Screen.png)
+
+--------------------------
+
+## Changes
+
+### 01.11.2022
+
+Try to make YM bank .ini file management a bit more intuitive
+* No default SYNTHYM.INI file loading
+* First press on "(Re)Load YM bank" button will trigger a fileselector if no INI file defined
+* When INI YM bank file selected (because you have loaded it specifically or in the same time you have opened a XM file), "(Re)Load YM bank" button will reload this file
+* When saving a XM file, copy last selected .INI file as mymodule.ini file beside mymodule.xm file
+
+Avoid errors when selecting a sound into ym sounds list : you now need to press "< Set YM sound" button to set name into regular instruments list from ym sounds list

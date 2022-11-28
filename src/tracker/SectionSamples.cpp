@@ -163,6 +163,24 @@ pp_int32 SectionSamples::handleEvent(PPObject* sender, PPEvent* event)
 				break;
 			}
 
+			case BUTTON_SAMPLE_IMPORT_YMSOUND:
+			{
+				pp_int32 instruIndex  = tracker.listBoxInstruments->getSelectedIndex();
+				pp_int32 ymsoundIndex = tracker.listBoxYMsounds->getSelectedIndex();
+
+				if (( instruIndex >= 0 ) && ( ymsoundIndex >= 0 ))
+				{
+					const PPString& ymSoundName = tracker.listBoxYMsounds->getItem( ymsoundIndex );
+
+					moduleEditor->setInstrumentName(instruIndex, ymSoundName.getStrBuffer(), ModuleEditor::MAX_INSTEXT);
+					tracker.listBoxInstruments->updateItem(instruIndex, ymSoundName);
+					screen->paintControl(tracker.listBoxInstruments);
+
+					tracker.refreshYMSoundsIntrumentsMapping();
+				}
+			}
+			break;
+
 			case BUTTON_SAMPLE_PLAY_UP:
 				if (currentSamplePlayNote < 95)
 					currentSamplePlayNote++;

@@ -646,7 +646,7 @@ ChannelMixer::ChannelMixer(mp_uint32 numChannels,
 		bool init = gResamplerYM.Init();
 		if (init == false)
 		{
-			char message[512] = "Cannot open SYNTHYM.INI file\n";
+			char message[512] = "Cannot init resampler YM\n";
 			strcat(message, gResamplerYM.GetError());
 			throw ErrorInfo(message, true);	 
 		}

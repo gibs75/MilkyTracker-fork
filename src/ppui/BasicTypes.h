@@ -35,6 +35,7 @@ typedef signed int		pp_int32;
 #if defined(WIN32) || defined(_WIN32_WCE) 
 	#include <windows.h>
 	#include <stdio.h>
+	#include <assert.h>
 	#define VK_ALT        VK_MENU
 	#define __PPUI_WINDOWS__
 #endif
@@ -418,6 +419,12 @@ public:
 			return strBuffer[index];
 			
 		return 0;
+	}
+
+	char& charAt(pp_uint32 index)
+	{
+		assert(index < length());
+		return strBuffer[index];
 	}
 
 	void insertAt(pp_uint32 i, const PPString& s)

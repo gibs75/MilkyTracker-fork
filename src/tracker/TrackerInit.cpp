@@ -642,20 +642,26 @@ void Tracker::initListboxesSection(pp_int32 x, pp_int32 y)
 
 	// Samples
 	button = new PPButton(BUTTON_SAMPLE_EDIT_CLEAR, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setFont(PPFont::getFont(PPFont::FONT_SYSTEM));
 	button->setText("Clear sample");
 	container->addControl(button);	
 	offsety += tinyButtonHeight + 1;
 
 	button = new PPButton(BUTTON_SAMPLE_LOAD, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setFont(PPFont::getFont(PPFont::FONT_SYSTEM));
 	button->setText("Load sample");
 	container->addControl(button);
 	offsety += tinyButtonHeight + 1;
 
 	button = new PPButton(BUTTON_SAMPLE_SAVE, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
-	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
+	button->setFont(PPFont::getFont(PPFont::FONT_SYSTEM));
 	button->setText("Save sample");
+	container->addControl(button);
+	offsety += tinyButtonHeight * 5 + 1;
+
+	button = new PPButton(BUTTON_SAMPLE_IMPORT_YMSOUND, screen, sectionSamples, PPPoint(offsetx, offsety), PPSize(80, tinyButtonHeight));
+	button->setFont(PPFont::getFont(PPFont::FONT_SYSTEM));
+	button->setText("< Set YM sound");
 	container->addControl(button);
 	}
 
@@ -672,6 +678,8 @@ void Tracker::initListboxesSection(pp_int32 x, pp_int32 y)
 	container->addControl(listBoxYMsounds);
 	offsety += height-offsety-12;
 
+	offsetx = x+4 + size + myDx;
+
 	button = new PPButton(BUTTON_YM_EDIT, screen, this, PPPoint(offsetx, offsety), PPSize(tinyButtonHeight, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
 	button->setText("x");
@@ -687,34 +695,33 @@ void Tracker::initListboxesSection(pp_int32 x, pp_int32 y)
 	auto offsetx = x+4 + size*2 + 6;
 	auto offsety = y+dy+tinyButtonOffset+tinyButtonHeight+4;
 
-
-	button = new PPButton(BUTTON_YM_TEST, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
+	button = new PPButton(BUTTON_YM_RELOAD, screen, this, PPPoint(offsetx, offsety), PPSize(120, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Test YM ini file in SynthYM");
+	button->setText("<Re>Load YM bank");
 	container->addControl(button);
 	offsety += tinyButtonHeight + 1;
 
-	button = new PPButton(BUTTON_YM_RELOAD, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
+	button = new PPButton(BUTTON_YM_TEST, screen, this, PPPoint(offsetx, offsety), PPSize(120, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Load YM ini file");
+	button->setText("SynthYM");
 	container->addControl(button);
 	offsety += tinyButtonHeight + 1;
 
-	button = new PPButton(BUTTON_BLS_CONVERT, screen, this, PPPoint(offsetx,offsety), PPSize(149, tinyButtonHeight));
+	button = new PPButton(BUTTON_BLS_CONVERT, screen, this, PPPoint(offsetx,offsety), PPSize(120, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Save > Convert");
+	button->setText("Save + MakeBLS");
 	container->addControl(button);
 	offsety += tinyButtonHeight + 1;
 
-	button = new PPButton(BUTTON_BLS_CONVERT_N_PLAY_BLS, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
+	button = new PPButton(BUTTON_BLS_CONVERT_N_PLAY_BLS, screen, this, PPPoint(offsetx, offsety), PPSize(120, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Save > Convert > Play BLS");
+	button->setText("Save + MakeBLS + Play");
 	container->addControl(button);
 	offsety += tinyButtonHeight + 1;
 
-	button = new PPButton(BUTTON_BLS_CONVERT_N_PLAY_BLZ, screen, this, PPPoint(offsetx, offsety), PPSize(149, tinyButtonHeight));
+	button = new PPButton(BUTTON_BLS_CONVERT_N_PLAY_BLZ, screen, this, PPPoint(offsetx, offsety), PPSize(120, tinyButtonHeight));
 	button->setFont(PPFont::getFont(PPFont::FONT_TINY));
-	button->setText("Save > Convert > Play BLZ");
+	button->setText("Save + MakeBLZ + Play");
 	container->addControl(button);
 	offsety += tinyButtonHeight + 1;
 	}

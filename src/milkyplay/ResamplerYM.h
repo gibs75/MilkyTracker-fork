@@ -41,7 +41,6 @@ public:
 
 private:
 	char m_path[512];
-	char m_default[512];
 
 	mp_ubyte m_STebalanceLeft;
 	mp_ubyte m_STebalanceRight;
@@ -86,7 +85,6 @@ public:
 	void SetMute(mp_uint32 _index, bool _mute);
 
 	const char* GetSndSynFilename() const { return m_path; }
-	const char* GetSndSynDefaultFilename() const { return m_default; }
 
 	void SetSndSynFilename(const char* _filepath) { strcpy(m_path, _filepath); }
 

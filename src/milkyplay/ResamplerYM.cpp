@@ -86,6 +86,7 @@ ResamplerYM::ResamplerYM()
 	memset(m_bufferCopy, 0, sizeof(m_bufferCopy));
 
 	m_cache = new mp_sint32[CACHE_LENGTH];
+	strcpy(m_path, "");
 
 	m_STebalanceLeft = m_STebalanceRight = 20;
 
@@ -112,8 +113,6 @@ bool ResamplerYM::Init()
 
 		memset(&g_ymplayer, 0, sizeof(g_ymplayer));
 		EMULinitYM();
-		GetCurrentDirectory(sizeof(m_default), m_default);
-		strcat(m_default, "\\SYNTHYM.INI");
 		isinitialized = true;
 		SNDYMinitPlayer (&stdAllocator, &g_ymplayer, &g_ymsoundSet);
 	}
@@ -144,7 +143,7 @@ bool ResamplerYM::Reload()
 	}
 	else
 	{
-		return true;
+		return false;
 	}
 }
 
