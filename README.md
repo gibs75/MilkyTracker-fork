@@ -20,7 +20,7 @@ of MilkyTracker.
 --------------------------
 ## BlitSTracker fork
 
-***BlitSTracker*** version is a specific uggly hack fork that produces songs for Atari STe *BLITSnd* routine.
+***BlitSTracker*** version is a specific uggly hack fork that produces songs for Atari STe *[BLITSnd](https://github.com/jhubrt/demOS/tree/master/DOCS/BLITSnd)* routine.
 
 YM2149 emulation code integrated courtesy of *N.Pomarede*
 
